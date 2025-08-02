@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Cricker - Live Scoring</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            font-size: 16px; /* Increased base font size */
         }
         /* Custom scrollbar for better aesthetics */
         ::-webkit-scrollbar {
@@ -157,8 +158,8 @@
                 </div>
                 <div class="flex justify-between text-xs sm:text-sm text-gray-500 mt-2">
                     <span>Details</span>
-                    <span>Team 1</span>
-                    <span>Team 2</span>
+                    <span>Home Team</span>
+                    <span>Away Team</span>
                     <span>Toss</span>
                 </div>
             </div>
@@ -186,10 +187,15 @@
                                 <label for="total-overs" class="block font-medium text-gray-700">Match Format (Overs)</label>
                                 <select id="total-overs" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                     <option value="5">5 Overs</option>
+                                    <option value="6">6 Overs</option>
+                                    <option value="7">7 Overs</option>
+                                    <option value="8">8 Overs</option>
+                                    <option value="9">9 Overs</option>
                                     <option value="10">10 Overs</option>
+                                    <option value="12">12 Overs</option>
                                     <option value="15">15 Overs</option>
-                                    <option value="20" selected>20 Overs (T20)</option>
-                                    <option value="50">50 Overs (ODI)</option>
+                                    <option value="20" selected>20 Overs</option>
+                                    <option value="50">50 Overs</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
@@ -204,13 +210,37 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <label for="team1-name-input" class="block font-medium text-gray-700">Team 1 Name</label>
-                            <input type="text" id="team1-name-input" placeholder="Enter Team 1 Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                        <div class="border-t pt-4 space-y-4">
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="space-y-2 md:col-span-2">
+                                    <label for="team1-name-input" class="block font-medium text-gray-700">Home Team Name</label>
+                                    <input type="text" id="team1-name-input" placeholder="Enter Home Team Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="team1-color-input" class="block font-medium text-gray-700">Team Color</label>
+                                    <input type="color" id="team1-color-input" value="#3b82f6" class="w-full h-10 p-1 border-gray-300 border rounded-md">
+                                </div>
+                            </div>
+                             <div class="space-y-2">
+                                <label for="team1-logo-input" class="block font-medium text-gray-700">Home Team Logo</label>
+                                <input type="file" id="team1-logo-input" accept="image/png, image/jpeg" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
                         </div>
-                        <div class="space-y-2">
-                            <label for="team2-name-input" class="block font-medium text-gray-700">Team 2 Name</label>
-                            <input type="text" id="team2-name-input" placeholder="Enter Team 2 Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                         <div class="border-t pt-4 space-y-4">
+                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="space-y-2 md:col-span-2">
+                                    <label for="team2-name-input" class="block font-medium text-gray-700">Away Team Name</label>
+                                    <input type="text" id="team2-name-input" placeholder="Enter Away Team Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                </div>
+                                 <div class="space-y-2">
+                                    <label for="team2-color-input" class="block font-medium text-gray-700">Team Color</label>
+                                    <input type="color" id="team2-color-input" value="#64748b" class="w-full h-10 p-1 border-gray-300 border rounded-md">
+                                </div>
+                            </div>
+                             <div class="space-y-2">
+                                <label for="team2-logo-input" class="block font-medium text-gray-700">Away Team Logo</label>
+                                <input type="file" id="team2-logo-input" accept="image/png, image/jpeg" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
                         </div>
                     </div>
                     <div class="mt-8 text-right">
@@ -317,29 +347,8 @@
                     </div>
                     <p class="text-sm text-gray-500 mb-4" id="match-date"></p>
 
-                    <div class="space-y-3">
-                        <!-- Team 1 -->
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <img src="https://placehold.co/40x40/3182CE/FFFFFF?text=T1" alt="Team 1 Logo" class="w-10 h-10 rounded-full object-cover">
-                                <span id="team1Name" class="font-semibold text-gray-800"></span>
-                            </div>
-                            <div class="text-right">
-                                <p id="team1Score" class="font-bold text-lg text-gray-900">0/0</p>
-                                <p id="team1Overs" class="text-sm text-gray-600">(0.0 / 20 ov)</p>
-                            </div>
-                        </div>
-                        <!-- Team 2 -->
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <img src="https://placehold.co/40x40/4A5568/FFFFFF?text=T2" alt="Team 2 Logo" class="w-10 h-10 rounded-full object-cover">
-                                <span id="team2Name" class="font-semibold text-gray-800"></span>
-                            </div>
-                             <div class="text-right">
-                                <p id="team2Score" class="font-bold text-lg text-gray-900">0/0</p>
-                                <p id="team2Overs" class="text-sm text-gray-600">(0.0 / 20 ov)</p>
-                            </div>
-                        </div>
+                    <div id="team-scores-container" class="space-y-3">
+                        <!-- Team scores will be dynamically inserted here -->
                     </div>
                      <div id="commentary" class="mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-sm font-medium hidden"></div>
                 </div>
@@ -347,16 +356,16 @@
                 <!-- Batting & Bowling Tables -->
                 <div class="space-y-4">
                     <!-- Batting -->
-                    <div class="bg-white rounded-lg p-4 shadow-md">
-                        <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="text-gray-500">
-                                    <th class="pb-2 font-medium">Batting</th>
-                                    <th class="text-center pb-2 font-medium">R</th>
-                                    <th class="text-center pb-2 font-medium">B</th>
-                                    <th class="text-center pb-2 font-medium">4s</th>
-                                    <th class="text-center pb-2 font-medium">6s</th>
-                                    <th class="text-right pb-2 font-medium">SR</th>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <table class="w-full text-left text-sm relative">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="p-3 font-semibold text-base">Batting</th>
+                                    <th class="text-center p-3 font-semibold text-base">R</th>
+                                    <th class="text-center p-3 font-semibold text-base">B</th>
+                                    <th class="text-center p-3 font-semibold text-base">4s</th>
+                                    <th class="text-center p-3 font-semibold text-base">6s</th>
+                                    <th class="text-right p-3 font-semibold text-base">SR</th>
                                 </tr>
                             </thead>
                             <tbody id="batting-table">
@@ -365,16 +374,16 @@
                         </table>
                     </div>
                     <!-- Bowling -->
-                    <div class="bg-white rounded-lg p-4 shadow-md">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="text-gray-500">
-                                    <th class="pb-2 font-medium">Bowling</th>
-                                    <th class="text-center pb-2 font-medium">O</th>
-                                    <th class="text-center pb-2 font-medium">M</th>
-                                    <th class="text-center pb-2 font-medium">R</th>
-                                    <th class="text-center pb-2 font-medium">W</th>
-                                    <th class="text-right pb-2 font-medium">Econ</th>
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="p-3 font-semibold text-base">Bowling</th>
+                                    <th class="text-center p-3 font-semibold text-base">O</th>
+                                    <th class="text-center p-3 font-semibold text-base">M</th>
+                                    <th class="text-center p-3 font-semibold text-base">R</th>
+                                    <th class="text-center p-3 font-semibold text-base">W</th>
+                                    <th class="text-right p-3 font-semibold text-base">Econ</th>
                                 </tr>
                             </thead>
                             <tbody id="bowling-table">
@@ -561,22 +570,26 @@
             venue: '',
             matchDate: '',
             team1: {
-                name: "Toronto Warriors CC",
+                name: "HOME TEAM",
                 score: 0,
                 wickets: 0,
                 overs: 0,
                 balls: 0,
                 players: [],
-                playerStats: {}
+                playerStats: {},
+                color: '#3b82f6',
+                logo: ''
             },
             team2: {
-                name: "CTS Toronto Patricians",
+                name: "AWAY TEAM",
                 score: 0,
                 wickets: 0,
                 overs: 0,
                 balls: 0,
                 players: [],
-                playerStats: {}
+                playerStats: {},
+                color: '#64748b',
+                logo: ''
             },
             battingTeam: 'team1',
             bowlingTeam: 'team2',
@@ -601,6 +614,10 @@
             matchDateInput: document.getElementById('match-date-input'),
             team1NameInput: document.getElementById('team1-name-input'),
             team2NameInput: document.getElementById('team2-name-input'),
+            team1ColorInput: document.getElementById('team1-color-input'),
+            team2ColorInput: document.getElementById('team2-color-input'),
+            team1LogoInput: document.getElementById('team1-logo-input'),
+            team2LogoInput: document.getElementById('team2-logo-input'),
             team1PlayerInputs: document.getElementById('team1-player-inputs'),
             team2PlayerInputs: document.getElementById('team2-player-inputs'),
             team1RosterTitle: document.getElementById('team1-roster-title'),
@@ -608,16 +625,7 @@
             progressBar: document.getElementById('progress-bar'),
             matchTitle: document.getElementById('match-title'),
             matchDate: document.getElementById('match-date'),
-            team1: {
-                name: document.getElementById('team1Name'),
-                score: document.getElementById('team1Score'),
-                overs: document.getElementById('team1Overs'),
-            },
-            team2: {
-                name: document.getElementById('team2Name'),
-                score: document.getElementById('team2Score'),
-                overs: document.getElementById('team2Overs'),
-            },
+            teamScoresContainer: document.getElementById('team-scores-container'),
             battingTable: document.getElementById('batting-table'),
             bowlingTable: document.getElementById('bowling-table'),
             commentary: document.getElementById('commentary'),
@@ -666,12 +674,12 @@
 
             if (step === 1) ui.progressBar.style.width = '25%';
             if (step === 2) {
-                ui.team1RosterTitle.textContent = ui.team1NameInput.value || 'TEAM 1';
+                ui.team1RosterTitle.textContent = ui.team1NameInput.value || 'HOME TEAM';
                 generatePlayerInputs('team1');
                 ui.progressBar.style.width = '50%';
             }
             if (step === 3) {
-                ui.team2RosterTitle.textContent = ui.team2NameInput.value || 'TEAM 2';
+                ui.team2RosterTitle.textContent = ui.team2NameInput.value || 'AWAY TEAM';
                 generatePlayerInputs('team2');
                 ui.progressBar.style.width = '75%';
             }
@@ -684,6 +692,9 @@
             ui.tossBtn.disabled = true;
             ui.tossBtn.classList.add('opacity-50', 'cursor-not-allowed');
             ui.coin.classList.add('flipping');
+            
+            state.team1.name = ui.team1NameInput.value || 'HOME TEAM';
+            state.team2.name = ui.team2NameInput.value || 'AWAY TEAM';
 
             setTimeout(() => {
                 const random = Math.random();
@@ -697,13 +708,28 @@
             }, 1000);
         }
 
+        function handleLogoUpload(file, teamKey) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    state[teamKey].logo = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         function startMatch() {
             state.totalOvers = parseInt(ui.totalOversInput.value);
             state.playersPerSide = parseInt(ui.playersPerSideInput.value);
             state.venue = ui.venueInput.value;
             state.matchDate = ui.matchDateInput.value;
-            state.team1.name = ui.team1NameInput.value || 'TEAM 1';
-            state.team2.name = ui.team2NameInput.value || 'TEAM 2';
+            state.team1.name = ui.team1NameInput.value || 'HOME TEAM';
+            state.team2.name = ui.team2NameInput.value || 'AWAY TEAM';
+            state.team1.color = ui.team1ColorInput.value;
+            state.team2.color = ui.team2ColorInput.value;
+
+            handleLogoUpload(ui.team1LogoInput.files[0], 'team1');
+            handleLogoUpload(ui.team2LogoInput.files[0], 'team2');
 
             state.team1.players = Array.from(ui.team1PlayerInputs.querySelectorAll('input')).map(input => input.value.trim()).filter(p => p);
             state.team2.players = Array.from(ui.team2PlayerInputs.querySelectorAll('input')).map(input => input.value.trim()).filter(p => p);
@@ -827,11 +853,11 @@
                 state.striker.balls++;
                 if (runs === 4) {
                     state.striker.fours++;
-                    triggerEventAnimation('FOUR!', 'text-blue-400');
+                    triggerEventAnimation('FOUR!', 'text-yellow-400');
                 }
                 if (runs === 6) {
                     state.striker.sixes++;
-                    triggerEventAnimation('SIX!', 'text-green-400');
+                    triggerEventAnimation('SIX!', 'text-green-500');
                 }
                 
                 processBall(runs, `${runs}`);
@@ -897,8 +923,7 @@
         async function processWicket(type, playerName) {
             closeAllModals();
             saveState();
-            await triggerEventAnimation('WICKET!', 'text-red-500');
-
+            
             const battingTeamKey = state.battingTeam;
             const battingTeam = state[battingTeamKey];
             const playerOut = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
@@ -915,6 +940,8 @@
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
 
             updateUI();
+            
+            await triggerEventAnimation('WICKET!', 'text-red-700');
 
             if (battingTeam.wickets < state.playersPerSide - 1) {
                 state.isScoringLocked = true;
@@ -1006,6 +1033,7 @@
         
         function swapBatsmen() {
             [state.striker, state.nonStriker] = [state.nonStriker, state.striker];
+            updateUI();
         }
         
         function undo() {
@@ -1039,42 +1067,82 @@
         }
 
         function updateScoreboard() {
-            const team1 = state.team1;
-            const team2 = state.team2;
+            const battingTeamKey = state.battingTeam;
+            const bowlingTeamKey = state.bowlingTeam;
+            const battingTeam = state[battingTeamKey];
+            const bowlingTeam = state[bowlingTeamKey];
+
+            const createTeamHTML = (team, isBatting) => {
+                const overs = `${team.overs}.${team.balls}`;
+                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-xl font-bold';
+                const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
+                
+                return `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="${logoSrc}" alt="${team.name} Logo" class="w-10 h-10 rounded-full object-cover">
+                            <span class="font-semibold text-gray-800 text-lg">${team.name}</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="${scoreClass} text-gray-900">${team.score}/${team.wickets}</p>
+                            <p class="text-base text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
+                        </div>
+                    </div>
+                `;
+            };
+
+            const battingTeamHTML = createTeamHTML(battingTeam, true);
+            const bowlingTeamHTML = createTeamHTML(bowlingTeam, false);
             
-            const t1Overs = `${team1.overs}.${team1.balls}`;
-            const t2Overs = `${team2.overs}.${team2.balls}`;
-
-            ui.team1.name.textContent = team1.name;
-            ui.team1.score.textContent = `${team1.score}/${team1.wickets}`;
-            ui.team1.overs.textContent = `(${t1Overs} / ${state.totalOvers} ov)`;
-
-            ui.team2.name.textContent = team2.name;
-            ui.team2.score.textContent = `${team2.score}/${team2.wickets}`;
-            ui.team2.overs.textContent = `(${t2Overs} / ${state.totalOvers} ov)`;
+            ui.teamScoresContainer.innerHTML = battingTeamHTML + bowlingTeamHTML;
+            document.getElementById('scoreboard').style.background = `linear-gradient(135deg, ${battingTeam.color}20, #ffffff)`;
         }
         
         function updateBattingTable() {
             ui.battingTable.innerHTML = '';
-            [state.striker, state.nonStriker].forEach((batsman, index) => {
-                if (batsman) {
-                    const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : '0.00';
-                    const row = `
-                        <tr class="border-t">
-                            <td class="py-2 font-semibold text-gray-800 flex items-center">${batsman.name} ${index === 0 ? '<span class="text-red-500 ml-2 text-xs">*</span>' : ''}</td>
-                            <td class="text-center py-2 font-bold">${batsman.runs}</td>
-                            <td class="text-center py-2">${batsman.balls}</td>
-                            <td class="text-center py-2">${batsman.fours}</td>
-                            <td class="text-center py-2">${batsman.sixes}</td>
-                            <td class="text-right py-2">${sr}</td>
-                        </tr>
-                    `;
-                    ui.battingTable.innerHTML += row;
-                }
-            });
-             if (!state.striker && !state.nonStriker) {
-                ui.battingTable.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Select batsmen to begin</td></tr>`;
+            const batsman1HTML = state.striker ? createBatsmanRow(state.striker, true) : createEmptyBatsmanRow();
+            const batsman2HTML = state.nonStriker ? createBatsmanRow(state.nonStriker, false) : createEmptyBatsmanRow();
+
+            ui.battingTable.innerHTML = batsman1HTML + batsman2HTML;
+        }
+
+        function createBatsmanRow(batsman, isStriker) {
+            const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : '0.00';
+            return `
+                <tr class="border-t">
+                    <td class="p-3 font-semibold text-gray-800 flex items-center justify-between text-base">
+                        <div>
+                            ${batsman.name} ${isStriker ? '<span class="text-red-500 ml-1 text-xs">*</span>' : ''}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                             <button onclick="swapBatsmen()" class="text-gray-400 hover:text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 12l-3-3m3 3l3-3m7 3V4m0 12l3-3m-3 3l-3-3" /></svg>
+                            </button>
+                            <button onclick="editPlayer('${isStriker ? 'striker' : 'nonStriker'}')" class="text-gray-400 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-center p-3 font-bold text-base">${batsman.runs}</td>
+                    <td class="text-center p-3 text-base">${batsman.balls}</td>
+                    <td class="text-center p-3 text-base">${batsman.fours}</td>
+                    <td class="text-center p-3 text-base">${batsman.sixes}</td>
+                    <td class="text-right p-3 text-base">${sr}</td>
+                </tr>
+            `;
+        }
+        
+        function createEmptyBatsmanRow() {
+            if (!state.striker && !state.nonStriker) {
+                return `<tr><td colspan="6" class="text-center py-4 text-gray-500">Select batsmen to begin</td></tr>`;
             }
+            return '';
+        }
+
+        function editPlayer(role) {
+            selectPlayer(role, () => {
+                // No further action needed after selection
+            });
         }
         
         function updateBowlingTable() {
@@ -1085,12 +1153,17 @@
                 const econ = bowler.overs > 0 ? (bowler.runsConceded / bowler.overs).toFixed(2) : '0.00';
                 const row = `
                     <tr class="border-t">
-                        <td class="py-2 font-semibold text-gray-800">${bowler.name}</td>
-                        <td class="text-center py-2">${overs}</td>
-                        <td class="text-center py-2">${bowler.maidens}</td>
-                        <td class="text-center py-2">${bowler.runsConceded}</td>
-                        <td class="text-center py-2">${bowler.wickets}</td>
-                        <td class="text-right py-2">${econ}</td>
+                        <td class="p-3 font-semibold text-gray-800 flex items-center space-x-2 text-base">
+                            <span>${bowler.name}</span>
+                            <button onclick="editPlayer('bowler')" class="text-gray-400 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
+                            </button>
+                        </td>
+                        <td class="text-center p-3 text-base">${overs}</td>
+                        <td class="text-center p-3 text-base">${bowler.maidens}</td>
+                        <td class="text-center p-3 text-base">${bowler.runsConceded}</td>
+                        <td class="text-center p-3 text-base">${bowler.wickets}</td>
+                        <td class="text-right p-3 text-base">${econ}</td>
                     </tr>
                 `;
                 ui.bowlingTable.innerHTML = row;
@@ -1172,6 +1245,7 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
+            ui.matchDateInput.value = new Date().toISOString().split('T')[0];
             ui.confirmCancelBtn.onclick = () => {
                 closeModal('confirm-modal');
                 confirmCallback = null;
