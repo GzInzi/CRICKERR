@@ -878,7 +878,10 @@
             ui.playerSaveBtn.onclick = () => {
                 const selectedPlayer = ui.playerSelect.value;
                 if (selectedPlayer) {
-                    state[role] = { name: selectedPlayer, runs: 0, balls: 0, fours: 0, sixes: 0, overs: 0, maidens: 0, runsConceded: 0, wickets: 0 };
+                    state[role] = { name: selectedPlayer, runs: 0, balls: 0, fours: 0, sixes: 0, maidens: 0, runsConceded: 0, wickets: 0 };
+                    if(role === 'bowler') {
+                        state[role].ballsBowled = 0;
+                    }
                     closeModal('player-modal');
                     updateUI();
                     
@@ -993,51 +996,46 @@
             closeAllModals();
             saveState();
             
-            const battingTeamKey = state.battingTeam;
-            const battingTeam = state[battingTeamKey];
+            const battingTeam = state[state.battingTeam];
             const playerOut = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
 
             battingTeam.wickets++;
             state.bowler.wickets++;
             playerOut.balls++;
             battingTeam.playerStats[playerName].isOut = true;
-
-            processBall(0, 'W');
-            updateCommentary(`${state.bowler.name} to ${playerOut.name}, OUT! (${type})`);
             
             if (state.striker && state.striker.name === playerName) state.striker = null;
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
 
-            updateUI();
+            processBall(0, 'W');
             
+            updateCommentary(`${state.bowler.name} to ${playerOut.name}, OUT! (${type})`);
+            updateUI();
             await triggerEventAnimation('WICKET!', 'text-red-700');
 
-            if (battingTeam.wickets < state.playersPerSide - 1) {
-                state.isScoringLocked = true;
-                const roleToFill = !state.striker ? 'striker' : 'nonStriker';
-                selectPlayer(roleToFill, () => {
-                    state.isScoringLocked = false;
-                });
+            if (checkInningsEnd()) {
+                return;
             }
+            
+            state.isScoringLocked = true;
+            const roleToFill = !state.striker ? 'striker' : 'nonStriker';
+            selectPlayer(roleToFill, () => {
+                state.isScoringLocked = false;
+            });
         }
 
         function processBall(runs, event) {
             const battingTeam = state[state.battingTeam];
-            
             battingTeam.balls++;
+            state.bowler.ballsBowled++;
             state.bowler.runsConceded += runs;
             state.currentOver.push({ event, runs });
-
-            if (checkInningsEnd()) {
-                return; 
-            }
 
             const isOverComplete = battingTeam.balls === 6;
 
             if (isOverComplete) {
                 battingTeam.balls = 0;
                 battingTeam.overs++;
-                state.bowler.overs = parseFloat((state.bowler.overs + 0.5).toFixed(1));
                 
                 if (state.currentOver.reduce((acc, ball) => acc + ball.runs, 0) === 0) {
                     state.bowler.maidens++;
@@ -1047,16 +1045,12 @@
                 state.currentOver = [];
                 swapBatsmen();
                 
-                if (battingTeam.overs < state.totalOvers) {
-                    state.isScoringLocked = true;
-                    selectPlayer('bowler', () => {
-                        state.isScoringLocked = false;
-                    });
-                } else {
-                    checkInningsEnd();
-                }
-            } else {
-                 state.bowler.overs = parseFloat((state.bowler.overs + 0.1).toFixed(1));
+                if (checkInningsEnd()) return;
+
+                state.isScoringLocked = true;
+                selectPlayer('bowler', () => {
+                    state.isScoringLocked = false;
+                });
             }
         }
 
@@ -1232,8 +1226,11 @@
             ui.bowlingTable.innerHTML = '';
             if (state.bowler) {
                 const bowler = state.bowler;
-                const overs = `${Math.floor(bowler.overs)}.${(bowler.overs % 1 * 10).toFixed(0)}`;
-                const econ = bowler.overs > 0 ? (bowler.runsConceded / bowler.overs).toFixed(2) : '0.00';
+                const overs = Math.floor(bowler.ballsBowled / 6);
+                const balls = bowler.ballsBowled % 6;
+                const oversDisplay = `${overs}.${balls}`;
+                const econ = bowler.ballsBowled > 0 ? (bowler.runsConceded / (bowler.ballsBowled / 6)).toFixed(2) : '0.00';
+                
                 const row = `
                     <tr class="border-t">
                         <td class="p-3 font-semibold text-gray-800 flex items-center space-x-2 text-lg">
@@ -1242,7 +1239,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
                             </button>
                         </td>
-                        <td class="text-center p-3 text-lg">${overs}</td>
+                        <td class="text-center p-3 text-lg">${oversDisplay}</td>
                         <td class="text-center p-3 text-lg">${bowler.maidens}</td>
                         <td class="text-center p-3 text-lg">${bowler.runsConceded}</td>
                         <td class="text-center p-3 text-lg">${bowler.wickets}</td>
