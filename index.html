@@ -8,275 +8,134 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        /* NEW: Full-screen layout and font size for setup pages on mobile */
-        @media (max-width: 768px) {
-            /* 1. Apply your requested font size for the whole app on mobile */
-            body {
-                font-size: 12px;
-            }
+<style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 16px; /* Adjusted base font size */ 
+        }
 
-            /* 2. Make the setup screen and card full-page */
-            #setup-screen {
-                padding: 0; /* Remove padding from the gray background */
-            }
-            .setup-card {
-                max-width: 100%;        /* Allow the card to be full width */
-                min-height: 100vh;      /* Make the card fill the screen height */
-                border-radius: 0;       /* Remove rounded corners for an edge-to-edge look */
-                box-shadow: none;         /* Remove the shadow effect */
-                border: none;             /* Remove the border */
-            }
+        /* Full-screen layout and font size for setup pages on mobile */
+        @media (max-width: 768px) {
+            body { font-size: 14px; } /* Increased base font slightly for better readability */
+            #setup-screen { padding: 0; }
+            .setup-card { max-width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; border: none; }
         }
 
         /* --- SPLASH SCREEN STYLES --- */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f0f2f5; /* Light grey background to match the setup page */
-            z-index: 9999;
-            display: flex;
-            flex-direction: column; /* Stacks the logo on top of the text */
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.75s ease-out; /* For the fade-out effect */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f0f2f5; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.75s ease-out; }
+        #splash-logo { width: 120px; margin-bottom: 1rem; }
+        #splash-text { font-size: 0.8rem; font-family: 'Inter', sans-serif; color: #475569; animation: fadeInAnimation 1s ease-in; }
+        @keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Styles for select dropdown placeholders */
+        select.placeholder { color: #9ca3af; font-size: 0.9em; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .modal-content { transition: transform 0.3s ease-in-out; }
+
+        .setup-bg { background-color: #f0f2f5; }
+        .setup-card { background: #ffffff; border: 1px solid #e2e8f0; transition: box-shadow 0.3s ease-in-out; }
+        .setup-step { transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; }
+        .setup-step.hidden { opacity: 0; transform: translateX(30px) scale(0.98); position: absolute; pointer-events: none; }
+        .setup-step.active { opacity: 1; transform: translateX(0) scale(1); }
+        .progress-bar-fill { background-color: #2563eb; transition: width 0.5s ease-in-out; }
+        .setup-btn { background-color: #2563eb; background-image: linear-gradient(to right, #2563eb, #1d4ed8); transition: all 0.3s ease; }
+        .setup-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15); }
+        .back-btn { color: #475569; transition: color 0.2s; }
+        .back-btn:hover { color: #1e293b; }
+
+        /* --- NEW COIN TOSS ANIMATION --- */
+        #coin-container { perspective: 1000px; }
+        #coin { position: relative; width: 100px; height: 100px; transform-style: preserve-3d; }
+        #coin.tossing { animation: toss-animation 2.5s forwards; }
+        .coin-side { position: absolute; width: 100px; height: 100px; border-radius: 50%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; border: 4px solid rgba(255, 255, 255, 0.5); }
+        .front { background-color: #d4af37; transform: translateZ(2px); }
+        .back { background-color: #c0c0c0; transform: rotateY(180deg) translateZ(2px); }
+        #coin-shadow { width: 80px; height: 20px; background: rgba(0,0,0,0.2); border-radius: 50%; filter: blur(5px); transform-origin: center; }
+        #coin-shadow.tossing { animation: shadow-animation 2.5s forwards; }
+        @keyframes toss-animation {
+            0% { transform: translateY(0) rotateY(0) rotateX(0); }
+            15% { transform: translateY(-120px) rotateY(720deg) rotateX(20deg); }
+            100% { transform: translateY(0) rotateY(3600deg) rotateX(0); }
+        }
+        @keyframes shadow-animation {
+            0% { transform: scale(1); opacity: 1; }
+            15% { transform: scale(0.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        #splash-logo {
-            width: 120px; /* Adjust the size of your logo if needed */
-            margin-bottom: 1rem;
+        /* Event Animation Styles */
+        .event-text-animation { animation: event-animation 1.5s ease-in-out forwards; }
+        @keyframes event-animation { 
+            0% { opacity: 0; transform: scale(0.7); } 
+            20% { opacity: 1; transform: scale(1.2); } 
+            80% { opacity: 1; transform: scale(1.1); } 
+            100% { opacity: 0; transform: scale(0.5); } 
         }
 
-        #splash-text {
-            font-size: 0.8rem;
-            font-family: 'Inter', sans-serif;
-            color: #475569; /* A muted text color */
-            /* Simple fade-in animation */
-            animation: fadeInAnimation 1s ease-in;
-        }
-
-        @keyframes fadeInAnimation {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        /* NEW: Styles for select dropdown placeholders */
-        select.placeholder {
-            color: #9ca3af; /* A nice grey color */
-            font-size: 0.9em;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            font-size: 20px;
-        }
-        /* Custom scrollbar for better aesthetics */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+        /* --- ANIMATIONS & UI POLISH --- */
+        .scoring-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } /* Ensure equal width columns */
         .scoring-grid button {
             transition: all 0.2s ease-in-out;
+            text-align: center;
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
-        .scoring-grid button:active {
-            transform: scale(0.95);
-        }
-        .modal-overlay {
-            transition: opacity 0.3s ease-in-out;
-        }
-        .modal-content {
-            transition: transform 0.3s ease-in-out;
-        }
+        .scoring-grid button:nth-child(4n) { border-right: none; } /* Remove right border for the last in each row */
+        .scoring-grid button:nth-last-child(-n+4) { border-bottom: none; } /* Remove bottom border for the last row */
         
-        /* --- Professional Setup Screen Styles --- */
-        .setup-bg {
-            background-color: #f0f2f5;
-        }
-        .setup-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            transition: box-shadow 0.3s ease-in-out;
-        }
-        .setup-step {
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-        .setup-step.hidden {
-            opacity: 0;
-            transform: translateX(20px);
-            position: absolute;
-            pointer-events: none;
-        }
-        .setup-step.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        .progress-bar-bg {
-            background-color: #e2e8f0;
-        }
-        .progress-bar-fill {
-            background-color: #2563eb;
-            transition: width 0.5s ease-in-out;
-        }
-        .setup-btn {
-            background-color: #2563eb;
-            background-image: linear-gradient(to right, #2563eb, #1d4ed8);
-            transition: all 0.3s ease;
-        }
-        .setup-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15);
-        }
-        .back-btn {
-            color: #475569;
-        }
-        .back-btn:hover {
-            color: #1e293b;
+        .scoring-grid button:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .scoring-grid button:active { transform: scale(0.98); }
+        
+        /* Color Highlights for Scoring Buttons */
+        .scoring-grid button:nth-child(6) span:first-child { color: #a37100; } /* Dark Yellow for 4 */
+        .scoring-grid button:nth-child(7) span:first-child { color: #14532d; } /* Dark Green for 6 */
+        .scoring-grid button:nth-child(8) { color: #8b0000; } /* Dark Red for Wicket */
+
+        input, select { transition: all 0.3s ease; }
+
+        .highlight-score { animation: score-flash 0.6s ease-out; }
+        @keyframes score-flash {
+            0% { background-color: transparent; }
+            50% { background-color: #bfdbfe; transform: scale(1.05); }
+            100% { background-color: transparent; transform: scale(1); }
         }
 
-        /* --- Coin Toss Animation --- */
-        #coin {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            transform-style: preserve-3d;
-            transition: transform 1s;
-        }
-        #coin.flipping {
-            transform: rotateY(1800deg);
-        }
-        .coin-side {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-        .front {
-            background-color: #d4af37; /* Gold */
-            transform: translateZ(1px);
-        }
-        .back {
-            background-color: #c0c0c0; /* Silver */
-            transform: rotateY(180deg) translateZ(1px);
-        }
+        .tab-button.active { border-color: #2563eb; background-color: #2563eb; color: white; }
 
+        /* Styles specific to the scoreboard area */
+        #scoreboard { padding: 12px; }
+        #team-scores-container > div { padding: 6px 0; }
+        #team-scores-container .font-semibold { font-size: 1rem; }
+        #team-scores-container .text-4xl { font-size: 2.5rem; }
+        #team-scores-container .text-2xl { font-size: 1.8rem; }
+        #team-scores-container .text-lg { font-size: 0.9rem; }
+        #team-scores-container .text-gray-600 { font-size: 0.8rem; }
 
-        /* --- Event Animation Styles --- */
-        @keyframes event-animation {
-            0% {
-                opacity: 0;
-                transform: scale(0.5) translateY(50px);
-            }
-            20% {
-                opacity: 1;
-                transform: scale(1.2) translateY(0);
-            }
-            80% {
-                opacity: 1;
-                transform: scale(1.2) translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1.5) translateY(-50px);
-            }
+        /* Styles for batting and bowling tables */
+        #batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
+            padding: 8px 3px; /* Reduced horizontal padding */
+            font-size: 0.8rem;
         }
-        .event-text-animation {
-            animation: event-animation 1.5s ease-in-out forwards;
+        #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child {
+            padding-left: 8px;
         }
+        #batting-table th:last-child, #batting-table td:last-child, #bowling-table th:last-child, #bowling-table td:last-child {
+            padding-right: 8px;
+            text-align: right;
+        }
+        #batting-table .font-semibold, #bowling-table .font-semibold { font-size: 0.9rem; }
 
-        /* --- Win Modal Styles --- */
-        .win-modal-content.animate-slide-in {
-            animation: win-slide-in 0.5s forwards ease-out;
-        }
-        .win-modal-content.animate-slide-out {
-            animation: win-slide-out 0.5s forwards ease-in;
-        }
+        #select-batsman-prompt { padding: 8px; font-size: 0.85rem; }
 
-        @keyframes win-slide-in {
-            from {
-                transform: translateY(100%) scale(0.9);
-            }
-            to {
-                transform: translateY(0) scale(1);
-            }
-        }
-        @keyframes win-slide-out {
-            from {
-                transform: translateY(0) scale(1);
-            }
-            to {
-                transform: translateY(100%) scale(0.9);
-            }
-        }
-
-        .win-text-animate {
-            animation: text-glow 2s infinite alternate;
-        }
-
-        @keyframes text-glow {
-            from {
-                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px currentColor;
-            }
-            to {
-                text-shadow: 0 0 10px #fff, 0 0 20px currentColor, 0 0 30px currentColor;
-            }
-        }
-
-        /* --- CSS Confetti --- */
-        #confetti-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        #confetti-container i {
-            position: absolute;
-            display: block;
-            width: 5px;
-            height: 10px;
-            top: -10px;
-            animation: confetti-fall 3s linear infinite;
-        }
-
-        @keyframes confetti-fall {
-            from {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(110vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* Summary Tabs */
-        .tab-button.active {
-            border-color: #2563eb;
-            background-color: #2563eb;
-            color: white;
-        }
+        #over-progress-container { padding: 8px; }
+        #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
+        #over-summary { font-size: 0.8rem; }
     </style>
 </head>
 <body class="bg-gray-100 antialiased">
@@ -284,10 +143,6 @@
     <div id="splash-screen">
         <img src="my-logo.png" alt="App Logo" id="splash-logo">
         <p id="splash-text">Created and developed by Inzamam Rishi</p>
-    </div>
-
-    <div class="w-full bg-white py-2 flex justify-center shadow-md">
-        <img src="your-logo.png" class="h-12" alt="Your Logo">
     </div>
 
     <div id="event-animation-overlay" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pointer-events-none hidden z-50">
@@ -398,7 +253,7 @@
                         <h1 id="team1-roster-title" class="text-3xl font-bold text-gray-800"></h1>
                         <p class="text-gray-500 mt-1">Enter player names</p>
                     </header>
-                    <div id="team1-player-inputs" class="space-y-3 max-h-64 overflow-y-auto pr-2">
+                    <div id="team1-player-inputs" class="space-y-3 pr-2">
                         </div>
                     <div class="mt-8 flex justify-between items-center">
                         <button onclick="goToStep(1)" class="back-btn font-semibold">Back</button>
@@ -411,7 +266,7 @@
                         <h1 id="team2-roster-title" class="text-3xl font-bold text-gray-800"></h1>
                         <p class="text-gray-500 mt-1">Enter player names</p>
                     </header>
-                    <div id="team2-player-inputs" class="space-y-3 max-h-64 overflow-y-auto pr-2">
+                    <div id="team2-player-inputs" class="space-y-3 pr-2">
                         </div>
                     <div class="mt-8 flex justify-between items-center">
                         <button onclick="goToStep(2)" class="back-btn font-semibold">Back</button>
@@ -425,12 +280,13 @@
                         <p class="text-gray-500 mt-1">Decide who bats first</p>
                     </header>
                     <div class="flex flex-col items-center space-y-6">
-                        <div id="coin-container" class="perspective-1000">
+                        <div id="coin-container">
                             <div id="coin">
                                 <div class="coin-side front">HEADS</div>
                                 <div class="coin-side back">TAILS</div>
                             </div>
                         </div>
+                        <div id="coin-shadow"></div>
                         <button id="toss-btn" onclick="tossCoin()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Toss Coin</button>
                         <div id="toss-result" class="text-center hidden space-y-4">
                             <p id="toss-winner-text" class="text-lg font-semibold"></p>
@@ -450,49 +306,12 @@
     </div>
 
 
-    <div id="app" class="min-h-screen w-full flex-col hidden">
-        <header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md w-full">
-            <button class="text-white" onclick="showConfirm('Are you sure you want to exit? All progress will be lost.', () => { window.location.reload(); })">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <h1 class="text-xl font-bold">Scoring</h1>
-            <div class="flex items-center space-x-4">
-                <button onclick="showSummaryScreen()" class="text-white p-1 rounded-full hover:bg-white/20 transition-colors" title="View Match Summary">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </button>
-                <button onclick="openEditModal()" class="text-white p-1 rounded-full hover:bg-white/20 transition-colors" title="Edit Match">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                </button>
-                 <div class="flex items-center space-x-2">
-                    <span class="h-3 w-3 bg-green-400 rounded-full animate-pulse"></span>
-                    <span class="text-sm font-medium">Online</span>
-                </div>
-                <button id="fullscreen-btn" class="text-white" title="Fullscreen">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" />
-                    </svg>
-                </button>
+    <div id="app" class="h-screen w-full flex-col hidden overflow-hidden">
+        <div id="match-header" class="text-center py-1 px-4 pt-4 bg-gray-100">
             </div>
-        </header>
-
-        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-4">
+        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-6 overflow-hidden">
+            <div class="lg:col-span-2 space-y-4 overflow-y-auto">
                 <div id="scoreboard" class="bg-white rounded-lg p-4 shadow-md">
-                    <div class="flex justify-between items-center mb-2">
-                        <h2 id="match-title" class="font-bold text-gray-700"></h2>
-                        <span class="text-red-500 font-bold text-sm flex items-center">
-                            <svg class="w-2 h-2 mr-1.5 fill-current" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
-                            Live
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-500 mb-4" id="match-date"></p>
-
                     <div id="team-scores-container" class="space-y-3">
                         </div>
                 </div>
@@ -532,13 +351,13 @@
                                </tbody>
                         </table>
                     </div>
-                    <div id="select-bowler-prompt" class="hidden text-center p-4 bg-red-100 border border-red-300 rounded-lg cursor-pointer hover:bg-red-200 transition-colors">
-                        <p class="font-bold text-red-800">Over Complete! Select Next Bowler</p>
+                    <div id="select-batsman-prompt" class="hidden text-center p-4 bg-yellow-100 border border-yellow-300 rounded-lg cursor-pointer hover:bg-yellow-200 transition-colors">
+                        <p class="font-bold text-yellow-800">WICKET! Select the next batsman to continue.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-1 space-y-4">
+            <div class="lg:col-span-1 space-y-4 overflow-y-auto">
                 <div id="over-progress-container" class="bg-white rounded-lg p-4 shadow-md hidden">
                     <div class="flex items-center justify-between">
                         <div id="over-progress" class="flex items-center gap-2 flex-wrap">
@@ -546,32 +365,43 @@
                         <div id="over-summary" class="text-lg text-gray-700 font-medium whitespace-nowrap ml-4"></div>
                     </div>
                 </div>
-                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md">
+                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative">
+                    <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
+                        <p class="font-bold text-gray-800 text-lg">Select Next Bowler</p>
+                    </div>
                     <div class="grid grid-cols-4 scoring-grid">
-                        <button onclick="addRuns(0)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">0</span><br><span class="text-base text-gray-500">Dot</span></button>
-                        <button onclick="addRuns(1)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">1</span><br><span class="text-base text-gray-500">Single</span></button>
-                        <button onclick="addRuns(2)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">2</span><br><span class="text-base text-gray-500">Double</span></button>
-                        <button onclick="undo()" class="p-4 text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-bold">Undo</span></button>
-
-                        <button onclick="addRuns(3)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">3</span><br><span class="text-base text-gray-500">Triple</span></button>
-                        <button onclick="addRuns(4)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">4</span><br><span class="text-base text-gray-500">Four</span></button>
-                        <button onclick="addRuns(6)" class="p-4 text-center border-r border-b"><span class="font-bold text-3xl">6</span><br><span class="text-base text-gray-500">Six</span></button>
-                        <button onclick="openWicketModal()" class="p-4 text-center border-b text-red-500"><span class="font-bold text-2xl">Wicket</span></button>
-
-                        <button onclick="openModal('wide-modal')" class="p-4 text-center border-r"><span class="font-bold">Wide</span></button>
-                        <button onclick="openModal('noball-modal')" class="p-4 text-center border-r"><span class="font-bold">NB</span></button>
-                        <button onclick="openModal('byes-modal')" class="p-4 text-center border-r"><span class="font-bold">Byes</span></button>
-                        <button onclick="openModal('legbyes-modal')" class="p-4 text-center"><span class="font-bold">LB</span></button>
+                        <button onclick="addRuns(0)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
+                        <button onclick="addRuns(1)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
+                        <button onclick="addRuns(2)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
+                        <button onclick="undo()" class="h-14 text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-xs font-semibold mt-1">Undo</span></button>
+    
+                        <button onclick="addRuns(3)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
+                        <button onclick="addRuns(4)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
+                        <button onclick="addRuns(6)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
+                        <button onclick="openWicketModal()" class="h-14 text-center border-b flex items-center justify-center"><span class="font-bold text-base text-red-700">Wicket</span></button>
+    
+                        <button onclick="openModal('wide-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">Wide</span></button>
+                        <button onclick="openModal('noball-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">NB</span></button>
+                        <button onclick="openModal('byes-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">Byes</span></button>
+                        <button onclick="openModal('legbyes-modal')" class="h-14 text-center flex items-center justify-center"><span class="font-bold text-base">LB</span></button>
                     </div>
                 </footer>
             </div>
         </div>
+        <header class="bg-gray-800 text-white p-1 flex justify-between items-center shadow-inner w-full">
+            <img src="your-logo.png" class="h-8 ml-2" alt="Your Logo">
+            <div class="flex items-center justify-center flex-grow">
+                <button onclick="openEditModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">Edit</button>
+                <button onclick="showSummaryScreen()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">Summary</button>
+                <button onclick="openEndMatchModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">End Match</button>
+            </div>
+            <div class="w-8"></div> </header>
     </div>
 
     <div id="summary-screen" class="min-h-screen w-full flex-col hidden items-center bg-gray-100 p-4 sm:p-8">
         <div id="summary-content" class="relative w-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6 sm:p-8">
              <button onclick="backToScorecard()" class="absolute top-2 right-2 p-2 text-gray-400 hover:text-gray-700">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <h1 class="text-4xl font-black text-center text-gray-800 mb-2">Match Summary</h1>
             <p id="summary-venue-date" class="text-center text-gray-500 mb-6 sm:mb-8"></p>
@@ -775,6 +605,18 @@
         </div>
     </div>
 
+    <div id="end-match-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="modal-content bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm transform scale-95">
+            <h3 class="text-lg font-bold text-center mb-4">End Match</h3>
+            <p class="text-center text-sm text-gray-600 mb-4">Select a reason for ending the match prematurely.</p>
+            <div class="grid grid-cols-1 gap-3">
+                <button onclick="endMatch('Match Abandoned')" class="p-3 bg-gray-100 rounded-lg hover:bg-gray-200">Match Abandoned</button>
+                <button onclick="endMatch('Match Conceded')" class="p-3 bg-gray-100 rounded-lg hover:bg-gray-200">Match Conceded</button>
+                <button onclick="closeModal('end-match-modal')" class="p-3 mt-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div id="win-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden z-50">
         <div class="win-modal-content modal-content bg-white rounded-lg shadow-xl p-8 w-11/12 max-w-md text-center transform scale-100 relative overflow-hidden">
             <div id="confetti-container"></div>
@@ -871,13 +713,13 @@
             team1RosterTitle: document.getElementById('team1-roster-title'),
             team2RosterTitle: document.getElementById('team2-roster-title'),
             progressBar: document.getElementById('progress-bar'),
-            matchTitle: document.getElementById('match-title'),
-            matchDate: document.getElementById('match-date'),
+            matchHeader: document.getElementById('match-header'),
             teamScoresContainer: document.getElementById('team-scores-container'),
             targetInfoContainer: document.getElementById('target-info-container'),
             battingTable: document.getElementById('batting-table'),
             bowlingTable: document.getElementById('bowling-table'),
-            selectBowlerPrompt: document.getElementById('select-bowler-prompt'),
+            bowlerPromptOverlay: document.getElementById('bowler-prompt-overlay'),
+            selectBatsmanPrompt: document.getElementById('select-batsman-prompt'),
             overProgress: document.getElementById('over-progress'),
             overProgressContainer: document.getElementById('over-progress-container'),
             overSummary: document.getElementById('over-summary'),
@@ -899,6 +741,7 @@
             tossWinnerText: document.getElementById('toss-winner-text'),
             startMatchBtn: document.getElementById('start-match-btn'),
             coin: document.getElementById('coin'),
+            coinShadow: document.getElementById('coin-shadow'),
             winModal: document.getElementById('win-modal'),
             winModalWinner: document.getElementById('win-modal-winner'),
             winModalMargin: document.getElementById('win-modal-margin'),
@@ -962,7 +805,15 @@
         function tossCoin() {
             ui.tossBtn.disabled = true;
             ui.tossBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            ui.coin.classList.add('flipping');
+            
+            // Reset animation classes
+            ui.coin.classList.remove('tossing');
+            ui.coinShadow.classList.remove('tossing');
+            void ui.coin.offsetWidth; // Trigger reflow to restart animation
+
+            // Add classes to start animation
+            ui.coin.classList.add('tossing');
+            ui.coinShadow.classList.add('tossing');
             
             state.team1.name = ui.team1NameInput.value || 'HOME TEAM';
             state.team2.name = ui.team2NameInput.value || 'AWAY TEAM';
@@ -975,8 +826,7 @@
                 ui.tossResult.classList.remove('hidden');
                 ui.startMatchBtn.disabled = false;
                 ui.startMatchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                ui.coin.classList.remove('flipping');
-            }, 1000);
+            }, 2500); // Wait for animation to finish
         }
 
         function handleLogoUpload(file, teamKey) {
@@ -1044,9 +894,17 @@
 
         // --- CORE LOGIC ---
         function initialize() {
-            ui.matchTitle.textContent = `${state.totalOvers} Overs Match at ${state.venue || 'Unknown Venue'}`;
-            const date = new Date(state.matchDate + 'T00:00:00');
-            ui.matchDate.textContent = state.matchDate ? date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const team1Name = state.team1.name;
+            const team2Name = state.team2.name;
+            const venue = state.venue || 'Unknown Venue';
+            const dateStr = state.matchDate ? new Date(state.matchDate + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const matchHeader = ui.matchHeader;
+            matchHeader.innerHTML = `
+                <h1 class="font-bold text-sm uppercase">Match Between ${team1Name} vs ${team2Name}</h1>
+                <p class="text-xs text-gray-600">At ${venue} on ${dateStr}</p>
+            `;
+
             state.isScoringLocked = true;
             updateUI();
             
@@ -1054,6 +912,7 @@
                 selectPlayer('nonStriker', () => {
                     selectPlayer('bowler', () => {
                         state.isScoringLocked = false;
+                        updateUI();
                     });
                 });
             });
@@ -1251,6 +1110,7 @@
             const roleToFill = !state.striker ? 'striker' : 'nonStriker';
             selectPlayer(roleToFill, () => {
                 state.isScoringLocked = false;
+                updateUI();
             });
         }
 
@@ -1278,7 +1138,7 @@
                     
                     if (checkInningsEnd()) return;
                     
-                    ui.selectBowlerPrompt.classList.remove('hidden');
+                    ui.bowlerPromptOverlay.classList.remove('hidden');
                 }, 2000); 
             }
         }
@@ -1382,12 +1242,25 @@
         }
 
         // --- UI UPDATES ---
+        function manageBatsmanPrompt() {
+            const batsmanIsNeeded = (state.striker === null || state.nonStriker === null) && !state.winner;
+            const prompt = ui.selectBatsmanPrompt;
+
+            if (batsmanIsNeeded) {
+                prompt.classList.remove('hidden');
+                state.isScoringLocked = true; // Ensure scoring remains locked
+            } else {
+                prompt.classList.add('hidden');
+            }
+        }
+
         function updateUI() {
             updateScoreboard();
             updateTargetInfo();
             updateBattingTable();
             updateBowlingTable();
             updateOverProgress();
+            manageBatsmanPrompt();
         }
 
         function updateScoreboard() {
@@ -1397,19 +1270,39 @@
             const bowlingTeam = state[bowlingTeamKey];
 
             const createTeamHTML = (team, isBatting) => {
-                const overs = `${team.overs}.${team.balls}`;
-                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-2xl font-bold';
+                // Define styles based on whether the team is batting or bowling
+                const logoClass = isBatting ? 'w-12 h-12' : 'w-10 h-10';
+                const nameClass = isBatting ? 'text-xl' : 'text-lg';
+                const scoreClass = isBatting ? 'text-5xl font-bold' : 'text-2xl font-semibold';
+                const oversClass = isBatting ? 'text-lg' : 'text-base';
                 const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
-                
+
+                // For the bowling team in the first innings, show "Yet to bat"
+                if (state.innings === 1 && !isBatting) {
+                    return `
+                        <div class="flex items-center justify-between opacity-70 mt-2">
+                            <div class="flex items-center space-x-3">
+                                <img src="${logoSrc}" alt="${team.name} Logo" class="${logoClass} rounded-full object-cover">
+                                <span class="${nameClass} font-semibold text-gray-700">${team.name}</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-semibold text-gray-500">Yet to bat</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Default display for the batting team and for all teams in the second innings
+                const overs = `${team.overs}.${team.balls}`;
                 return `
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <img src="${logoSrc}" alt="${team.name} Logo" class="w-10 h-10 rounded-full object-cover">
-                            <span class="font-semibold text-gray-800 text-lg">${team.name}</span>
+                            <img src="${logoSrc}" alt="${team.name} Logo" class="${logoClass} rounded-full object-cover">
+                            <span class="${nameClass} font-semibold text-gray-800">${team.name}</span>
                         </div>
                         <div class="text-right">
                             <p class="${scoreClass} text-gray-900">${team.score}/${team.wickets}</p>
-                            <p class="text-lg text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
+                            <p class="${oversClass} text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
                         </div>
                     </div>
                 `;
@@ -1421,6 +1314,7 @@
             ui.teamScoresContainer.innerHTML = battingTeamHTML + bowlingTeamHTML;
             document.getElementById('scoreboard').style.background = `linear-gradient(135deg, ${battingTeam.color}20, #ffffff)`;
         }
+
 
         function updateTargetInfo() {
             if (state.innings !== 2 || state.isScoringLocked) {
@@ -1474,7 +1368,7 @@
                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 12l-3-3m3 3l3-3m7 3V4m0 12l3-3m-3 3l-3-3" /></svg>
                             </button>
                             <button onclick="editPlayer('${isStriker ? 'striker' : 'nonStriker'}')" class="text-gray-400 hover:text-gray-700">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
                             </button>
                         </div>
                     </td>
@@ -1515,7 +1409,7 @@
                         <td class="p-3 font-semibold text-gray-800 flex items-center space-x-2 text-lg">
                             <span>${bowler.name}</span>
                             <button onclick="editPlayer('bowler')" class="text-gray-400 hover:text-gray-700">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
                             </button>
                         </td>
                         <td class="text-center p-3 text-lg">${oversDisplay}</td>
@@ -1573,7 +1467,7 @@
         }
         
         function closeAllModals() {
-            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal'].forEach(closeModal);
+            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal', 'end-match-modal'].forEach(closeModal);
             if (!ui.winModal.classList.contains('hidden')) {
                 closeWinModal();
             }
@@ -1591,6 +1485,19 @@
             confirmCallback = onConfirm;
             openModal('confirm-modal');
         }
+
+        function openEndMatchModal() {
+            openModal('end-match-modal');
+        }
+
+        function endMatch(reason) {
+            state.winner = "Match Ended";
+            state.winMargin = reason;
+            state.isScoringLocked = true;
+            ui.scoringControls.classList.add('hidden');
+            showSummaryScreen();
+        }
+
 
         // --- WIN MODAL & SUMMARY CONTROLS ---
         function launchConfetti() {
@@ -1703,7 +1610,7 @@
                  document.getElementById('summary-motm-contribution').textContent = '';
                  document.getElementById('summary-result').textContent = 'Match in Progress';
             }
-            closeWinModal();
+            closeAllModals();
             
             const date = new Date(state.matchDate + 'T00:00:00');
             const formattedDate = state.matchDate ? date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
@@ -1841,11 +1748,6 @@
         }
         
         function openEditModal() {
-            document.getElementById('edit-total-overs').value = state.totalOvers;
-            document.getElementById('edit-team1-name').value = state.team1.name;
-            document.getElementById('edit-team2-name').value = state.team2.name;
-            document.getElementById('edit-team1-players').value = state.team1.players.join('\n');
-            document.getElementById('edit-team2-players').value = state.team2.players.join('\n');
             openModal('edit-match-modal');
         }
 
@@ -1929,21 +1831,31 @@
 
             ui.winModalOkBtn.onclick = () => showSummaryScreen();
             
-            ui.selectBowlerPrompt.onclick = () => {
+            ui.bowlerPromptOverlay.onclick = () => {
                 swapBatsmen();
                 state.currentOver = [];
                 updateUI();
-                ui.selectBowlerPrompt.classList.add('hidden');
+                ui.bowlerPromptOverlay.classList.add('hidden');
                 selectPlayer('bowler', () => {
                     state.isScoringLocked = false;
+                    updateUI();
                 });
+            };
+            
+            ui.selectBatsmanPrompt.onclick = () => {
+                if (!state.winner) {
+                    const roleToFill = state.striker === null ? 'striker' : 'nonStriker';
+                    selectPlayer(roleToFill, () => {
+                        state.isScoringLocked = false;
+                        updateUI();
+                    });
+                }
             };
             
             ui.confirmDownloadBtn.onclick = () => {
                 if(downloadAction) downloadAction();
             };
 
-            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
         });
 
         // --- 'Enter' Key Navigation for Setup Inputs ---
