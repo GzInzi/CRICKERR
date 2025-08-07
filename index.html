@@ -72,10 +72,10 @@
         /* Event Animation Styles */
         .event-text-animation { animation: event-animation 1.5s ease-in-out forwards; }
         @keyframes event-animation { 
-            0% { opacity: 0; transform: scale(0.7); } 
-            20% { opacity: 1; transform: scale(1.2); } 
+            0% { opacity: 0; transform: scale(0.8); } 
+            20% { opacity: 1; transform: scale(1.1); } 
             80% { opacity: 1; transform: scale(1.1); } 
-            100% { opacity: 0; transform: scale(0.5); } 
+            100% { opacity: 0; transform: scale(0.8); } 
         }
 
         /* --- ANIMATIONS & UI POLISH --- */
@@ -275,24 +275,22 @@
                 </div>
 
                 <div id="setup-step-4" class="setup-step hidden">
-                     <header class="text-center mb-8">
-                        <h1 class="text-3xl font-bold text-gray-800">Coin Toss</h1>
-                        <p class="text-gray-500 mt-1">Decide who bats first</p>
+                    <header class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-gray-800">Toss Result</h1>
+                        <p class="text-gray-500 mt-1">Select the toss winner and their choice</p>
                     </header>
-                    <div class="flex flex-col items-center space-y-6">
-                        <div id="coin-container">
-                            <div id="coin">
-                                <div class="coin-side front">HEADS</div>
-                                <div class="coin-side back">TAILS</div>
-                            </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label for="toss-winner-select" class="block font-medium text-gray-700">Who won the toss?</label>
+                            <select id="toss-winner-select" class="w-full p-2 border-gray-300 border rounded-md mt-1">
+                                <option value="" disabled selected>Select a Team</option>
+                                </select>
                         </div>
-                        <div id="coin-shadow"></div>
-                        <button id="toss-btn" onclick="tossCoin()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Toss Coin</button>
-                        <div id="toss-result" class="text-center hidden space-y-4">
-                            <p id="toss-winner-text" class="text-lg font-semibold"></p>
-                            <div id="toss-choice" class="flex items-center justify-center space-x-4">
-                                <label><input type="radio" name="bat-bowl" value="bat" checked> Bat</label>
-                                <label><input type="radio" name="bat-bowl" value="bowl"> Bowl</label>
+                        <div id="toss-decision-container" class="hidden">
+                            <p class="block font-medium text-gray-700 mb-2">...and elected to:</p>
+                            <div class="flex items-center justify-center space-x-6">
+                                <label class="flex items-center text-lg"><input type="radio" name="bat-bowl" value="bat" class="mr-2 h-4 w-4" checked> Bat</label>
+                                <label class="flex items-center text-lg"><input type="radio" name="bat-bowl" value="bowl" class="mr-2 h-4 w-4"> Bowl</label>
                             </div>
                         </div>
                     </div>
@@ -312,7 +310,7 @@
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-6 overflow-hidden">
             <div class="lg:col-span-2 space-y-4 overflow-y-auto">
                 <div id="scoreboard" class="bg-white rounded-lg p-4 shadow-md">
-                    <div id="team-scores-container" class="space-y-3">
+                    <div id="team-scores-container" class="space-y-1">
                         </div>
                 </div>
                 
@@ -367,7 +365,7 @@
                 </div>
                 <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-                        <p class="font-bold text-gray-800 text-lg">Select Next Bowler</p>
+                        <p class="font-bold text-yellow-600 text-lg">Choose the Next Bowler</p>
                     </div>
                     <div class="grid grid-cols-4 scoring-grid">
                         <button onclick="addRuns(0)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
@@ -449,12 +447,12 @@
         <div class="modal-content bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm transform scale-95">
             <div class="flex justify-between items-center mb-4">
                 <h3 id="modal-title" class="text-lg font-bold">Select Player</h3>
-                <button onclick="closeModal('player-modal')" class="text-gray-500 hover:text-gray-800">&times;</button>
+                <button id="player-modal-cancel-btn-x" onclick="closeModal('player-modal')" class="text-gray-500 hover:text-gray-800">&times;</button>
             </div>
             <select id="player-select" class="w-full p-2 border rounded-md mb-4">
                 </select>
             <div class="flex justify-end space-x-3">
-                <button onclick="closeModal('player-modal')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                <button id="player-modal-cancel-btn-text" onclick="closeModal('player-modal')" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
                 <button id="player-save-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save</button>
             </div>
         </div>
@@ -728,6 +726,8 @@
             modalTitle: document.getElementById('modal-title'),
             playerSelect: document.getElementById('player-select'),
             playerSaveBtn: document.getElementById('player-save-btn'),
+            playerModalCancelBtnX: document.getElementById('player-modal-cancel-btn-x'),
+            playerModalCancelBtnText: document.getElementById('player-modal-cancel-btn-text'),
             alertModal: document.getElementById('alert-modal'),
             alertMessage: document.getElementById('alert-message'),
             alertOkBtn: document.getElementById('alert-ok-btn'),
@@ -736,12 +736,9 @@
             confirmOkBtn: document.getElementById('confirm-ok-btn'),
             confirmCancelBtn: document.getElementById('confirm-cancel-btn'),
             runOutOptions: document.getElementById('run-out-options'),
-            tossBtn: document.getElementById('toss-btn'),
-            tossResult: document.getElementById('toss-result'),
-            tossWinnerText: document.getElementById('toss-winner-text'),
+            tossWinnerSelect: document.getElementById('toss-winner-select'),
+            tossDecisionContainer: document.getElementById('toss-decision-container'),
             startMatchBtn: document.getElementById('start-match-btn'),
-            coin: document.getElementById('coin'),
-            coinShadow: document.getElementById('coin-shadow'),
             winModal: document.getElementById('win-modal'),
             winModalWinner: document.getElementById('win-modal-winner'),
             winModalMargin: document.getElementById('win-modal-margin'),
@@ -799,34 +796,14 @@
             }
             if (step === 4) {
                  ui.progressBar.style.width = '100%';
+                 const team1Name = ui.team1NameInput.value || 'HOME TEAM';
+                 const team2Name = ui.team2NameInput.value || 'AWAY TEAM';
+                 ui.tossWinnerSelect.innerHTML = `
+                    <option value="" disabled selected>Select a Team</option>
+                    <option value="team1">${team1Name}</option>
+                    <option value="team2">${team2Name}</option>
+                 `;
             }
-        }
-
-        function tossCoin() {
-            ui.tossBtn.disabled = true;
-            ui.tossBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            
-            // Reset animation classes
-            ui.coin.classList.remove('tossing');
-            ui.coinShadow.classList.remove('tossing');
-            void ui.coin.offsetWidth; // Trigger reflow to restart animation
-
-            // Add classes to start animation
-            ui.coin.classList.add('tossing');
-            ui.coinShadow.classList.add('tossing');
-            
-            state.team1.name = ui.team1NameInput.value || 'HOME TEAM';
-            state.team2.name = ui.team2NameInput.value || 'AWAY TEAM';
-
-            setTimeout(() => {
-                const random = Math.random();
-                const tossWinner = random < 0.5 ? state.team1.name : state.team2.name;
-                state.tossWinner = tossWinner;
-                ui.tossWinnerText.textContent = `${tossWinner} won the toss and will...`;
-                ui.tossResult.classList.remove('hidden');
-                ui.startMatchBtn.disabled = false;
-                ui.startMatchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }, 2500); // Wait for animation to finish
         }
 
         function handleLogoUpload(file, teamKey) {
@@ -871,15 +848,17 @@
                 return;
             }
             
+            const tossWinnerKey = ui.tossWinnerSelect.value;
             const tossChoice = document.querySelector('input[name="bat-bowl"]:checked').value;
-            const tossWinnerIsTeam1 = state.tossWinner === state.team1.name;
 
-            if ((tossWinnerIsTeam1 && tossChoice === 'bat') || (!tossWinnerIsTeam1 && tossChoice === 'bowl')) {
-                state.battingTeam = 'team1';
-                state.bowlingTeam = 'team2';
+            const tossLoserKey = tossWinnerKey === 'team1' ? 'team2' : 'team1';
+
+            if (tossChoice === 'bat') {
+                state.battingTeam = tossWinnerKey;
+                state.bowlingTeam = tossLoserKey;
             } else {
-                state.battingTeam = 'team2';
-                state.bowlingTeam = 'team1';
+                state.battingTeam = tossLoserKey;
+                state.bowlingTeam = tossWinnerKey;
             }
 
             ui.setupScreen.classList.add('hidden');
@@ -908,9 +887,13 @@
             state.isScoringLocked = true;
             updateUI();
             
+            ui.playerModalCancelBtnX.classList.add('hidden');
+            ui.playerModalCancelBtnText.classList.add('hidden');
             selectPlayer('striker', () => {
                 selectPlayer('nonStriker', () => {
                     selectPlayer('bowler', () => {
+                        ui.playerModalCancelBtnX.classList.remove('hidden');
+                        ui.playerModalCancelBtnText.classList.remove('hidden');
                         state.isScoringLocked = false;
                         updateUI();
                     });
@@ -1102,13 +1085,18 @@
             processBall(0, 'W');
             
             updateUI();
-            await triggerEventAnimation('WICKET!', 'text-red-700');
+            await triggerEventAnimation('OUT', 'text-red-700');
 
             if (checkInningsEnd()) return;
             
             state.isScoringLocked = true;
             const roleToFill = !state.striker ? 'striker' : 'nonStriker';
+            
+            ui.playerModalCancelBtnX.classList.add('hidden');
+            ui.playerModalCancelBtnText.classList.add('hidden');
             selectPlayer(roleToFill, () => {
+                ui.playerModalCancelBtnX.classList.remove('hidden');
+                ui.playerModalCancelBtnText.classList.remove('hidden');
                 state.isScoringLocked = false;
                 updateUI();
             });
@@ -1795,7 +1783,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             ui.matchDateInput.value = new Date().toISOString().split('T')[0];
             
-            // NEW: Logic to style select dropdowns
+            ui.tossWinnerSelect.onchange = () => {
+                if(ui.tossWinnerSelect.value) {
+                    ui.tossDecisionContainer.classList.remove('hidden');
+                    ui.startMatchBtn.disabled = false;
+                    ui.startMatchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    ui.tossDecisionContainer.classList.add('hidden');
+                    ui.startMatchBtn.disabled = true;
+                    ui.startMatchBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            };
+            
             const selects = document.querySelectorAll('#total-overs, #players-per-side');
             selects.forEach(select => {
                 function applyPlaceholderStyle() {
@@ -1832,11 +1831,15 @@
             ui.winModalOkBtn.onclick = () => showSummaryScreen();
             
             ui.bowlerPromptOverlay.onclick = () => {
+                ui.playerModalCancelBtnX.classList.add('hidden');
+                ui.playerModalCancelBtnText.classList.add('hidden');
                 swapBatsmen();
                 state.currentOver = [];
                 updateUI();
                 ui.bowlerPromptOverlay.classList.add('hidden');
                 selectPlayer('bowler', () => {
+                    ui.playerModalCancelBtnX.classList.remove('hidden');
+                    ui.playerModalCancelBtnText.classList.remove('hidden');
                     state.isScoringLocked = false;
                     updateUI();
                 });
@@ -1844,8 +1847,12 @@
             
             ui.selectBatsmanPrompt.onclick = () => {
                 if (!state.winner) {
+                    ui.playerModalCancelBtnX.classList.add('hidden');
+                    ui.playerModalCancelBtnText.classList.add('hidden');
                     const roleToFill = state.striker === null ? 'striker' : 'nonStriker';
                     selectPlayer(roleToFill, () => {
+                        ui.playerModalCancelBtnX.classList.remove('hidden');
+                        ui.playerModalCancelBtnText.classList.remove('hidden');
                         state.isScoringLocked = false;
                         updateUI();
                     });
