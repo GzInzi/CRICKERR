@@ -1,11 +1,22 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="en">
+<head>
     <meta charset="UTF-8">
+    
+    <base href="/CRICKERR/">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Cricker - Live Scoring</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb"/>
+    <link rel="apple-touch-icon" href="icon-512.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <style>
         body { 
             font-family: 'Inter', sans-serif; 
             font-size: 16px; /* Adjusted base font size */ 
@@ -170,7 +181,9 @@
         #over-progress-container { padding: 8px; }
         #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
         #over-summary { font-size: 0.8rem; }
-    </style></head><body class="bg-gray-100 antialiased">
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
 
     <div id="splash-screen">
         <img src="my-logo.png" alt="App Logo" id="splash-logo">
@@ -403,7 +416,7 @@
             <div class="lg:col-span-1 flex flex-col space-y-2">
                 <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
                     <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">BALL-BY-BALL</p>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
                         <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
                     </div>
                     <div class="flex items-center justify-between">
@@ -732,7 +745,8 @@
             isScoringLocked: false,
             manOfTheMatch: null,
             winner: null,
-            winMargin: ''
+            winMargin: '',
+            toss: {}
         };
 
         let alertCallback = null;
@@ -973,7 +987,7 @@
         function startMatch() {
             state.totalOvers = parseInt(ui.totalOversInput.value);
             state.playersPerSide = parseInt(ui.playersPerSideInput.value);
-            state.venue = ui.venueInput.value;
+            state.venue = ui.venueInput.value || 'The Local Ground';
             state.matchDate = ui.matchDateInput.value;
             state.team1.name = ui.team1NameInput.value || 'HOME TEAM';
             state.team2.name = ui.team2NameInput.value || 'AWAY TEAM';
@@ -983,7 +997,7 @@
             state.team1.players = Array.from(ui.team1PlayerInputs.querySelectorAll('input')).map((input, i) => input.value.trim() || `Player ${i + 1}`).filter(p => p);
             state.team2.players = Array.from(ui.team2PlayerInputs.querySelectorAll('input')).map((input, i) => input.value.trim() || `Player ${i + 1}`).filter(p => p);
             
-            const initPlayerStats = (player) => ({ name: player, runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalInfo: null, ballsBowled: 0, runsConceded: 0, wickets: 0, maidens: 0 });
+            const initPlayerStats = (player) => ({ name: player, runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalInfo: null, ballsBowled: 0, runsConceded: 0, wickets: 0, maidens: 0, consecutiveFours: 0, consecutiveSixes: 0 });
             state.team1.players.forEach(p => { state.team1.playerStats[p] = initPlayerStats(p); });
             state.team2.players.forEach(p => { state.team2.playerStats[p] = initPlayerStats(p); });
 
@@ -993,6 +1007,10 @@
             }
             
             const tossLoserKey = tossWinnerKey === 'team1' ? 'team2' : 'team1';
+            
+            state.toss.winner = state[tossWinnerKey].name;
+            state.toss.decision = tossDecision;
+
 
             if (tossDecision === 'bat') {
                 state.battingTeam = tossWinnerKey;
@@ -1013,6 +1031,15 @@
 
 
         // --- CORE LOGIC ---
+        function showIntroCommentary() {
+            const tossWinnerName = state.toss.winner;
+            const tossDecisionText = state.toss.decision === 'bat' ? 'bat first' : 'field first';
+            
+            const introText = `Welcome, everyone, to <b>${state.venue}</b> for this exciting clash between <b>${state.team1.name}</b> and <b>${state.team2.name}</b>. ${tossWinnerName} won the toss and will ${tossDecisionText}. The opening pair of <b>${state.striker.name}</b> and <b>${state.nonStriker.name}</b> are making their way to the middle, and it looks like <b>${state.bowler.name}</b> will start the proceedings with the ball.`;
+            
+            updateLiveCommentary(introText);
+        }
+
         function initialize() {
             const team1Name = state.team1.name;
             const team2Name = state.team2.name;
@@ -1041,6 +1068,7 @@
                         ui.playerModalCancelBtnText.classList.remove('hidden');
                         state.isScoringLocked = false;
                         updateUI();
+                        showIntroCommentary();
                     });
                 });
             });
@@ -1115,82 +1143,88 @@
             }, 1500));
         }
         
-        function updateLiveCommentary(commentary) {
+        function updateLiveCommentary(commentary, append = false) {
             if (ui.liveCommentary && commentary) {
+                ui.overProgressContainer.classList.remove('hidden');
                 ui.liveCommentaryContainer.classList.remove('hidden');
-                ui.liveCommentary.innerHTML = commentary;
-            } else if (ui.liveCommentaryContainer) {
-                // Do not hide it here automatically, let other logic handle it.
+                 if (append) {
+                    ui.liveCommentary.innerHTML += `<br><span class="text-gray-500 italic">${commentary}</span>`;
+                } else {
+                    ui.liveCommentary.innerHTML = commentary;
+                }
             }
         }
         
-        function pickRandom(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
+        const commentaryPool = {
+            dot: ["Excellent delivery from {bowler}! A perfect dot ball.", "{bowler} to {striker}, played straight to the fielder. No run there.", "A swing and a miss! {striker} couldn't connect on that one.", "Good, tight bowling from {bowler}. {striker} is forced to defend.", "Punched to the cover fielder, no space for a single.", "Solidly defended by {striker}. No run on offer.", "Left alone outside the off stump, wise batting from {striker}.", "A sharp bouncer from {bowler}, and {striker} has to duck under it.", "Driven firmly, but straight to the man at mid-off."],
+            single: ["Pushed into the gap for a quick single. That brings {nonStriker} on strike.", "Just one run, keeping the scoreboard ticking over nicely.", "{striker} gets off the mark with a simple single.", "Tucked away to the leg side for one. Easy does it.", "Dabbed down to third man for a comfortable single.", "Good running, they pinch a single and rotate the strike.", "Works it away through square leg and they'll get one for it."],
+            double: [`Good placement by {striker}, they'll come back for two runs easily.`, `Well-judged running between the wickets nets them a couple.`, `Flicked off the pads, and they'll pick up two more.`, `Driven through the covers, and that's a brace for {striker}.`, "Excellent running, they convert the single into two."],
+            triple: [`They're pushing hard! Great effort in the deep, but they'll make it back for three.`, `Finds the vast outfield space, and it's three more valuable runs for {striker}.`, `A bit of a fumble in the deep allows them to come back for the third. Excellent awareness.`],
+            four: [`<b>FOUR!</b> A cracking shot from {striker}! It races away to the boundary.`, `<b>FOUR!</b> Beautifully timed! Pierces the field for a boundary.`, `<b>FOUR!</b> Smashed away with power! {striker} is looking in great touch.`, `<b>FOUR!</b> A delicate late cut finds the rope. Sublime.`, `<b>FOUR!</b> Pulled away with disdain by {striker}!`, `<b>FOUR!</b> Finds the gap to perfection! Wonderful placement.`, `<b>FOUR!</b> Classic cover drive, textbook stuff from {striker}.`, `<b>FOUR!</b> Edged... and it flies past the slips for a lucky boundary!`],
+            four_2: ["That's two in a row! {striker} is finding the boundary with ease now.", "Another four! {bowler} is under pressure as {striker} hits another boundary."],
+            four_3: ["Hat-trick of boundaries! This is superb batting from {striker}!", "Make that three in a row! {striker} is putting on a show!"],
+            four_4plus: ["Four fours in a row! This is an onslaught from {striker}!", "It's a boundary-fest! {striker} makes it four in a row!"],
+            six: [`<b>SIX!</b> That's out of here! A monstrous hit from {striker}!`, `<b>SIX!</b> The ball is sailing over the fence! What a powerful shot by {striker}!`, `<b>SIX!</b> That's a massive one! The batsman, {striker}, is on fire!`, `<b>SIX!</b> Clears the front leg and launches it over long-on!`, `<b>SIX!</b> High and handsome! That's gone all the way!`, `<b>SIX!</b> It's in the stands! Incredible power from {striker}!`, `<b>SIX!</b> A flick of the wrists and it travels the distance! Effortless!`, `<b>SIX!</b> Right out of the middle of the bat!`],
+            six_2: ["WOW! Back-to-back sixes! {striker} is on fire and the crowd is loving it!", "Continuous sixes for the batsman! {bowler} doesn't know where to bowl!"],
+            six_3: ["UNBELIEVABLE! THREE SIXES IN A ROW! {striker} is simply unstoppable!", "This is carnage! A hat-trick of sixes for {striker}!"],
+            six_4plus: ["MAKE THAT FOUR SIXES IN A ROW! This is unbelievable hitting from {striker}!", "{bowler} has no answer! It's another maximum, the fourth in a row!"],
+            milestone_50: ["<b>Fifty for {striker}!</b> A brilliant knock, and he raises his bat to the applause of the crowd!", "That's a half-century for {striker}! He gets there with a quick single."],
+            milestone_100: ["<b>CENTURY! What an innings from {striker}!</b> He takes off his helmet and soaks in the ovation!", "A hundred for {striker}! An absolutely masterful innings comes to a magnificent conclusion."]
+        };
+        let usedCommentaryIndexes = {};
+
+        function pickUnique(poolName) {
+            if (!commentaryPool[poolName]) return "";
+            if (!usedCommentaryIndexes[poolName]) {
+                usedCommentaryIndexes[poolName] = [];
+            }
+            let pool = commentaryPool[poolName];
+            if (usedCommentaryIndexes[poolName].length === pool.length) {
+                usedCommentaryIndexes[poolName] = []; // Reset if all have been used
+            }
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * pool.length);
+            } while (usedCommentaryIndexes[poolName].includes(randomIndex));
+            
+            usedCommentaryIndexes[poolName].push(randomIndex);
+            return pool[randomIndex];
         }
 
         function generateRealCommentary(type, data) {
             let commentary = '';
-            const { bowler, striker, nonStriker, runs, wicketType, fielder, playerOut, extraType } = data;
+            let poolName = '';
+            const { bowler, striker, nonStriker, runs, wicketType, fielder, playerOut, extraType, overRuns, maiden } = data;
+            let append = false;
 
             switch (type) {
                 case 'runs':
                     switch (runs) {
-                        case 0:
-                            commentary = pickRandom([
-                                `Excellent delivery from ${bowler}! A dot ball.`,
-                                `${bowler} to ${striker}, played straight to the fielder. No run.`,
-                                `A swing and a miss! ${striker} couldn't connect.`
-                            ]);
+                        case 0: poolName = 'dot'; break;
+                        case 1: poolName = 'single'; break;
+                        case 2: poolName = 'double'; break;
+                        case 3: poolName = 'triple'; break;
+                        case 4: 
+                            if (striker.consecutiveFours >= 4) poolName = 'four_4plus';
+                            else if (striker.consecutiveFours === 3) poolName = 'four_3';
+                            else if (striker.consecutiveFours === 2) poolName = 'four_2';
+                            else poolName = 'four';
                             break;
-                        case 1:
-                            commentary = pickRandom([
-                                `Pushed into the gap for a quick single. That brings ${nonStriker} on strike.`,
-                                `Just one run, keeping the scoreboard ticking.`,
-                                `${striker} gets off the mark with a single.`
-                            ]);
-                            break;
-                        case 2:
-                            commentary = pickRandom([
-                                `Good placement, they'll come back for two runs easily.`,
-                                `Well-judged running between the wickets nets them a couple.`
-                            ]);
-                            break;
-                        case 3:
-                            commentary = pickRandom([
-                                `They're pushing hard! Great effort in the deep, but they'll make it back for three.`,
-                                `Finds the vast outfield space, and it's three more for ${striker}.`
-                            ]);
-                            break;
-                        case 4:
-                            commentary = pickRandom([
-                                `<b>FOUR!</b> A cracking shot from ${striker}! It races to the boundary.`,
-                                `<b>FOUR!</b> Beautifully timed! Pierces the field for a boundary.`,
-                                `<b>FOUR!</b> Smashed away! ${striker} is looking in great touch.`
-                            ]);
-                            break;
-                        case 6:
-                            commentary = pickRandom([
-                                `<b>SIX!</b> That's out of here! A monstrous hit from ${striker}!`,
-                                `<b>SIX!</b> The ball is sailing over the fence! What a shot by ${striker}!`,
-                                `<b>SIX!</b> That's a massive one! The batsman, ${striker}, is on fire!`
-                            ]);
+                        case 6: 
+                            if (striker.consecutiveSixes >= 4) poolName = 'six_4plus';
+                            else if (striker.consecutiveSixes === 3) poolName = 'six_3';
+                            else if (striker.consecutiveSixes === 2) poolName = 'six_2';
+                            else poolName = 'six';
                             break;
                     }
+                    commentary = pickUnique(poolName);
                     break;
                 case 'wicket':
                     switch (wicketType) {
-                        case 'Catch':
-                            commentary = `<b>OUT! Caught!</b> In the air... and taken! A superb catch by ${fielder} sends ${data.striker.name} packing.`;
-                            break;
-                        case 'Bowled':
-                            commentary = `<b>OUT! Bowled 'em!</b> Right through the defenses! A perfect delivery from ${bowler} dismantles the stumps.`;
-                            break;
-                        case 'Stump Out':
-                            commentary = `<b>OUT! Stumped!</b> Lightning-fast work by the keeper! ${data.striker.name} is caught out of the crease.`;
-                            break;
-                        case 'Run Out':
-                            commentary = `<b>OUT! Run out!</b> A moment of madness! A direct hit from the fielder catches ${playerOut} well short.`;
-                            break;
+                        case 'Catch': commentary = `<b>OUT! Caught!</b> In the air... and taken! A superb catch by ${fielder} sends ${data.striker.name} packing.`; break;
+                        case 'Bowled': commentary = `<b>OUT! Bowled 'em!</b> Right through the defenses! A perfect delivery from ${bowler} dismantles the stumps.`; break;
+                        case 'Stump Out': commentary = `<b>OUT! Stumped!</b> Lightning-fast work by the keeper! ${data.striker.name} is caught out of the crease.`; break;
+                        case 'Run Out': commentary = `<b>OUT! Run out!</b> A moment of madness! A direct hit from the fielder catches ${playerOut} well short.`; break;
                     }
                     break;
                 case 'extra':
@@ -1200,20 +1234,47 @@
                     if(extraType === 'b') commentary = `<b>Byes!</b> It beats the bat and the keeper! They'll pick up ${totalExtraRuns} bye${totalExtraRuns > 1 ? 's' : ''}.`;
                     if(extraType === 'lb') commentary = `<b>Leg Byes!</b> Off the pads and they scamper through for ${totalExtraRuns} leg bye${totalExtraRuns > 1 ? 's' : ''}.`;
                     break;
+                case 'milestone_50': commentary = pickUnique('milestone_50'); break;
+                case 'milestone_100': commentary = pickUnique('milestone_100'); break;
+                case 'endOfOver':
+                    append = true;
+                    if (maiden) {
+                        commentary = `A maiden over! Superb, disciplined bowling from ${bowler}.`;
+                    } else {
+                        commentary = `End of the over. ${overRuns} run${overRuns !== 1 ? 's' : ''} from it.`;
+                        if (overRuns >= 12) commentary += ` A very expensive one for ${bowler}.`;
+                        else if (overRuns >= 6) commentary += ` A decent over for the batting side.`;
+                        else if (overRuns > 0) commentary += ` A tidy over from ${bowler}.`;
+                    }
+                    break;
             }
-            updateLiveCommentary(commentary);
+            if(commentary) {
+                updateLiveCommentary(commentary.replace(/{striker}/g, striker ? striker.name : "").replace(/{nonStriker}/g, nonStriker ? nonStriker.name : "").replace(/{bowler}/g, bowler ? bowler.name : ""), append);
+            }
         }
 
         function addRuns(runs, isExtra = false, extraType = '') {
             if (state.isScoringLocked) return;
-            
             saveState();
-
+            
             const battingTeam = state[state.battingTeam];
             battingTeam.score += runs;
 
             if (!isExtra) {
+                const oldScore = state.striker.runs;
                 state.striker.runs += runs;
+
+                if(runs === 6) {
+                    state.striker.consecutiveSixes++;
+                    state.striker.consecutiveFours = 0;
+                } else if(runs === 4) {
+                    state.striker.consecutiveFours++;
+                    state.striker.consecutiveSixes = 0;
+                } else {
+                    state.striker.consecutiveFours = 0;
+                    state.striker.consecutiveSixes = 0;
+                }
+
                 state.striker.balls++;
                 if (runs === 4) state.striker.fours++;
                 if (runs === 6) state.striker.sixes++;
@@ -1221,12 +1282,24 @@
                 if (runs === 4) triggerEventAnimation('FOUR!', 'text-yellow-400');
                 if (runs === 6) triggerEventAnimation('SIX!', 'text-green-500');
                 
-                generateRealCommentary('runs', {
-                    runs: runs,
-                    bowler: state.bowler.name,
-                    striker: state.striker.name,
-                    nonStriker: state.nonStriker.name
-                });
+                let milestoneReached = false;
+                if (oldScore < 100 && state.striker.runs >= 100) {
+                    generateRealCommentary('milestone_100', { striker: state.striker });
+                    milestoneReached = true;
+                } else if (oldScore < 50 && state.striker.runs >= 50) {
+                    generateRealCommentary('milestone_50', { striker: state.striker });
+                    milestoneReached = true;
+                }
+
+                setTimeout(() => {
+                    generateRealCommentary('runs', {
+                        runs: runs,
+                        bowler: state.bowler,
+                        striker: state.striker,
+                        nonStriker: state.nonStriker
+                    });
+                }, milestoneReached ? 1500 : 0);
+
 
                 processBall(runs, `${runs}`);
 
@@ -1245,6 +1318,9 @@
             const totalRuns = (type === 'wd' || type === 'nb' ? 1 : 0) + runs;
             state[state.battingTeam].score += totalRuns;
             state.bowler.runsConceded += totalRuns;
+            state.striker.consecutiveFours = 0;
+            state.striker.consecutiveSixes = 0;
+
 
             let ballEvent = type.toUpperCase();
             if (runs > 0) ballEvent += `+${runs}`;
@@ -1316,6 +1392,9 @@
             const battingTeamKey = state.battingTeam;
             const battingTeam = state[battingTeamKey];
             const playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+            
+            playerOutObject.consecutiveFours = 0;
+            playerOutObject.consecutiveSixes = 0;
 
             battingTeam.wickets++;
             if (type !== 'Run Out') {
@@ -1373,13 +1452,18 @@
 
             if (isOverComplete) {
                 state.isScoringLocked = true;
+                const overRuns = state.currentOver.reduce((acc, ball) => acc + ball.runs, 0);
+                const isMaiden = overRuns === 0 && state.currentOver.every(b => b.event !== 'wd' && b.event !== 'nb');
+                
                  setTimeout(() => {
                     battingTeam.overs++;
                     battingTeam.balls = 0;
                     
-                    if (state.currentOver.reduce((acc, ball) => acc + ball.runs, 0) === 0) {
+                    if (isMaiden) {
                         state.bowler.maidens++;
                     }
+                    generateRealCommentary('endOfOver', { overRuns: overRuns, maiden: isMaiden, bowler: state.bowler.name });
+
 
                     savePlayerStats(state.bowler, state.bowlingTeam);
                     state.lastBowler = state.bowler.name;
@@ -1464,6 +1548,10 @@
         }
         
         function swapBatsmen() {
+            if (state.striker) {
+                state.striker.consecutiveFours = 0;
+                state.striker.consecutiveSixes = 0;
+            }
             [state.striker, state.nonStriker] = [state.nonStriker, state.striker];
             updateUI();
         }
@@ -2173,4 +2261,5 @@
                 }, 750); // This time must match the CSS transition duration
             }, 3000); // 3000 milliseconds = 3 seconds
         });
-    </script></body></html>
+    </script></body>
+</html>
