@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,24 +50,59 @@
         .back-btn { color: #475569; transition: color 0.2s; }
         .back-btn:hover { color: #1e293b; }
 
-        /* --- NEW COIN TOSS ANIMATION --- */
-        #coin-container { perspective: 1000px; }
-        #coin { position: relative; width: 100px; height: 100px; transform-style: preserve-3d; }
-        #coin.tossing { animation: toss-animation 2.5s forwards; }
-        .coin-side { position: absolute; width: 100px; height: 100px; border-radius: 50%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; border: 4px solid rgba(255, 255, 255, 0.5); }
-        .front { background-color: #d4af37; transform: translateZ(2px); }
-        .back { background-color: #c0c0c0; transform: rotateY(180deg) translateZ(2px); }
-        #coin-shadow { width: 80px; height: 20px; background: rgba(0,0,0,0.2); border-radius: 50%; filter: blur(5px); transform-origin: center; }
-        #coin-shadow.tossing { animation: shadow-animation 2.5s forwards; }
-        @keyframes toss-animation {
-            0% { transform: translateY(0) rotateY(0) rotateX(0); }
-            15% { transform: translateY(-120px) rotateY(720deg) rotateX(20deg); }
-            100% { transform: translateY(0) rotateY(3600deg) rotateX(0); }
+        /* --- TOSS SCREEN STYLES --- */
+        #setup-step-4.toss-active {
+            background: linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db);
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        @keyframes shadow-animation {
-            0% { transform: scale(1); opacity: 1; }
-            15% { transform: scale(0.5); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
+        .toss-3d-button {
+            border-radius: 0.75rem;
+            color: #1f2937;
+            font-weight: 600;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.15s ease-out;
+            transform: translateY(0);
+        }
+        .toss-3d-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        .toss-3d-button.selected {
+            background-color: #2563eb;
+            border-color: #1d4ed8;
+            color: white;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+            transform: translateY(2px);
+            outline: none;
+        }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(156, 163, 175, 0.4);
+            transform: scale(0);
+            animation: ripple-effect 0.7s ease-out;
+            pointer-events: none;
+        }
+        @keyframes ripple-effect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        .player-setup-fullscreen {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         /* Event Animation Styles */
@@ -109,18 +145,22 @@
         .tab-button.active { border-color: #2563eb; background-color: #2563eb; color: white; }
 
         /* Styles specific to the scoreboard area */
-        #scoreboard { padding: 12px; }
-        #team-scores-container > div { padding: 6px 0; }
+        #scoreboard { padding: 8px; }
+        #team-scores-container > div { padding: 2px 0; }
         #team-scores-container .font-semibold { font-size: 1rem; }
-        #team-scores-container .text-4xl { font-size: 2.5rem; }
-        #team-scores-container .text-2xl { font-size: 1.8rem; }
+        #team-scores-container .text-4xl { font-size: 2rem; }
+        #team-scores-container .text-2xl { font-size: 1.5rem; }
         #team-scores-container .text-lg { font-size: 0.9rem; }
         #team-scores-container .text-gray-600 { font-size: 0.8rem; }
 
         /* Styles for batting and bowling tables */
+        #batting-table, #bowling-table {
+            table-layout: fixed;
+            width: 100%;
+        }
         #batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
-            padding: 8px 3px; /* Reduced horizontal padding */
-            font-size: 0.8rem;
+            padding: 4px 3px; /* Reduced horizontal padding */
+            font-size: 0.75rem;
         }
         #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child {
             padding-left: 8px;
@@ -129,9 +169,7 @@
             padding-right: 8px;
             text-align: right;
         }
-        #batting-table .font-semibold, #bowling-table .font-semibold { font-size: 0.9rem; }
-
-        #select-batsman-prompt { padding: 8px; font-size: 0.85rem; }
+        #batting-table .font-semibold, #bowling-table .font-semibold { font-size: 0.8rem; }
 
         #over-progress-container { padding: 8px; }
         #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
@@ -149,9 +187,9 @@
         <h1 id="event-animation-text" class="text-8xl font-black uppercase" style="text-shadow: 3px 3px 6px rgba(0,0,0,0.5);"></h1>
     </div>
 
-    <div id="setup-screen" class="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 setup-bg">
+    <div id="setup-screen" class="min-h-screen w-full flex flex-col items-center justify-center setup-bg">
         <div class="w-full max-w-2xl shadow-xl rounded-2xl p-8 setup-card overflow-hidden">
-            <div class="mb-8">
+            <div id="progress-container" class="mb-8">
                 <div class="progress-bar-bg w-full h-2 rounded-full">
                     <div id="progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: 25%;"></div>
                 </div>
@@ -248,55 +286,71 @@
                     </div>
                 </div>
 
-                <div id="setup-step-2" class="setup-step hidden">
-                    <header class="text-center mb-8">
-                        <h1 id="team1-roster-title" class="text-3xl font-bold text-gray-800"></h1>
-                        <p class="text-gray-500 mt-1">Enter player names</p>
-                    </header>
-                    <div id="team1-player-inputs" class="space-y-3 pr-2">
+                <div id="setup-step-2" class="setup-step hidden player-setup-fullscreen">
+                    <div class="w-full max-w-lg mx-auto px-6">
+                        <header class="text-center mb-8">
+                            <img id="team1-roster-logo" src="" alt="Team 1 Logo" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover hidden shadow-md">
+                            <h1 id="team1-roster-title" class="text-3xl font-bold"></h1>
+                            <p class="text-gray-500 mt-1">Enter player names</p>
+                        </header>
+                        <div id="team1-player-inputs" class="space-y-3 pr-2 overflow-y-auto" style="max-height: 50vh;">
                         </div>
-                    <div class="mt-8 flex justify-between items-center">
-                        <button onclick="goToStep(1)" class="back-btn font-semibold">Back</button>
-                        <button onclick="goToStep(3)" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Next</button>
+                        <div class="mt-8 flex justify-between items-center">
+                            <button onclick="goToStep(1)" class="back-btn font-semibold">Back</button>
+                            <button onclick="goToStep(3)" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Next</button>
+                        </div>
                     </div>
                 </div>
 
-                <div id="setup-step-3" class="setup-step hidden">
-                    <header class="text-center mb-8">
-                        <h1 id="team2-roster-title" class="text-3xl font-bold text-gray-800"></h1>
-                        <p class="text-gray-500 mt-1">Enter player names</p>
-                    </header>
-                    <div id="team2-player-inputs" class="space-y-3 pr-2">
+                <div id="setup-step-3" class="setup-step hidden player-setup-fullscreen">
+                    <div class="w-full max-w-lg mx-auto px-6">
+                        <header class="text-center mb-8">
+                            <img id="team2-roster-logo" src="" alt="Team 2 Logo" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover hidden shadow-md">
+                            <h1 id="team2-roster-title" class="text-3xl font-bold"></h1>
+                            <p class="text-gray-500 mt-1">Enter player names</p>
+                        </header>
+                        <div id="team2-player-inputs" class="space-y-3 pr-2 overflow-y-auto" style="max-height: 50vh;">
                         </div>
-                    <div class="mt-8 flex justify-between items-center">
-                        <button onclick="goToStep(2)" class="back-btn font-semibold">Back</button>
-                        <button onclick="goToStep(4)" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Toss</button>
+                        <div class="mt-8 flex justify-between items-center">
+                            <button onclick="goToStep(2)" class="back-btn font-semibold">Back</button>
+                            <button onclick="goToStep(4)" class="px-6 py-2 text-white font-bold rounded-lg setup-btn">Toss</button>
+                        </div>
                     </div>
                 </div>
 
-                <div id="setup-step-4" class="setup-step hidden">
-                    <header class="text-center mb-8">
-                        <h1 class="text-3xl font-bold text-gray-800">Toss Result</h1>
-                        <p class="text-gray-500 mt-1">Select the toss winner and their choice</p>
-                    </header>
-                    <div class="space-y-6">
-                        <div>
-                            <label for="toss-winner-select" class="block font-medium text-gray-700">Who won the toss?</label>
-                            <select id="toss-winner-select" class="w-full p-2 border-gray-300 border rounded-md mt-1">
-                                <option value="" disabled selected>Select a Team</option>
-                                </select>
-                        </div>
-                        <div id="toss-decision-container" class="hidden">
-                            <p class="block font-medium text-gray-700 mb-2">...and elected to:</p>
-                            <div class="flex items-center justify-center space-x-6">
-                                <label class="flex items-center text-lg"><input type="radio" name="bat-bowl" value="bat" class="mr-2 h-4 w-4" checked> Bat</label>
-                                <label class="flex items-center text-lg"><input type="radio" name="bat-bowl" value="bowl" class="mr-2 h-4 w-4"> Bowl</label>
+                <div id="setup-step-4" class="setup-step hidden text-slate-800">
+                     <div class="w-full max-w-lg mx-auto px-6">
+                        <header class="text-center mb-8">
+                            <h1 class="text-3xl font-bold">Toss Result</h1>
+                            <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
+                        </header>
+                        <div class="space-y-8">
+                            <div>
+                                <p class="text-center font-semibold mb-4">Who won the toss?</p>
+                                <div class="flex justify-center gap-6">
+                                    <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                        <div id="toss-team1-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                        <span id="toss-team1-name" class="truncate w-full"></span>
+                                    </button>
+                                    <button id="toss-winner-team2" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                        <div id="toss-team2-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                        <span id="toss-team2-name" class="truncate w-full"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="toss-decision-container" class="hidden text-center">
+                                <p class="font-semibold mb-4">...and elected to:</p>
+                                <div class="flex justify-center gap-6">
+                                    <button id="toss-choice-bat" class="toss-3d-button w-32 py-3">Bat First</button>
+                                    <button id="toss-choice-bowl" class="toss-3d-button w-32 py-3">Field First</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-8 flex justify-between items-center">
-                        <button onclick="goToStep(3)" class="back-btn font-semibold">Back</button>
-                        <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
+                        <div class="mt-12 flex justify-between items-center">
+                            <button onclick="goToStep(3)" class="back-btn font-semibold hover:text-slate-900">Back</button>
+                            <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -304,96 +358,93 @@
     </div>
 
 
-    <div id="app" class="h-screen w-full flex-col hidden overflow-hidden">
+    <div id="app" class="h-screen w-full flex flex-col hidden">
         <div id="match-header" class="text-center py-1 px-4 pt-4 bg-gray-100">
             </div>
-        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-6 overflow-hidden">
-            <div class="lg:col-span-2 space-y-4 overflow-y-auto">
-                <div id="scoreboard" class="bg-white rounded-lg p-4 shadow-md">
-                    <div id="team-scores-container" class="space-y-1">
+        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
+            <div class="lg:col-span-2 space-y-2 flex flex-col">
+                <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
+                    <div id="team-scores-container" class="space-y-0">
                         </div>
                 </div>
                 
                 <div id="target-info-container" class="hidden bg-white rounded-lg p-3 shadow-md text-center"></div>
 
-                <div class="space-y-4">
+                <div class="space-y-2 flex-grow flex flex-col">
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <table class="w-full text-left text-sm relative">
+                        <table class="table-fixed w-full text-left text-sm relative">
                             <thead class="bg-gray-200">
                                 <tr>
-                                    <th class="p-3 font-semibold text-lg">Batting</th>
-                                    <th class="text-center p-3 font-semibold text-lg">R</th>
-                                    <th class="text-center p-3 font-semibold text-lg">B</th>
-                                    <th class="text-center p-3 font-semibold text-lg">4s</th>
-                                    <th class="text-center p-3 font-semibold text-lg">6s</th>
-                                    <th class="text-right p-3 font-semibold text-lg">SR</th>
+                                    <th class="p-2 font-semibold text-base w-2/5">Batting</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">R</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">B</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">4s</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">6s</th>
+                                    <th class="text-right p-2 font-semibold text-base w-1/5">SR</th>
                                 </tr>
                             </thead>
                             <tbody id="batting-table">
                                 </tbody>
                         </table>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <table class="w-full text-left text-sm">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex-grow">
+                        <table class="table-fixed w-full text-left text-sm h-full">
                             <thead class="bg-gray-200">
                                 <tr>
-                                    <th class="p-3 font-semibold text-lg">Bowling</th>
-                                    <th class="text-center p-3 font-semibold text-lg">O</th>
-                                    <th class="text-center p-3 font-semibold text-lg">M</th>
-                                    <th class="text-center p-3 font-semibold text-lg">R</th>
-                                    <th class="text-center p-3 font-semibold text-lg">W</th>
-                                    <th class="text-right p-3 font-semibold text-lg">Econ</th>
+                                    <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">O</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">M</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">R</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[12%]">W</th>
+                                    <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
                                 </tr>
                             </thead>
                             <tbody id="bowling-table">
                                </tbody>
                         </table>
                     </div>
-                    <div id="select-batsman-prompt" class="hidden text-center p-4 bg-yellow-100 border border-yellow-300 rounded-lg cursor-pointer hover:bg-yellow-200 transition-colors">
-                        <p class="font-bold text-yellow-800">WICKET! Select the next batsman to continue.</p>
-                    </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-1 space-y-4 overflow-y-auto">
-                <div id="over-progress-container" class="bg-white rounded-lg p-4 shadow-md hidden">
+            <div class="lg:col-span-1 flex flex-col space-y-2">
+                <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
                     <div class="flex items-center justify-between">
                         <div id="over-progress" class="flex items-center gap-2 flex-wrap">
                             </div>
-                        <div id="over-summary" class="text-lg text-gray-700 font-medium whitespace-nowrap ml-4"></div>
+                        <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
                     </div>
                 </div>
-                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative">
+                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
                         <p class="font-bold text-yellow-600 text-lg">Choose the Next Bowler</p>
                     </div>
-                    <div class="grid grid-cols-4 scoring-grid">
-                        <button onclick="addRuns(0)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
-                        <button onclick="addRuns(1)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
-                        <button onclick="addRuns(2)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
-                        <button onclick="undo()" class="h-14 text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-xs font-semibold mt-1">Undo</span></button>
+                    <div class="grid grid-cols-4 scoring-grid flex-grow">
+                        <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
+                        <button onclick="addRuns(1)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
+                        <button onclick="addRuns(2)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
+                        <button onclick="undo()" class="h-full text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
     
-                        <button onclick="addRuns(3)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
-                        <button onclick="addRuns(4)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
-                        <button onclick="addRuns(6)" class="h-14 text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-2xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
-                        <button onclick="openWicketModal()" class="h-14 text-center border-b flex items-center justify-center"><span class="font-bold text-base text-red-700">Wicket</span></button>
+                        <button onclick="addRuns(3)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
+                        <button onclick="addRuns(4)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
+                        <button onclick="addRuns(6)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
+                        <button onclick="openWicketModal()" class="h-full text-center border-b flex items-center justify-center"><span class="font-semibold text-base">Wicket</span></button>
     
-                        <button onclick="openModal('wide-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">Wide</span></button>
-                        <button onclick="openModal('noball-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">NB</span></button>
-                        <button onclick="openModal('byes-modal')" class="h-14 text-center border-r flex items-center justify-center"><span class="font-bold text-base">Byes</span></button>
-                        <button onclick="openModal('legbyes-modal')" class="h-14 text-center flex items-center justify-center"><span class="font-bold text-base">LB</span></button>
+                        <button onclick="openModal('wide-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Wide</span></button>
+                        <button onclick="openModal('noball-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">NB</span></button>
+                        <button onclick="openModal('byes-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Byes</span></button>
+                        <button onclick="openModal('legbyes-modal')" class="h-full text-center flex items-center justify-center"><span class="font-semibold text-base">LB</span></button>
                     </div>
                 </footer>
             </div>
         </div>
-        <header class="bg-gray-800 text-white p-1 flex justify-between items-center shadow-inner w-full">
-            <img src="your-logo.png" class="h-8 ml-2" alt="Your Logo">
+        <header class="bg-gray-200 text-black p-1 flex justify-between items-center shadow-inner w-full">
             <div class="flex items-center justify-center flex-grow">
-                <button onclick="openEditModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">Edit</button>
-                <button onclick="showSummaryScreen()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">Summary</button>
-                <button onclick="openEndMatchModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-700 active:bg-blue-600 transition-colors">End Match</button>
+                <button onclick="openEditModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-300 active:bg-blue-600 active:text-white transition-colors">Edit</button>
+                <button onclick="showSummaryScreen()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-300 active:bg-blue-600 active:text-white transition-colors">Summary</button>
+                <button onclick="openEndMatchModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-300 active:bg-blue-600 active:text-white transition-colors">End Match</button>
             </div>
-            <div class="w-8"></div> </header>
+            <button onclick="confirmStartNewMatch()" class="text-sm font-semibold py-2 px-3 rounded-md text-green-600 hover:bg-gray-300 active:bg-green-600 active:text-white transition-colors">Start New Match</button>
+        </header>
     </div>
 
     <div id="summary-screen" class="min-h-screen w-full flex-col hidden items-center bg-gray-100 p-4 sm:p-8">
@@ -688,6 +739,8 @@
 
         let alertCallback = null;
         let downloadAction = null;
+        let tossWinnerKey = null;
+        let tossDecision = 'bat';
 
         // --- DOM ELEMENTS ---
         const ui = {
@@ -710,14 +763,16 @@
             team2PlayerInputs: document.getElementById('team2-player-inputs'),
             team1RosterTitle: document.getElementById('team1-roster-title'),
             team2RosterTitle: document.getElementById('team2-roster-title'),
+            team1RosterLogo: document.getElementById('team1-roster-logo'),
+            team2RosterLogo: document.getElementById('team2-roster-logo'),
             progressBar: document.getElementById('progress-bar'),
+            progressContainer: document.getElementById('progress-container'),
             matchHeader: document.getElementById('match-header'),
             teamScoresContainer: document.getElementById('team-scores-container'),
             targetInfoContainer: document.getElementById('target-info-container'),
             battingTable: document.getElementById('batting-table'),
             bowlingTable: document.getElementById('bowling-table'),
             bowlerPromptOverlay: document.getElementById('bowler-prompt-overlay'),
-            selectBatsmanPrompt: document.getElementById('select-batsman-prompt'),
             overProgress: document.getElementById('over-progress'),
             overProgressContainer: document.getElementById('over-progress-container'),
             overSummary: document.getElementById('over-summary'),
@@ -736,7 +791,14 @@
             confirmOkBtn: document.getElementById('confirm-ok-btn'),
             confirmCancelBtn: document.getElementById('confirm-cancel-btn'),
             runOutOptions: document.getElementById('run-out-options'),
-            tossWinnerSelect: document.getElementById('toss-winner-select'),
+            tossWinnerTeam1: document.getElementById('toss-winner-team1'),
+            tossWinnerTeam2: document.getElementById('toss-winner-team2'),
+            tossTeam1Name: document.getElementById('toss-team1-name'),
+            tossTeam2Name: document.getElementById('toss-team2-name'),
+            tossTeam1LogoContainer: document.getElementById('toss-team1-logo-container'),
+            tossTeam2LogoContainer: document.getElementById('toss-team2-logo-container'),
+            tossChoiceBat: document.getElementById('toss-choice-bat'),
+            tossChoiceBowl: document.getElementById('toss-choice-bowl'),
             tossDecisionContainer: document.getElementById('toss-decision-container'),
             startMatchBtn: document.getElementById('start-match-btn'),
             winModal: document.getElementById('win-modal'),
@@ -746,12 +808,22 @@
             confettiContainer: document.getElementById('confetti-container'),
             previewImage: document.getElementById('preview-image'),
             confirmDownloadBtn: document.getElementById('confirm-download-btn'),
+            setupCard: document.querySelector('.setup-card'),
+            setupStep4: document.getElementById('setup-step-4'),
         };
+
+        // --- HELPER FUNCTIONS ---
+        function hexToRgba(hex, alpha = 0.1) {
+            if (!hex || hex.length < 7) hex = '#ffffff'; // Default to white if color is invalid
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
 
         // --- SETUP LOGIC ---
         function generatePlayerInputs(teamKey) {
-            // MODIFIED: Added +1 to the number of players
-            const numPlayers = parseInt(ui.playersPerSideInput.value) + 1;
+            const numPlayers = parseInt(ui.playersPerSideInput.value) || 11;
             const container = (teamKey === 'team1') ? ui.team1PlayerInputs : ui.team2PlayerInputs;
             container.innerHTML = ''; // Clear existing inputs
             for (let i = 1; i <= numPlayers; i++) {
@@ -763,6 +835,33 @@
                 container.appendChild(input);
             }
         }
+        
+        function selectTossWinner(teamKey) {
+            tossWinnerKey = teamKey;
+            ui.tossDecisionContainer.classList.remove('hidden');
+            ui.startMatchBtn.disabled = false;
+            ui.startMatchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            if (teamKey === 'team1') {
+                ui.tossWinnerTeam1.classList.add('selected');
+                ui.tossWinnerTeam2.classList.remove('selected');
+            } else {
+                ui.tossWinnerTeam2.classList.add('selected');
+                ui.tossWinnerTeam1.classList.remove('selected');
+            }
+        }
+
+        function selectTossChoice(choice) {
+            tossDecision = choice;
+             if (choice === 'bat') {
+                ui.tossChoiceBat.classList.add('selected');
+                ui.tossChoiceBowl.classList.remove('selected');
+            } else {
+                ui.tossChoiceBowl.classList.add('selected');
+                ui.tossChoiceBat.classList.remove('selected');
+            }
+        }
+
 
         function goToStep(step) {
             if (step === 2) {
@@ -776,6 +875,18 @@
                 }
             }
 
+            // Handle fullscreen background for toss page
+            if (step === 2 || step === 3 || step === 4) {
+                ui.setupCard.classList.add('p-0', 'border-none', 'shadow-none');
+                ui.setupCard.style.background = 'transparent';
+                ui.progressContainer.classList.add('hidden');
+                
+            } else {
+                ui.setupCard.classList.remove('p-0', 'border-none', 'shadow-none');
+                ui.setupCard.style.background = '';
+                ui.progressContainer.classList.remove('hidden');
+            }
+
             document.querySelectorAll('.setup-step').forEach(el => {
                 el.classList.remove('active');
                 el.classList.add('hidden');
@@ -785,24 +896,61 @@
 
             if (step === 1) ui.progressBar.style.width = '25%';
             if (step === 2) {
+                document.getElementById('setup-step-2').style.background = `linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db)`;
+                if (state.team1.logo) {
+                    ui.team1RosterLogo.src = state.team1.logo;
+                    ui.team1RosterLogo.classList.remove('hidden');
+                } else {
+                    ui.team1RosterLogo.classList.add('hidden');
+                }
                 ui.team1RosterTitle.textContent = ui.team1NameInput.value || 'HOME TEAM';
                 generatePlayerInputs('team1');
                 ui.progressBar.style.width = '50%';
             }
             if (step === 3) {
+                 document.getElementById('setup-step-3').style.background = `linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db)`;
+                if (state.team2.logo) {
+                    ui.team2RosterLogo.src = state.team2.logo;
+                    ui.team2RosterLogo.classList.remove('hidden');
+                } else {
+                    ui.team2RosterLogo.classList.add('hidden');
+                }
                 ui.team2RosterTitle.textContent = ui.team2NameInput.value || 'AWAY TEAM';
                 generatePlayerInputs('team2');
                 ui.progressBar.style.width = '75%';
             }
             if (step === 4) {
                  ui.progressBar.style.width = '100%';
-                 const team1Name = ui.team1NameInput.value || 'HOME TEAM';
-                 const team2Name = ui.team2NameInput.value || 'AWAY TEAM';
-                 ui.tossWinnerSelect.innerHTML = `
-                    <option value="" disabled selected>Select a Team</option>
-                    <option value="team1">${team1Name}</option>
-                    <option value="team2">${team2Name}</option>
-                 `;
+                 // Reset toss state
+                tossWinnerKey = null;
+                tossDecision = 'bat';
+                ui.tossDecisionContainer.classList.add('hidden');
+                ui.startMatchBtn.disabled = true;
+                ui.startMatchBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                ui.tossWinnerTeam1.classList.remove('selected');
+                ui.tossWinnerTeam2.classList.remove('selected');
+                selectTossChoice('bat'); // Default to bat
+
+                 // Populate Team 1 info
+                ui.tossTeam1Name.textContent = ui.team1NameInput.value || 'HOME TEAM';
+                if (state.team1.logo) {
+                    ui.tossTeam1LogoContainer.innerHTML = `<img src="${state.team1.logo}" class="w-full h-full object-cover rounded-full">`;
+                    ui.tossTeam1LogoContainer.style.backgroundColor = '';
+                } else {
+                    ui.tossTeam1LogoContainer.style.backgroundColor = ui.team1ColorInput.value;
+                    ui.tossTeam1LogoContainer.innerHTML = `<span>${(ui.team1NameInput.value || 'H').charAt(0)}</span>`;
+                }
+
+                // Populate Team 2 info
+                ui.tossTeam2Name.textContent = ui.team2NameInput.value || 'AWAY TEAM';
+                if (state.team2.logo) {
+                    ui.tossTeam2LogoContainer.innerHTML = `<img src="${state.team2.logo}" class="w-full h-full object-cover rounded-full">`;
+                    ui.tossTeam2LogoContainer.style.backgroundColor = '';
+                } else {
+                    ui.tossTeam2LogoContainer.style.backgroundColor = ui.team2ColorInput.value;
+                    ui.tossTeam2LogoContainer.innerHTML = `<span>${(ui.team2NameInput.value || 'A').charAt(0)}</span>`;
+                }
+                 ui.setupStep4.classList.add('toss-active');
             }
         }
 
@@ -832,9 +980,6 @@
             state.team1.color = ui.team1ColorInput.value;
             state.team2.color = ui.team2ColorInput.value;
 
-            handleLogoUpload(ui.team1LogoInput.files[0], 'team1');
-            handleLogoUpload(ui.team2LogoInput.files[0], 'team2');
-
             state.team1.players = Array.from(ui.team1PlayerInputs.querySelectorAll('input')).map((input, i) => input.value.trim() || `Player ${i + 1}`).filter(p => p);
             state.team2.players = Array.from(ui.team2PlayerInputs.querySelectorAll('input')).map((input, i) => input.value.trim() || `Player ${i + 1}`).filter(p => p);
             
@@ -842,18 +987,14 @@
             state.team1.players.forEach(p => { state.team1.playerStats[p] = initPlayerStats(p); });
             state.team2.players.forEach(p => { state.team2.playerStats[p] = initPlayerStats(p); });
 
-
             if (state.team1.players.length < 2 || state.team2.players.length < 1) {
                 showAlert('Please add at least 2 players to the batting team and 1 player to the bowling team.');
                 return;
             }
             
-            const tossWinnerKey = ui.tossWinnerSelect.value;
-            const tossChoice = document.querySelector('input[name="bat-bowl"]:checked').value;
-
             const tossLoserKey = tossWinnerKey === 'team1' ? 'team2' : 'team1';
 
-            if (tossChoice === 'bat') {
+            if (tossDecision === 'bat') {
                 state.battingTeam = tossWinnerKey;
                 state.bowlingTeam = tossLoserKey;
             } else {
@@ -880,8 +1021,12 @@
             
             const matchHeader = ui.matchHeader;
             matchHeader.innerHTML = `
-                <h1 class="font-bold text-sm uppercase">Match Between ${team1Name} vs ${team2Name}</h1>
-                <p class="text-xs text-gray-600">At ${venue} on ${dateStr}</p>
+                <div class="flex items-center justify-center space-x-2">
+                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <p class="font-semibold text-sm text-gray-500">Live Match</p>
+                </div>
+                <h1 class="font-bold text-lg uppercase text-blue-900">${team1Name} vs ${team2Name}</h1>
+                <p class="text-xs text-gray-600">${venue} | ${dateStr} | ${state.totalOvers} Overs, ${state.playersPerSide}-a-side</p>
             `;
 
             state.isScoringLocked = true;
@@ -1205,6 +1350,7 @@
         
         function swapBatsmen() {
             [state.striker, state.nonStriker] = [state.nonStriker, state.striker];
+            updateUI();
         }
         
         function undo() {
@@ -1230,25 +1376,12 @@
         }
 
         // --- UI UPDATES ---
-        function manageBatsmanPrompt() {
-            const batsmanIsNeeded = (state.striker === null || state.nonStriker === null) && !state.winner;
-            const prompt = ui.selectBatsmanPrompt;
-
-            if (batsmanIsNeeded) {
-                prompt.classList.remove('hidden');
-                state.isScoringLocked = true; // Ensure scoring remains locked
-            } else {
-                prompt.classList.add('hidden');
-            }
-        }
-
         function updateUI() {
             updateScoreboard();
             updateTargetInfo();
             updateBattingTable();
             updateBowlingTable();
             updateOverProgress();
-            manageBatsmanPrompt();
         }
 
         function updateScoreboard() {
@@ -1259,22 +1392,22 @@
 
             const createTeamHTML = (team, isBatting) => {
                 // Define styles based on whether the team is batting or bowling
-                const logoClass = isBatting ? 'w-12 h-12' : 'w-10 h-10';
-                const nameClass = isBatting ? 'text-xl' : 'text-lg';
-                const scoreClass = isBatting ? 'text-5xl font-bold' : 'text-2xl font-semibold';
-                const oversClass = isBatting ? 'text-lg' : 'text-base';
+                const logoClass = isBatting ? 'w-10 h-10' : 'w-8 h-8';
+                const nameClass = isBatting ? 'text-lg' : 'text-base';
+                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-2xl font-semibold';
+                const oversClass = isBatting ? 'text-base' : 'text-sm';
                 const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
 
                 // For the bowling team in the first innings, show "Yet to bat"
                 if (state.innings === 1 && !isBatting) {
                     return `
-                        <div class="flex items-center justify-between opacity-70 mt-2">
-                            <div class="flex items-center space-x-3">
+                        <div class="flex items-center justify-between opacity-70 mt-1">
+                            <div class="flex items-center space-x-2">
                                 <img src="${logoSrc}" alt="${team.name} Logo" class="${logoClass} rounded-full object-cover">
                                 <span class="${nameClass} font-semibold text-gray-700">${team.name}</span>
                             </div>
                             <div class="text-right">
-                                <p class="text-lg font-semibold text-gray-500">Yet to bat</p>
+                                <p class="text-base font-semibold text-gray-500">Yet to bat</p>
                             </div>
                         </div>
                     `;
@@ -1289,7 +1422,7 @@
                             <span class="${nameClass} font-semibold text-gray-800">${team.name}</span>
                         </div>
                         <div class="text-right">
-                            <p class="${scoreClass} text-gray-900">${team.score}/${team.wickets}</p>
+                            <p class="${scoreClass} text-gray-900 leading-tight">${team.score}/${team.wickets}</p>
                             <p class="${oversClass} text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
                         </div>
                     </div>
@@ -1347,7 +1480,7 @@
             const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : '0.00';
             return `
                 <tr class="border-t">
-                    <td class="p-3 font-semibold text-gray-800 flex items-center justify-between text-lg">
+                    <td class="p-2 font-semibold text-gray-800 flex items-center justify-between text-base">
                         <div>
                             ${batsman.name} ${isStriker ? '<span class="text-red-500 ml-1 text-xs">*</span>' : ''}
                         </div>
@@ -1360,11 +1493,11 @@
                             </button>
                         </div>
                     </td>
-                    <td class="text-center p-3 font-bold text-lg">${batsman.runs}</td>
-                    <td class="text-center p-3 text-lg">${batsman.balls}</td>
-                    <td class="text-center p-3 text-lg">${batsman.fours}</td>
-                    <td class="text-center p-3 text-lg">${batsman.sixes}</td>
-                    <td class="text-right p-3 text-lg">${sr}</td>
+                    <td class="text-center p-2 font-bold text-base">${batsman.runs}</td>
+                    <td class="text-center p-2 text-base">${batsman.balls}</td>
+                    <td class="text-center p-2 text-base">${batsman.fours}</td>
+                    <td class="text-center p-2 text-base">${batsman.sixes}</td>
+                    <td class="text-right p-2 text-base">${sr}</td>
                 </tr>
             `;
         }
@@ -1394,17 +1527,17 @@
                 
                 const row = `
                     <tr class="border-t">
-                        <td class="p-3 font-semibold text-gray-800 flex items-center space-x-2 text-lg">
+                        <td class="p-2 font-semibold text-gray-800 flex items-center space-x-2 text-base">
                             <span>${bowler.name}</span>
                             <button onclick="editPlayer('bowler')" class="text-gray-400 hover:text-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
                             </button>
                         </td>
-                        <td class="text-center p-3 text-lg">${oversDisplay}</td>
-                        <td class="text-center p-3 text-lg">${bowler.maidens}</td>
-                        <td class="text-center p-3 text-lg">${bowler.runsConceded}</td>
-                        <td class="text-center p-3 text-lg">${bowler.wickets}</td>
-                        <td class="text-right p-3 text-lg">${econ}</td>
+                        <td class="text-center p-2 text-base">${oversDisplay}</td>
+                        <td class="text-center p-2 text-base">${bowler.maidens}</td>
+                        <td class="text-center p-2 text-base">${bowler.runsConceded}</td>
+                        <td class="text-center p-2 text-base">${bowler.wickets}</td>
+                        <td class="text-right p-2 text-base">${econ}</td>
                     </tr>
                 `;
                 ui.bowlingTable.innerHTML = row;
@@ -1484,6 +1617,12 @@
             state.isScoringLocked = true;
             ui.scoringControls.classList.add('hidden');
             showSummaryScreen();
+        }
+        
+        function confirmStartNewMatch() {
+            showConfirm('Are you sure you want to start a new match? All current progress will be lost.', () => {
+                window.location.reload();
+            });
         }
 
 
@@ -1783,18 +1922,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             ui.matchDateInput.value = new Date().toISOString().split('T')[0];
             
-            ui.tossWinnerSelect.onchange = () => {
-                if(ui.tossWinnerSelect.value) {
-                    ui.tossDecisionContainer.classList.remove('hidden');
-                    ui.startMatchBtn.disabled = false;
-                    ui.startMatchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                } else {
-                    ui.tossDecisionContainer.classList.add('hidden');
-                    ui.startMatchBtn.disabled = true;
-                    ui.startMatchBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                }
-            };
+            ui.tossWinnerTeam1.onclick = () => selectTossWinner('team1');
+            ui.tossWinnerTeam2.onclick = () => selectTossWinner('team2');
+            ui.tossChoiceBat.onclick = () => selectTossChoice('bat');
+            ui.tossChoiceBowl.onclick = () => selectTossChoice('bowl');
             
+            ui.team1LogoInput.onchange = (e) => handleLogoUpload(e.target.files[0], 'team1');
+            ui.team2LogoInput.onchange = (e) => handleLogoUpload(e.target.files[0], 'team2');
+
             const selects = document.querySelectorAll('#total-overs, #players-per-side');
             selects.forEach(select => {
                 function applyPlaceholderStyle() {
@@ -1845,23 +1980,34 @@
                 });
             };
             
-            ui.selectBatsmanPrompt.onclick = () => {
-                if (!state.winner) {
-                    ui.playerModalCancelBtnX.classList.add('hidden');
-                    ui.playerModalCancelBtnText.classList.add('hidden');
-                    const roleToFill = state.striker === null ? 'striker' : 'nonStriker';
-                    selectPlayer(roleToFill, () => {
-                        ui.playerModalCancelBtnX.classList.remove('hidden');
-                        ui.playerModalCancelBtnText.classList.remove('hidden');
-                        state.isScoringLocked = false;
-                        updateUI();
-                    });
-                }
-            };
-            
             ui.confirmDownloadBtn.onclick = () => {
                 if(downloadAction) downloadAction();
             };
+
+            const tossPage = document.getElementById('setup-step-4');
+            tossPage.addEventListener('click', function(e) {
+                // Don't create a ripple if a button inside the container was the main target
+                if (e.target.closest('button')) return;
+
+                const ripple = document.createElement('span');
+                const rect = tossPage.getBoundingClientRect();
+                
+                ripple.style.width = ripple.style.height = `100px`;
+                ripple.style.left = `${e.clientX - rect.left - 50}px`; // 50 is half of the width/height
+                ripple.style.top = `${e.clientY - rect.top - 50}px`;
+                ripple.classList.add('ripple');
+                
+                const oldRipple = tossPage.querySelector('.ripple');
+                if (oldRipple) {
+                    oldRipple.remove();
+                }
+                
+                tossPage.appendChild(ripple);
+
+                ripple.addEventListener('animationend', () => {
+                    ripple.remove();
+                });
+            });
 
         });
 
