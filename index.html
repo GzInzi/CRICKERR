@@ -1,15 +1,11 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Cricker - Live Scoring</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><style>
         body { 
             font-family: 'Inter', sans-serif; 
             font-size: 16px; /* Adjusted base font size */ 
@@ -174,9 +170,7 @@
         #over-progress-container { padding: 8px; }
         #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
         #over-summary { font-size: 0.8rem; }
-    </style>
-</head>
-<body class="bg-gray-100 antialiased">
+    </style></head><body class="bg-gray-100 antialiased">
 
     <div id="splash-screen">
         <img src="my-logo.png" alt="App Logo" id="splash-logo">
@@ -376,10 +370,10 @@
                             <thead class="bg-gray-200">
                                 <tr>
                                     <th class="p-2 font-semibold text-base w-2/5">Batting</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">R</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">B</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">4s</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">6s</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">B</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">4s</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">6s</th>
                                     <th class="text-right p-2 font-semibold text-base w-1/5">SR</th>
                                 </tr>
                             </thead>
@@ -392,10 +386,10 @@
                             <thead class="bg-gray-200">
                                 <tr>
                                     <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">O</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">M</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">R</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[12%]">W</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">O</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">M</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">W</th>
                                     <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
                                 </tr>
                             </thead>
@@ -408,6 +402,10 @@
 
             <div class="lg:col-span-1 flex flex-col space-y-2">
                 <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
+                    <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">BALL-BY-BALL</p>
+                        <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
+                    </div>
                     <div class="flex items-center justify-between">
                         <div id="over-progress" class="flex items-center gap-2 flex-wrap">
                             </div>
@@ -416,7 +414,7 @@
                 </div>
                 <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-                        <p class="font-bold text-yellow-600 text-lg">Choose the Next Bowler</p>
+                        <p class="font-bold text-red-800 text-lg">Choose the Next Bowler</p>
                     </div>
                     <div class="grid grid-cols-4 scoring-grid flex-grow">
                         <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
@@ -810,6 +808,8 @@
             confirmDownloadBtn: document.getElementById('confirm-download-btn'),
             setupCard: document.querySelector('.setup-card'),
             setupStep4: document.getElementById('setup-step-4'),
+            liveCommentaryContainer: document.getElementById('live-commentary-container'),
+            liveCommentary: document.getElementById('live-commentary'),
         };
 
         // --- HELPER FUNCTIONS ---
@@ -1055,6 +1055,11 @@
         function selectPlayer(role, onCompleteCallback) {
             ui.modalTitle.textContent = `Select ${role.charAt(0).toUpperCase() + role.slice(1)}`;
             
+            ui.modalTitle.classList.remove('text-red-800');
+            if (role === 'striker' || role === 'nonStriker') {
+                ui.modalTitle.classList.add('text-red-800');
+            }
+
             const teamKey = role === 'bowler' ? state.bowlingTeam : state.battingTeam;
             const players = state[teamKey].players;
             
@@ -1109,6 +1114,16 @@
                 resolve();
             }, 1500));
         }
+        
+        function updateLiveCommentary(commentary) {
+            if (ui.liveCommentary && commentary) {
+                ui.liveCommentaryContainer.classList.remove('hidden');
+                ui.liveCommentary.innerHTML = commentary;
+            } else if (ui.liveCommentaryContainer) {
+                ui.liveCommentaryContainer.classList.add('hidden');
+            }
+        }
+
 
         function addRuns(runs, isExtra = false, extraType = '') {
             if (state.isScoringLocked) return;
@@ -1127,6 +1142,9 @@
                 if (runs === 4) triggerEventAnimation('FOUR!', 'text-yellow-400');
                 if (runs === 6) triggerEventAnimation('SIX!', 'text-green-500');
                 
+                const commentary = `${state.bowler.name} to ${state.striker.name}, ${runs} run${runs !== 1 ? 's' : ''}.`;
+                updateLiveCommentary(commentary);
+
                 processBall(runs, `${runs}`);
 
                 if (runs % 2 !== 0) {
@@ -1148,6 +1166,17 @@
             let ballEvent = type.toUpperCase();
             if (runs > 0) ballEvent += `+${runs}`;
             
+            let extraName = type.toUpperCase();
+            if (type === 'wd') extraName = 'Wide';
+            if (type === 'nb') extraName = 'No Ball';
+            if (type === 'b') extraName = 'Bye';
+            if (type === 'lb') extraName = 'Leg Bye';
+            let commentary = `${extraName}! ${totalRuns} run${totalRuns !== 1 ? 's' : ''} added to the total.`;
+            if (runs > 0) {
+                commentary = `${extraName}! Batsmen complete ${runs} run${runs !== 1 ? 's' : ''}. Total ${totalRuns} added to the score.`
+            }
+            updateLiveCommentary(commentary);
+
             if (type !== 'b' && type !== 'lb') {
                  state.currentOver.push({ event: ballEvent, runs: totalRuns });
             } else {
@@ -1226,6 +1255,25 @@
             
             if (state.striker && state.striker.name === playerName) state.striker = null;
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
+            
+            let commentary = '';
+            switch(type) {
+                case 'Catch':
+                    commentary = `<b>OUT!</b> Caught by ${fielderName}. ${playerName} departs.`;
+                    break;
+                case 'Bowled':
+                    commentary = `<b>OUT! Bowled!</b> A beauty from ${state.bowler.name} sends ${playerName} back.`;
+                    break;
+                case 'Stump Out':
+                    commentary = `<b>OUT! Stumped!</b> ${playerName} is out of the crease and the bails are off.`;
+                    break;
+                case 'Run Out':
+                    commentary = `<b>OUT! Run out!</b> A mix-up in the middle and ${playerName} is gone.`;
+                    break;
+                default:
+                    commentary = `<b>OUT!</b> ${playerName} is dismissed.`;
+            }
+            updateLiveCommentary(commentary);
 
             processBall(0, 'W');
             
@@ -1271,6 +1319,7 @@
                     
                     if (checkInningsEnd()) return;
                     
+                    updateLiveCommentary(''); // Clear commentary for new over
                     ui.bowlerPromptOverlay.classList.remove('hidden');
                 }, 2000); 
             }
@@ -2057,6 +2106,4 @@
                 }, 750); // This time must match the CSS transition duration
             }, 3000); // 3000 milliseconds = 3 seconds
         });
-    </script>
-</body>
-</html>
+    </script></body></html>
