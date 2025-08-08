@@ -1,3 +1,4 @@
+
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -1123,7 +1124,86 @@
                 ui.liveCommentaryContainer.classList.add('hidden');
             }
         }
+        
+        function pickRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
 
+        function generateRealCommentary(type, data) {
+            let commentary = '';
+            const { bowler, striker, nonStriker, runs, wicketType, fielder, playerOut, extraType } = data;
+
+            switch (type) {
+                case 'runs':
+                    switch (runs) {
+                        case 0:
+                            commentary = pickRandom([
+                                `Excellent delivery from ${bowler}! A dot ball.`,
+                                `${bowler} to ${striker}, played straight to the fielder. No run.`,
+                                `A swing and a miss! ${striker} couldn't connect.`
+                            ]);
+                            break;
+                        case 1:
+                            commentary = pickRandom([
+                                `Pushed into the gap for a quick single. That brings ${nonStriker} on strike.`,
+                                `Just one run, keeping the scoreboard ticking.`,
+                                `${striker} gets off the mark with a single.`
+                            ]);
+                            break;
+                        case 2:
+                            commentary = pickRandom([
+                                `Good placement, they'll come back for two runs easily.`,
+                                `Well-judged running between the wickets nets them a couple.`
+                            ]);
+                            break;
+                        case 3:
+                            commentary = pickRandom([
+                                `They're pushing hard! Great effort in the deep, but they'll make it back for three.`,
+                                `Finds the vast outfield space, and it's three more for ${striker}.`
+                            ]);
+                            break;
+                        case 4:
+                            commentary = pickRandom([
+                                `<b>FOUR!</b> A cracking shot from ${striker}! It races to the boundary.`,
+                                `<b>FOUR!</b> Beautifully timed! Pierces the field for a boundary.`,
+                                `<b>FOUR!</b> Smashed away! ${striker} is looking in great touch.`
+                            ]);
+                            break;
+                        case 6:
+                            commentary = pickRandom([
+                                `<b>SIX!</b> That's out of here! A monstrous hit from ${striker}!`,
+                                `<b>SIX!</b> He's sent that into orbit! The ball sails over the fence.`,
+                                `<b>SIX!</b> The batsman, ${striker}, is on fire! He clears the boundary with ease!`
+                            ]);
+                            break;
+                    }
+                    break;
+                case 'wicket':
+                    switch (wicketType) {
+                        case 'Catch':
+                            commentary = `<b>OUT! Caught!</b> In the air... and taken! A superb catch by ${fielder} sends ${data.striker.name} packing.`;
+                            break;
+                        case 'Bowled':
+                            commentary = `<b>OUT! Bowled 'em!</b> Right through the defenses! A perfect delivery from ${bowler} dismantles the stumps.`;
+                            break;
+                        case 'Stump Out':
+                            commentary = `<b>OUT! Stumped!</b> Lightning-fast work by the keeper! ${data.striker.name} is caught out of the crease.`;
+                            break;
+                        case 'Run Out':
+                            commentary = `<b>OUT! Run out!</b> A moment of madness! A direct hit from the fielder catches ${playerOut} well short.`;
+                            break;
+                    }
+                    break;
+                case 'extra':
+                    const totalExtraRuns = (extraType === 'wd' || extraType === 'nb' ? 1 : 0) + runs;
+                    if(extraType === 'wd') commentary = `<b>Wide!</b> That's drifted down the leg side. The umpire signals a wide and it's ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''} added to the total.`;
+                    if(extraType === 'nb') commentary = `<b>No Ball!</b> ${bowler} has overstepped. That's a free hit coming up, and they add ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''}.`;
+                    if(extraType === 'b') commentary = `<b>Byes!</b> It beats the bat and the keeper! They'll pick up ${totalExtraRuns} bye${totalExtraRuns > 1 ? 's' : ''}.`;
+                    if(extraType === 'lb') commentary = `<b>Leg Byes!</b> Off the pads and they scamper through for ${totalExtraRuns} leg bye${totalExtraRuns > 1 ? 's' : ''}.`;
+                    break;
+            }
+            updateLiveCommentary(commentary);
+        }
 
         function addRuns(runs, isExtra = false, extraType = '') {
             if (state.isScoringLocked) return;
@@ -1142,8 +1222,12 @@
                 if (runs === 4) triggerEventAnimation('FOUR!', 'text-yellow-400');
                 if (runs === 6) triggerEventAnimation('SIX!', 'text-green-500');
                 
-                const commentary = `${state.bowler.name} to ${state.striker.name}, ${runs} run${runs !== 1 ? 's' : ''}.`;
-                updateLiveCommentary(commentary);
+                generateRealCommentary('runs', {
+                    runs: runs,
+                    bowler: state.bowler.name,
+                    striker: state.striker.name,
+                    nonStriker: state.nonStriker.name
+                });
 
                 processBall(runs, `${runs}`);
 
@@ -1166,16 +1250,11 @@
             let ballEvent = type.toUpperCase();
             if (runs > 0) ballEvent += `+${runs}`;
             
-            let extraName = type.toUpperCase();
-            if (type === 'wd') extraName = 'Wide';
-            if (type === 'nb') extraName = 'No Ball';
-            if (type === 'b') extraName = 'Bye';
-            if (type === 'lb') extraName = 'Leg Bye';
-            let commentary = `${extraName}! ${totalRuns} run${totalRuns !== 1 ? 's' : ''} added to the total.`;
-            if (runs > 0) {
-                commentary = `${extraName}! Batsmen complete ${runs} run${runs !== 1 ? 's' : ''}. Total ${totalRuns} added to the score.`
-            }
-            updateLiveCommentary(commentary);
+            generateRealCommentary('extra', {
+                extraType: type,
+                runs: runs,
+                bowler: state.bowler.name
+            });
 
             if (type !== 'b' && type !== 'lb') {
                  state.currentOver.push({ event: ballEvent, runs: totalRuns });
@@ -1237,43 +1316,32 @@
             
             const battingTeamKey = state.battingTeam;
             const battingTeam = state[battingTeamKey];
-            const playerOut = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+            const playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
 
             battingTeam.wickets++;
             if (type !== 'Run Out') {
                 state.bowler.wickets++;
             }
-            playerOut.balls++;
-            playerOut.isOut = true;
-            playerOut.dismissalInfo = { 
+            playerOutObject.balls++;
+            playerOutObject.isOut = true;
+            playerOutObject.dismissalInfo = { 
                 type: type, 
                 bowler: state.bowler ? state.bowler.name : null, 
                 fielder: fielderName 
             };
             
-            savePlayerStats(playerOut, battingTeamKey);
+            savePlayerStats(playerOutObject, battingTeamKey);
             
+            generateRealCommentary('wicket', {
+                wicketType: type,
+                bowler: state.bowler.name,
+                striker: playerOutObject,
+                fielder: fielderName,
+                playerOut: playerName
+            });
+
             if (state.striker && state.striker.name === playerName) state.striker = null;
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
-            
-            let commentary = '';
-            switch(type) {
-                case 'Catch':
-                    commentary = `<b>OUT!</b> Caught by ${fielderName}. ${playerName} departs.`;
-                    break;
-                case 'Bowled':
-                    commentary = `<b>OUT! Bowled!</b> A beauty from ${state.bowler.name} sends ${playerName} back.`;
-                    break;
-                case 'Stump Out':
-                    commentary = `<b>OUT! Stumped!</b> ${playerName} is out of the crease and the bails are off.`;
-                    break;
-                case 'Run Out':
-                    commentary = `<b>OUT! Run out!</b> A mix-up in the middle and ${playerName} is gone.`;
-                    break;
-                default:
-                    commentary = `<b>OUT!</b> ${playerName} is dismissed.`;
-            }
-            updateLiveCommentary(commentary);
 
             processBall(0, 'W');
             
