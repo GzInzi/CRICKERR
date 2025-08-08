@@ -1,16 +1,20 @@
+
 <!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     
+    <!-- Fix for GitHub Pages paths -->
     <base href="/CRICKERR/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Cricker - Live Scoring</title>
 
+    <!-- PWA Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb"/>
     <link rel="apple-touch-icon" href="icon-512.png">
 
+    <!-- Your Scripts and Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -31,9 +35,37 @@
 
         /* --- SPLASH SCREEN STYLES --- */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f0f2f5; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.75s ease-out; }
-        #splash-logo { width: 120px; margin-bottom: 1rem; }
-        #splash-text { font-size: 0.8rem; font-family: 'Inter', sans-serif; color: #475569; animation: fadeInAnimation 1s ease-in; }
-        @keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
+        #splash-logo { 
+            width: 120px; 
+            margin-bottom: 1rem; 
+            animation: splash-logo-animation 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        #splash-text { 
+            font-size: 0.8rem; 
+            font-family: 'Inter', sans-serif; 
+            color: #475569; 
+            opacity: 0; /* Start hidden */
+            animation: splash-text-animation 1s ease-in 0.5s forwards; /* Delay start */
+        }
+
+        @keyframes splash-logo-animation {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes splash-text-animation {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
         /* Styles for select dropdown placeholders */
         select.placeholder { color: #9ca3af; font-size: 0.9em; }
