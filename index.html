@@ -1,4 +1,3 @@
-
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -1121,7 +1120,7 @@
                 ui.liveCommentaryContainer.classList.remove('hidden');
                 ui.liveCommentary.innerHTML = commentary;
             } else if (ui.liveCommentaryContainer) {
-                ui.liveCommentaryContainer.classList.add('hidden');
+                // Do not hide it here automatically, let other logic handle it.
             }
         }
         
@@ -1172,8 +1171,8 @@
                         case 6:
                             commentary = pickRandom([
                                 `<b>SIX!</b> That's out of here! A monstrous hit from ${striker}!`,
-                                `<b>SIX!</b> He's sent that into orbit! The ball sails over the fence.`,
-                                `<b>SIX!</b> The batsman, ${striker}, is on fire! He clears the boundary with ease!`
+                                `<b>SIX!</b> The ball is sailing over the fence! What a shot by ${striker}!`,
+                                `<b>SIX!</b> That's a massive one! The batsman, ${striker}, is on fire!`
                             ]);
                             break;
                     }
@@ -1387,7 +1386,6 @@
                     
                     if (checkInningsEnd()) return;
                     
-                    updateLiveCommentary(''); // Clear commentary for new over
                     ui.bowlerPromptOverlay.classList.remove('hidden');
                 }, 2000); 
             }
@@ -1596,7 +1594,7 @@
         function createBatsmanRow(batsman, isStriker) {
             const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : '0.00';
             return `
-                <tr class="border-t">
+                <tr class="border-t align-middle">
                     <td class="p-2 font-semibold text-gray-800 flex items-center justify-between text-base">
                         <div>
                             ${batsman.name} ${isStriker ? '<span class="text-red-500 ml-1 text-xs">*</span>' : ''}
@@ -1643,7 +1641,7 @@
                 const econ = bowler.ballsBowled > 0 ? (bowler.runsConceded / (bowler.ballsBowled / 6)).toFixed(2) : '0.00';
                 
                 const row = `
-                    <tr class="border-t">
+                    <tr class="border-t align-middle">
                         <td class="p-2 font-semibold text-gray-800 flex items-center space-x-2 text-base">
                             <span>${bowler.name}</span>
                             <button onclick="editPlayer('bowler')" class="text-gray-400 hover:text-gray-700">
@@ -1677,6 +1675,7 @@
                 ui.overSummary.textContent = `${overRuns} Runs This Over`;
             } else {
                  ui.overProgressContainer.classList.add('hidden');
+                 ui.liveCommentaryContainer.classList.add('hidden');
             }
         }
 
