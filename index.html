@@ -1,20 +1,17 @@
-
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     
-    <!-- Fix for GitHub Pages paths -->
     <base href="/CRICKERR/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Cricker - Live Scoring</title>
 
-    <!-- PWA Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb"/>
     <link rel="apple-touch-icon" href="icon-512.png">
 
-    <!-- Your Scripts and Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -229,7 +226,7 @@
     <div id="setup-screen" class="min-h-screen w-full flex flex-col items-center justify-center setup-bg">
         <div class="w-full max-w-2xl shadow-xl rounded-2xl p-8 setup-card overflow-hidden">
             <div id="progress-container" class="mb-8">
-                <div class="progress-bar-bg w-full h-2 rounded-full">
+                <div class="progress-bar-bg w-full h-2 bg-gray-200 rounded-full">
                     <div id="progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: 25%;"></div>
                 </div>
                 <div class="flex justify-between text-xs sm:text-sm text-gray-500 mt-2">
@@ -310,9 +307,9 @@
                                      <input type="text" id="team2-name-input" placeholder="Enter Away Team Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                  </div>
                                   <div class="space-y-2">
-                                     <label for="team2-color-input" class="block font-medium text-gray-700">Team Color</label>
-                                     <input type="color" id="team2-color-input" value="#64748b" class="w-full h-10 p-1 border-gray-300 border rounded-md">
-                                 </div>
+                                      <label for="team2-color-input" class="block font-medium text-gray-700">Team Color</label>
+                                      <input type="color" id="team2-color-input" value="#64748b" class="w-full h-10 p-1 border-gray-300 border rounded-md">
+                                  </div>
                             </div>
                              <div class="space-y-2">
                                  <label for="team2-logo-input" class="block font-medium text-gray-700">Away Team Logo</label>
@@ -359,38 +356,38 @@
 
                 <div id="setup-step-4" class="setup-step hidden text-slate-800">
                      <div class="w-full max-w-lg mx-auto px-6">
-                        <header class="text-center mb-8">
-                            <h1 class="text-3xl font-bold">Toss Result</h1>
-                            <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
-                        </header>
-                        <div class="space-y-8">
-                            <div>
-                                <p class="text-center font-semibold mb-4">Who won the toss?</p>
-                                <div class="flex justify-center gap-6">
-                                    <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
-                                        <div id="toss-team1-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
-                                        <span id="toss-team1-name" class="truncate w-full"></span>
-                                    </button>
-                                    <button id="toss-winner-team2" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
-                                        <div id="toss-team2-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
-                                        <span id="toss-team2-name" class="truncate w-full"></span>
-                                    </button>
-                                </div>
-                            </div>
+                         <header class="text-center mb-8">
+                             <h1 class="text-3xl font-bold">Toss Result</h1>
+                             <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
+                         </header>
+                         <div class="space-y-8">
+                             <div>
+                                 <p class="text-center font-semibold mb-4">Who won the toss?</p>
+                                 <div class="flex justify-center gap-6">
+                                     <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                         <div id="toss-team1-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                         <span id="toss-team1-name" class="truncate w-full"></span>
+                                     </button>
+                                     <button id="toss-winner-team2" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                         <div id="toss-team2-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                         <span id="toss-team2-name" class="truncate w-full"></span>
+                                     </button>
+                                 </div>
+                             </div>
 
-                            <div id="toss-decision-container" class="hidden text-center">
-                                <p class="font-semibold mb-4">...and elected to:</p>
-                                <div class="flex justify-center gap-6">
-                                    <button id="toss-choice-bat" class="toss-3d-button w-32 py-3">Bat First</button>
-                                    <button id="toss-choice-bowl" class="toss-3d-button w-32 py-3">Field First</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-12 flex justify-between items-center">
-                            <button onclick="goToStep(3)" class="back-btn font-semibold hover:text-slate-900">Back</button>
-                            <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
-                        </div>
-                    </div>
+                             <div id="toss-decision-container" class="hidden text-center">
+                                 <p class="font-semibold mb-4">...and elected to:</p>
+                                 <div class="flex justify-center gap-6">
+                                     <button id="toss-choice-bat" class="toss-3d-button w-32 py-3">Bat First</button>
+                                     <button id="toss-choice-bowl" class="toss-3d-button w-32 py-3">Field First</button>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="mt-12 flex justify-between items-center">
+                             <button onclick="goToStep(3)" class="back-btn font-semibold hover:text-slate-900">Back</button>
+                             <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>
@@ -614,16 +611,15 @@
         <div class="modal-content bg-white rounded-t-2xl shadow-xl w-full max-w-md p-6 transform translate-y-full" onclick="event.stopPropagation()">
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <h3 class="text-lg font-bold text-center mb-2">Wides</h3>
-            <p class="text-center text-sm text-gray-500 mb-6">(Wide = 1 run)</p>
+            <p class="text-center text-sm text-gray-500 mb-6">(Wide = 1 run + any extra runs)</p>
             <div class="grid grid-cols-4 gap-3">
-                <button onclick="addExtra('wd', 0)" class="p-3 bg-gray-100 rounded-lg">WD</button>
                 <button onclick="addExtra('wd', 1)" class="p-3 bg-gray-100 rounded-lg">WD+1</button>
                 <button onclick="addExtra('wd', 2)" class="p-3 bg-gray-100 rounded-lg">WD+2</button>
                 <button onclick="addExtra('wd', 3)" class="p-3 bg-gray-100 rounded-lg">WD+3</button>
                 <button onclick="addExtra('wd', 4)" class="p-3 bg-gray-100 rounded-lg">WD+4</button>
-                <button onclick="addExtra('wd', 5)" class="p-3 bg-gray-100 rounded-lg">WD+5</button>
-                <button onclick="addExtra('wd', 6)" class="p-3 bg-gray-100 rounded-lg">WD+6</button>
-                <button class="p-3 bg-gray-100 rounded-lg">More</button>
+            </div>
+             <div class="mt-4 border-t pt-4">
+                <button onclick="processExtraWicket('Run Out', 'wd')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -632,16 +628,17 @@
         <div class="modal-content bg-white rounded-t-2xl shadow-xl w-full max-w-md p-6 transform translate-y-full" onclick="event.stopPropagation()">
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <h3 class="text-lg font-bold text-center mb-2">No Ball</h3>
-            <p class="text-center text-sm text-gray-500 mb-6">(NB = 1 run)</p>
+            <p class="text-center text-sm text-gray-500 mb-6">(NB = 1 run + runs off bat. Free Hit next ball.)</p>
             <div class="grid grid-cols-4 gap-3">
-                <button onclick="addExtra('nb', 0)" class="p-3 bg-gray-100 rounded-lg">NB</button>
                 <button onclick="addExtra('nb', 1)" class="p-3 bg-gray-100 rounded-lg">NB+1</button>
                 <button onclick="addExtra('nb', 2)" class="p-3 bg-gray-100 rounded-lg">NB+2</button>
                 <button onclick="addExtra('nb', 3)" class="p-3 bg-gray-100 rounded-lg">NB+3</button>
                 <button onclick="addExtra('nb', 4)" class="p-3 bg-gray-100 rounded-lg">NB+4</button>
-                <button onclick="addExtra('nb', 5)" class="p-3 bg-gray-100 rounded-lg">NB+5</button>
-                <button onclick="addExtra('nb', 6)" class="p-3 bg-gray-100 rounded-lg">NB+6</button>
-                <button class="p-3 bg-gray-100 rounded-lg">More</button>
+                <button onclick="addExtra('nb', 0)" class="p-3 bg-gray-100 rounded-lg col-span-2">NB+0</button>
+                <button onclick="addExtra('nb', 6)" class="p-3 bg-gray-100 rounded-lg col-span-2">NB+6</button>
+            </div>
+            <div class="mt-4 border-t pt-4">
+                <button onclick="processExtraWicket('Run Out', 'nb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -651,14 +648,13 @@
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <h3 class="text-lg font-bold text-center mb-6">Byes</h3>
             <div class="grid grid-cols-4 gap-3">
-                <button onclick="addExtra('b', 1)" class="p-3 bg-gray-100 rounded-lg">B1</button>
-                <button onclick="addExtra('b', 2)" class="p-3 bg-gray-100 rounded-lg">B2</button>
-                <button onclick="addExtra('b', 3)" class="p-3 bg-gray-100 rounded-lg">B3</button>
-                <button onclick="addExtra('b', 4)" class="p-3 bg-gray-100 rounded-lg">B4</button>
-                <button onclick="addExtra('b', 5)" class="p-3 bg-gray-100 rounded-lg">B5</button>
-                <button onclick="addExtra('b', 6)" class="p-3 bg-gray-100 rounded-lg">B6</button>
-                <button onclick="addExtra('b', 7)" class="p-3 bg-gray-100 rounded-lg">B7</button>
-                <button class="p-3 bg-gray-100 rounded-lg">More</button>
+                <button onclick="addExtra('b', 1)" class="p-3 bg-gray-100 rounded-lg">B+1</button>
+                <button onclick="addExtra('b', 2)" class="p-3 bg-gray-100 rounded-lg">B+2</button>
+                <button onclick="addExtra('b', 3)" class="p-3 bg-gray-100 rounded-lg">B+3</button>
+                <button onclick="addExtra('b', 4)" class="p-3 bg-gray-100 rounded-lg">B+4</button>
+            </div>
+            <div class="mt-4 border-t pt-4">
+                <button onclick="processExtraWicket('Run Out', 'b')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -668,14 +664,13 @@
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <h3 class="text-lg font-bold text-center mb-6">Leg Byes</h3>
             <div class="grid grid-cols-4 gap-3">
-                <button onclick="addExtra('lb', 1)" class="p-3 bg-gray-100 rounded-lg">LB1</button>
-                <button onclick="addExtra('lb', 2)" class="p-3 bg-gray-100 rounded-lg">LB2</button>
-                <button onclick="addExtra('lb', 3)" class="p-3 bg-gray-100 rounded-lg">LB3</button>
-                <button onclick="addExtra('lb', 4)" class="p-3 bg-gray-100 rounded-lg">LB4</button>
-                <button onclick="addExtra('lb', 5)" class="p-3 bg-gray-100 rounded-lg">LB5</button>
-                <button onclick="addExtra('lb', 6)" class="p-3 bg-gray-100 rounded-lg">LB6</button>
-                <button onclick="addExtra('lb', 7)" class="p-3 bg-gray-100 rounded-lg">LB7</button>
-                <button class="p-3 bg-gray-100 rounded-lg">More</button>
+                <button onclick="addExtra('lb', 1)" class="p-3 bg-gray-100 rounded-lg">LB+1</button>
+                <button onclick="addExtra('lb', 2)" class="p-3 bg-gray-100 rounded-lg">LB+2</button>
+                <button onclick="addExtra('lb', 3)" class="p-3 bg-gray-100 rounded-lg">LB+3</button>
+                <button onclick="addExtra('lb', 4)" class="p-3 bg-gray-100 rounded-lg">LB+4</button>
+            </div>
+            <div class="mt-4 border-t pt-4">
+                <button onclick="processExtraWicket('Run Out', 'lb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -778,7 +773,8 @@
             manOfTheMatch: null,
             winner: null,
             winMargin: '',
-            toss: {}
+            toss: {},
+            pendingExtraWicket: null, // To track run outs on extras
         };
 
         let alertCallback = null;
@@ -1231,54 +1227,54 @@
 
             switch (type) {
                 case 'runs':
-                    switch (runs) {
-                        case 0: poolName = 'dot'; break;
-                        case 1: poolName = 'single'; break;
-                        case 2: poolName = 'double'; break;
-                        case 3: poolName = 'triple'; break;
-                        case 4: 
-                            if (striker.consecutiveFours >= 4) poolName = 'four_4plus';
-                            else if (striker.consecutiveFours === 3) poolName = 'four_3';
-                            else if (striker.consecutiveFours === 2) poolName = 'four_2';
-                            else poolName = 'four';
-                            break;
-                        case 6: 
-                            if (striker.consecutiveSixes >= 4) poolName = 'six_4plus';
-                            else if (striker.consecutiveSixes === 3) poolName = 'six_3';
-                            else if (striker.consecutiveSixes === 2) poolName = 'six_2';
-                            else poolName = 'six';
-                            break;
-                    }
-                    commentary = pickUnique(poolName);
-                    break;
+                        switch (runs) {
+                            case 0: poolName = 'dot'; break;
+                            case 1: poolName = 'single'; break;
+                            case 2: poolName = 'double'; break;
+                            case 3: poolName = 'triple'; break;
+                            case 4: 
+                                if (striker.consecutiveFours >= 4) poolName = 'four_4plus';
+                                else if (striker.consecutiveFours === 3) poolName = 'four_3';
+                                else if (striker.consecutiveFours === 2) poolName = 'four_2';
+                                else poolName = 'four';
+                                break;
+                            case 6: 
+                                if (striker.consecutiveSixes >= 4) poolName = 'six_4plus';
+                                else if (striker.consecutiveSixes === 3) poolName = 'six_3';
+                                else if (striker.consecutiveSixes === 2) poolName = 'six_2';
+                                else poolName = 'six';
+                                break;
+                        }
+                        commentary = pickUnique(poolName);
+                        break;
                 case 'wicket':
-                    switch (wicketType) {
-                        case 'Catch': commentary = `<b>OUT! Caught!</b> In the air... and taken! A superb catch by ${fielder} sends ${data.striker.name} packing.`; break;
-                        case 'Bowled': commentary = `<b>OUT! Bowled 'em!</b> Right through the defenses! A perfect delivery from ${bowler} dismantles the stumps.`; break;
-                        case 'Stump Out': commentary = `<b>OUT! Stumped!</b> Lightning-fast work by the keeper! ${data.striker.name} is caught out of the crease.`; break;
-                        case 'Run Out': commentary = `<b>OUT! Run out!</b> A moment of madness! A direct hit from the fielder catches ${playerOut} well short.`; break;
-                    }
-                    break;
+                        switch (wicketType) {
+                            case 'Catch': commentary = `<b>OUT! Caught!</b> In the air... and taken! A superb catch by ${fielder} sends ${data.striker.name} packing.`; break;
+                            case 'Bowled': commentary = `<b>OUT! Bowled 'em!</b> Right through the defenses! A perfect delivery from ${bowler} dismantles the stumps.`; break;
+                            case 'Stump Out': commentary = `<b>OUT! Stumped!</b> Lightning-fast work by the keeper! ${data.striker.name} is caught out of the crease.`; break;
+                            case 'Run Out': commentary = `<b>OUT! Run out!</b> A moment of madness! A direct hit from the fielder catches ${playerOut} well short.`; break;
+                        }
+                        break;
                 case 'extra':
-                    const totalExtraRuns = (extraType === 'wd' || extraType === 'nb' ? 1 : 0) + runs;
-                    if(extraType === 'wd') commentary = `<b>Wide!</b> That's drifted down the leg side. The umpire signals a wide and it's ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''} added to the total.`;
-                    if(extraType === 'nb') commentary = `<b>No Ball!</b> ${bowler} has overstepped. That's a free hit coming up, and they add ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''}.`;
-                    if(extraType === 'b') commentary = `<b>Byes!</b> It beats the bat and the keeper! They'll pick up ${totalExtraRuns} bye${totalExtraRuns > 1 ? 's' : ''}.`;
-                    if(extraType === 'lb') commentary = `<b>Leg Byes!</b> Off the pads and they scamper through for ${totalExtraRuns} leg bye${totalExtraRuns > 1 ? 's' : ''}.`;
-                    break;
+                        const totalExtraRuns = (extraType === 'wd' || extraType === 'nb' ? 1 : 0) + runs;
+                        if(extraType === 'wd') commentary = `<b>Wide!</b> That's drifted down the leg side. The umpire signals a wide and it's ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''} added to the total.`;
+                        if(extraType === 'nb') commentary = `<b>No Ball!</b> ${bowler} has overstepped. That's a free hit coming up, and they add ${totalExtraRuns} run${totalExtraRuns > 1 ? 's' : ''}.`;
+                        if(extraType === 'b') commentary = `<b>Byes!</b> It beats the bat and the keeper! They'll pick up ${totalExtraRuns} bye${totalExtraRuns > 1 ? 's' : ''}.`;
+                        if(extraType === 'lb') commentary = `<b>Leg Byes!</b> Off the pads and they scamper through for ${totalExtraRuns} leg bye${totalExtraRuns > 1 ? 's' : ''}.`;
+                        break;
                 case 'milestone_50': commentary = pickUnique('milestone_50'); break;
                 case 'milestone_100': commentary = pickUnique('milestone_100'); break;
                 case 'endOfOver':
-                    append = true;
-                    if (maiden) {
-                        commentary = `A maiden over! Superb, disciplined bowling from ${bowler}.`;
-                    } else {
-                        commentary = `End of the over. ${overRuns} run${overRuns !== 1 ? 's' : ''} from it.`;
-                        if (overRuns >= 12) commentary += ` A very expensive one for ${bowler}.`;
-                        else if (overRuns >= 6) commentary += ` A decent over for the batting side.`;
-                        else if (overRuns > 0) commentary += ` A tidy over from ${bowler}.`;
-                    }
-                    break;
+                        append = true;
+                        if (maiden) {
+                            commentary = `A maiden over! Superb, disciplined bowling from ${bowler}.`;
+                        } else {
+                            commentary = `End of the over. ${overRuns} run${overRuns !== 1 ? 's' : ''} from it.`;
+                            if (overRuns >= 12) commentary += ` A very expensive one for ${bowler}.`;
+                            else if (overRuns >= 6) commentary += ` A decent over for the batting side.`;
+                            else if (overRuns > 0) commentary += ` A tidy over from ${bowler}.`;
+                        }
+                        break;
             }
             if(commentary) {
                 updateLiveCommentary(commentary.replace(/{striker}/g, striker ? striker.name : "").replace(/{nonStriker}/g, nonStriker ? nonStriker.name : "").replace(/{bowler}/g, bowler ? bowler.name : ""), append);
@@ -1380,6 +1376,21 @@
             openModal('wicket-type-modal');
         }
 
+        // Handles initiating a wicket on an extra ball
+        function processExtraWicket(wicketType, extraType) {
+            if (state.isScoringLocked) return;
+            // Close the specific extra modal
+            const modalId = `${extraType.replace('wd', 'wide').replace('nb', 'noball').replace('b', 'byes').replace('lb', 'legbyes')}-modal`;
+            closeModal(modalId);
+            
+            // Set a flag that the next wicket is from an extra
+            state.pendingExtraWicket = extraType;
+
+            // Call the existing wicket handler, which will show the player selection for Run Out
+            handleWicket(wicketType);
+        }
+
+
         function selectFielderForCatch() {
             document.getElementById('fielder-modal-title').textContent = 'Fielder (Catcher)';
             const fieldingTeamKey = state.bowlingTeam;
@@ -1419,6 +1430,75 @@
         }
         
         async function processWicket(type, playerName, fielderName = null) {
+            // Handle run outs on extra deliveries
+            if (state.pendingExtraWicket && type === 'Run Out') {
+                const extraType = state.pendingExtraWicket;
+                state.pendingExtraWicket = null; // Clear the flag
+                
+                closeAllModals();
+                saveState();
+                
+                const battingTeamKey = state.battingTeam;
+                const battingTeam = state[battingTeamKey];
+                const playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+
+                // Update dismissal stats
+                battingTeam.wickets++;
+                playerOutObject.isOut = true;
+                playerOutObject.dismissalInfo = { type: 'Run Out', via: extraType.toUpperCase(), bowler: null, fielder: fielderName };
+
+                let runsOnBall = 0;
+                let isLegalDelivery = true;
+
+                if (extraType === 'wd' || extraType === 'nb') {
+                    runsOnBall = 1; // The automatic 1 run for a wide or no-ball
+                    isLegalDelivery = false;
+                }
+                // For Byes or Leg-Byes, runs are 0 unless specified, but the ball is legal
+
+                // Update scores
+                battingTeam.score += runsOnBall;
+                if (state.bowler) state.bowler.runsConceded += runsOnBall;
+                
+                const ballEvent = `${extraType.toUpperCase()}+W`;
+
+                // Handle if the ball counts towards the over
+                if (isLegalDelivery) {
+                    playerOutObject.balls++; // Counts for batsman on b/lb
+                    processBall(runsOnBall, ballEvent); // Counts the ball in the over
+                } else {
+                    state.currentOver.push({ event: ballEvent, runs: runsOnBall }); // Does not count as a ball
+                }
+
+                savePlayerStats(playerOutObject, battingTeamKey);
+                
+                generateRealCommentary('wicket', { wicketType: 'Run Out', playerOut: playerName });
+
+                if (state.striker && state.striker.name === playerName) state.striker = null;
+                if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
+
+                updateUI();
+                await triggerEventAnimation('OUT', 'text-red-700');
+
+                if (checkInningsEnd()) return;
+
+                // Prompt for the next batsman
+                state.isScoringLocked = true;
+                const roleToFill = !state.striker ? 'striker' : 'nonStriker';
+                
+                ui.playerModalCancelBtnX.classList.add('hidden');
+                ui.playerModalCancelBtnText.classList.add('hidden');
+                selectPlayer(roleToFill, () => {
+                    ui.playerModalCancelBtnX.classList.remove('hidden');
+                    ui.playerModalCancelBtnText.classList.remove('hidden');
+                    state.isScoringLocked = false;
+                    updateUI();
+                });
+                
+                return; // Exit here to prevent running original logic
+            }
+            
+            // --- Original Wicket Logic ---
             closeAllModals();
             saveState();
             
@@ -1789,7 +1869,7 @@
                     let bgColor = 'bg-gray-300';
                     if (ball.event === '4') bgColor = 'bg-yellow-500 text-white';
                     if (ball.event === '6') bgColor = 'bg-green-700 text-white';
-                    if (ball.event === 'W') bgColor = 'bg-red-700 text-white';
+                    if (ball.event.includes('W')) bgColor = 'bg-red-700 text-white';
                     return `<div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-base ${bgColor}">${ball.event}</div>`;
                 }).join('');
                 const overRuns = state.currentOver.reduce((acc, ball) => acc + ball.runs, 0);
@@ -2016,11 +2096,11 @@
                         // Display dismissal information if available
                         let dismissalText = '';
                         if (p.isOut && p.dismissalInfo) {
-                            const { type, bowler, fielder } = p.dismissalInfo;
+                            const { type, bowler, fielder, via } = p.dismissalInfo;
                             if (type === 'Catch' && fielder) {
                                 dismissalText = `c ${fielder} b ${bowler}`;
                             } else if (type === 'Run Out') {
-                                dismissalText = 'run out';
+                                dismissalText = `run out ${via ? `(${via})` : ''}`;
                             } else if (bowler) {
                                 dismissalText = `${type.toLowerCase()} b ${bowler}`;
                             } else {
@@ -2076,17 +2156,17 @@
                  ui.previewImage.src = imageDataUrl;
 
                  downloadAction = () => {
-                      if(format === 'jpeg') {
-                          const link = document.createElement('a');
-                          link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
-                          link.href = imageDataUrl;
-                          link.click();
-                      } else { // PDF
-                          const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
-                          pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
-                          pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
-                      }
-                      closeModal('preview-modal');
+                     if(format === 'jpeg') {
+                         const link = document.createElement('a');
+                         link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
+                         link.href = imageDataUrl;
+                         link.click();
+                     } else { // PDF
+                         const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+                         pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
+                         pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
+                     }
+                     closeModal('preview-modal');
                  };
                  openModal('preview-modal');
              });
@@ -2297,4 +2377,3 @@
     </script>
 </body>
 </html>
-```
