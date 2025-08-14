@@ -20,12 +20,12 @@
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
-            font-size: 16px; /* Adjusted base font size */ 
+            font-size: 16px;
         }
 
         /* Full-screen layout and font size for setup pages on mobile */
         @media (max-width: 768px) {
-            body { font-size: 14px; } /* Increased base font slightly for better readability */
+            body { font-size: 14px; }
             #setup-screen { padding: 0; }
             .setup-card { max-width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; border: none; }
         }
@@ -41,40 +41,24 @@
             font-size: 0.8rem; 
             font-family: 'Inter', sans-serif; 
             color: #475569; 
-            opacity: 0; /* Start hidden */
-            animation: splash-text-animation 1s ease-in 0.5s forwards; /* Delay start */
+            opacity: 0;
+            animation: splash-text-animation 1s ease-in 0.5s forwards;
         }
 
-        @keyframes splash-logo-animation {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        @keyframes splash-text-animation {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+        @keyframes splash-logo-animation { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes splash-text-animation { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Styles for select dropdown placeholders */
+        /* General Styles */
         select.placeholder { color: #9ca3af; font-size: 0.9em; }
-
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         .modal-overlay { transition: opacity 0.3s ease-in-out; }
-        .modal-content { transition: transform 0.3s ease-in-out; }
+        .modal-content { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
 
+        /* Setup Screen Styles */
         .setup-bg { background-color: #f0f2f5; }
         .setup-card { background: #ffffff; border: 1px solid #e2e8f0; transition: box-shadow 0.3s ease-in-out; }
         .setup-step { transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; }
@@ -86,139 +70,71 @@
         .back-btn { color: #475569; transition: color 0.2s; }
         .back-btn:hover { color: #1e293b; }
 
-        /* --- TOSS SCREEN STYLES --- */
-        #setup-step-4.toss-active {
-            background: linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db);
-            position: relative;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .toss-3d-button {
-            border-radius: 0.75rem;
-            color: #1f2937;
-            font-weight: 600;
-            background-color: #f9fafb;
-            border: 1px solid #d1d5db;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.15s ease-out;
-            transform: translateY(0);
-        }
-        .toss-3d-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-        }
-        .toss-3d-button.selected {
-            background-color: #2563eb;
-            border-color: #1d4ed8;
-            color: white;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.2);
-            transform: translateY(2px);
-            outline: none;
-        }
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(156, 163, 175, 0.4);
-            transform: scale(0);
-            animation: ripple-effect 0.7s ease-out;
-            pointer-events: none;
-        }
-        @keyframes ripple-effect {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-        .player-setup-fullscreen {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        /* Toss Screen Styles */
+        #setup-step-4.toss-active { background: linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db); position: relative; overflow: hidden; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center; }
+        .toss-3d-button { border-radius: 0.75rem; color: #1f2937; font-weight: 600; background-color: #f9fafb; border: 1px solid #d1d5db; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.15s ease-out; transform: translateY(0); }
+        .toss-3d-button:active { transform: translateY(2px); box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+        .toss-3d-button.selected { background-color: #2563eb; border-color: #1d4ed8; color: white; box-shadow: 0 2px 3px rgba(0,0,0,0.2); transform: translateY(2px); outline: none; }
+        .ripple { position: absolute; border-radius: 50%; background-color: rgba(156, 163, 175, 0.4); transform: scale(0); animation: ripple-effect 0.7s ease-out; pointer-events: none; }
+        @keyframes ripple-effect { to { transform: scale(4); opacity: 0; } }
+        .player-setup-fullscreen { height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center; }
 
         /* Event Animation Styles */
         .event-text-animation { animation: event-animation 1.5s ease-in-out forwards; }
-        @keyframes event-animation { 
-            0% { opacity: 0; transform: scale(0.8); } 
-            20% { opacity: 1; transform: scale(1.1); } 
-            80% { opacity: 1; transform: scale(1.1); } 
-            100% { opacity: 0; transform: scale(0.8); } 
-        }
+        @keyframes event-animation { 0% { opacity: 0; transform: scale(0.8); } 20% { opacity: 1; transform: scale(1.1); } 80% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(0.8); } }
 
-        /* --- ANIMATIONS & UI POLISH --- */
-        .scoring-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } /* Ensure equal width columns */
-        .scoring-grid button {
-            transition: all 0.2s ease-in-out;
-            text-align: center;
-            border-right: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .scoring-grid button:nth-child(4n) { border-right: none; } /* Remove right border for the last in each row */
-        .scoring-grid button:nth-last-child(-n+4) { border-bottom: none; } /* Remove bottom border for the last row */
-        
+        /* Scoring & UI Polish */
+        .scoring-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .scoring-grid button { transition: all 0.2s ease-in-out; text-align: center; border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+        .scoring-grid button:nth-child(4n) { border-right: none; }
+        .scoring-grid button:nth-last-child(-n+4) { border-bottom: none; }
         .scoring-grid button:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .scoring-grid button:active { transform: scale(0.98); }
-        
-        /* Color Highlights for Scoring Buttons */
-        .scoring-grid button:nth-child(6) span:first-child { color: #a37100; } /* Dark Yellow for 4 */
-        .scoring-grid button:nth-child(7) span:first-child { color: #14532d; } /* Dark Green for 6 */
-        .scoring-grid button:nth-child(8) { color: #8b0000; } /* Dark Red for Wicket */
-
-        input, select { transition: all 0.3s ease; }
-
+        .scoring-grid button:nth-child(6) span:first-child { color: #a37100; }
+        .scoring-grid button:nth-child(7) span:first-child { color: #14532d; }
+        .scoring-grid button:nth-child(8) { color: #8b0000; }
         .highlight-score { animation: score-flash 0.6s ease-out; }
-        @keyframes score-flash {
-            0% { background-color: transparent; }
-            50% { background-color: #bfdbfe; transform: scale(1.05); }
-            100% { background-color: transparent; transform: scale(1); }
-        }
-
+        @keyframes score-flash { 0% { background-color: transparent; } 50% { background-color: #bfdbfe; transform: scale(1.05); } 100% { background-color: transparent; transform: scale(1); } }
         .tab-button.active { border-color: #2563eb; background-color: #2563eb; color: white; }
 
-        /* Styles specific to the scoreboard area */
+        /* Scoreboard & Table Styles */
         #scoreboard { padding: 8px; }
         #team-scores-container > div { padding: 2px 0; }
         #team-scores-container .font-semibold { font-size: 1rem; }
+        #team-scores-container .text-5xl { font-size: 2.5rem; line-height: 1; } /* UPDATED */
         #team-scores-container .text-4xl { font-size: 2rem; }
         #team-scores-container .text-2xl { font-size: 1.5rem; }
         #team-scores-container .text-lg { font-size: 0.9rem; }
         #team-scores-container .text-gray-600 { font-size: 0.8rem; }
-
-        /* Styles for batting and bowling tables */
-        #batting-table, #bowling-table {
-            table-layout: fixed;
-            width: 100%;
-        }
-        #batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
-            padding: 4px 3px; /* Reduced horizontal padding */
-            font-size: 0.75rem;
-        }
-        #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child {
-            padding-left: 8px;
-        }
-        #batting-table th:last-child, #batting-table td:last-child, #bowling-table th:last-child, #bowling-table td:last-child {
-            padding-right: 8px;
-            text-align: right;
-        }
+        #batting-table, #bowling-table { table-layout: fixed; width: 100%; }
+        #batting-table th, #batting-table td, #bowling-table th, #bowling-table td { padding: 4px 3px; font-size: 0.75rem; }
+        #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child { padding-left: 8px; }
+        #batting-table th:last-child, #batting-table td:last-child, #bowling-table th:last-child, #bowling-table td:last-child { padding-right: 8px; text-align: right; }
         #batting-table .font-semibold, #bowling-table .font-semibold { font-size: 0.8rem; }
-
         #over-progress-container { padding: 8px; }
         #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
         #over-summary { font-size: 0.8rem; }
+        .target-highlight { color: #1e3a8a; } /* NEW: Dark blue for target */
 
-        /* --- New Animation for Player Out Summary --- */
-        .summary-pop-in-animation {
-            animation: summary-pop-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-        @keyframes summary-pop-in {
-            0% { opacity: 0; transform: translateY(20px) scale(0.9); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        /* Player Out Summary Animation */
+        .summary-pop-in-animation { animation: summary-pop-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        @keyframes summary-pop-in { 0% { opacity: 0; transform: translateY(20px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        /* Innings Break Modal Animation */
+        #innings-break-modal .modal-content { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease; }
+        .modal-overlay.hidden .modal-content { transform: scale(0.8) !important; opacity: 0 !important; }
+        .target-container { animation: pulse-bg 2.5s infinite; }
+        @keyframes pulse-bg { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); } 70% { transform: scale(1.02); box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
+
+        /* Win Modal Styles & Animations */
+        #win-modal .win-modal-content { background: radial-gradient(circle, #2d3748 0%, #1a202c 100%); }
+        #confetti-container i { position: absolute; width: 8px; height: 16px; background: #fde047; top: -20px; opacity: 0; animation: confetti-fall 4s linear infinite; }
+        @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        #win-modal .animate-pop-in { animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; transform: scale(0.5); }
+        #win-modal .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateY(20px); animation-delay: var(--delay, 0s); }
+        @keyframes pop-in { to { opacity: 1; transform: scale(1); } }
+        @keyframes slide-up { to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body class="bg-gray-100 antialiased">
@@ -256,7 +172,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label for="venue" class="block font-medium text-gray-700">Venue 🏟️</label>
-                                <input type="text" id="venue" placeholder="e.g., National Stadium" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition" style="text-transform: capitalize;">
+                                <input type="text" id="venue" placeholder="e.g., National Stadium" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                             </div>
                             <div class="space-y-2">
                                 <label for="match-date-input" class="block font-medium text-gray-700">Date</label>
@@ -268,6 +184,8 @@
                                 <label for="total-overs" class="block font-medium text-gray-700">Match Format (Overs)</label>
                                 <select id="total-overs" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                     <option value="" disabled selected>Select Match Format</option>
+                                    <option value="3">3 Overs</option>
+                                    <option value="4">4 Overs</option>
                                     <option value="5">5 Overs</option>
                                     <option value="6">6 Overs</option>
                                     <option value="7">7 Overs</option>
@@ -297,7 +215,7 @@
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div class="space-y-2 md:col-span-2">
                                       <label for="team1-name-input" class="block font-medium text-gray-700">Home Team Name</label>
-                                      <input type="text" id="team1-name-input" placeholder="Enter Home Team Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                      <input type="text" id="team1-name-input" placeholder="Enter Home Team Name" value="" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                   </div>
                                   <div class="space-y-2">
                                       <label for="team1-color-input" class="block font-medium text-gray-700">Team Color</label>
@@ -313,7 +231,7 @@
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div class="space-y-2 md:col-span-2">
                                       <label for="team2-name-input" class="block font-medium text-gray-700">Away Team Name</label>
-                                      <input type="text" id="team2-name-input" placeholder="Enter Away Team Name" value="" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                      <input type="text" id="team2-name-input" placeholder="Enter Away Team Name" value="" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                   </div>
                                    <div class="space-y-2">
                                        <label for="team2-color-input" class="block font-medium text-gray-700">Team Color</label>
@@ -404,8 +322,11 @@
 
 
     <div id="app" class="h-screen w-full flex flex-col hidden">
-        <div id="match-header" class="text-center py-1 px-4 pt-4 bg-gray-100">
+        <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
+            <div class="absolute top-2 right-2">
+                <button onclick="undo()" class="px-3 py-1 bg-gray-300 text-gray-800 text-sm font-semibold rounded-md hover:bg-gray-400 active:bg-gray-500 transition-colors shadow">Undo</button>
             </div>
+        </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
             <div class="lg:col-span-2 space-y-2 flex flex-col">
                 <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
@@ -465,7 +386,7 @@
                 </div>
                 <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-                        <p class="font-bold text-red-800 text-lg">Choose the Next Bowler</p>
+                        <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
                     </div>
                     <div class="grid grid-cols-4 scoring-grid flex-grow">
                         <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
@@ -572,21 +493,32 @@
                 <div>
                     <label for="edit-total-overs" class="block font-medium text-gray-700">Match Format (Overs)</label>
                     <select id="edit-total-overs" class="w-full p-2 border-gray-300 border rounded-md">
-                        <option value="5">5 Overs</option><option value="6">6 Overs</option><option value="7">7 Overs</option><option value="8">8 Overs</option><option value="9">9 Overs</option><option value="10">10 Overs</option><option value="12">12 Overs</option><option value="15">15 Overs</option><option value="20">20 Overs</option><option value="50">50 Overs</option>
+                        <option value="3">3 Overs</option>
+                        <option value="4">4 Overs</option>
+                        <option value="5">5 Overs</option>
+                        <option value="6">6 Overs</option>
+                        <option value="7">7 Overs</option>
+                        <option value="8">8 Overs</option>
+                        <option value="9">9 Overs</option>
+                        <option value="10">10 Overs</option>
+                        <option value="12">12 Overs</option>
+                        <option value="15">15 Overs</option>
+                        <option value="20">20 Overs</option>
+                        <option value="50">50 Overs</option>
                     </select>
                 </div>
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="edit-team1-name" class="block font-medium text-gray-700">Home Team Name</label>
-                        <input type="text" id="edit-team1-name" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md">
+                        <input type="text" id="edit-team1-name" class="w-full p-2 border-gray-300 border rounded-md">
                         <label for="edit-team1-players" class="block font-medium text-gray-700 mt-2">Player List (one per line)</label>
-                        <textarea id="edit-team1-players" rows="8" class="w-full p-2 border-gray-300 border rounded-md" style="text-transform: capitalize;"></textarea>
+                        <textarea id="edit-team1-players" rows="8" class="w-full p-2 border-gray-300 border rounded-md"></textarea>
                     </div>
                      <div>
                         <label for="edit-team2-name" class="block font-medium text-gray-700">Away Team Name</label>
-                        <input type="text" id="edit-team2-name" oninput="this.value = this.value.toUpperCase()" class="w-full p-2 border-gray-300 border rounded-md">
+                        <input type="text" id="edit-team2-name" class="w-full p-2 border-gray-300 border rounded-md">
                          <label for="edit-team2-players" class="block font-medium text-gray-700 mt-2">Player List (one per line)</label>
-                        <textarea id="edit-team2-players" rows="8" class="w-full p-2 border-gray-300 border rounded-md" style="text-transform: capitalize;"></textarea>
+                        <textarea id="edit-team2-players" rows="8" class="w-full p-2 border-gray-300 border rounded-md"></textarea>
                     </div>
                 </div>
             </div>
@@ -715,12 +647,44 @@
         </div>
     </div>
 
-    <div id="win-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden z-50">
-        <div class="win-modal-content modal-content bg-white rounded-lg shadow-xl p-8 w-11/12 max-w-md text-center transform scale-100 relative overflow-hidden">
-            <div id="confetti-container"></div>
-            <h2 id="win-modal-winner" class="text-4xl font-black uppercase win-text-animate"></h2>
-            <p id="win-modal-margin" class="text-xl mt-2 text-gray-600"></p>
-            <button id="win-modal-ok-btn" class="mt-8 px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-transform hover:scale-105">View Summary</button>
+    <div id="win-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden z-50 p-4">
+        <div class="win-modal-content modal-content bg-gray-900 rounded-2xl shadow-xl w-full max-w-md text-center transform scale-100 relative overflow-hidden border-4 border-yellow-400">
+            <div id="confetti-container" class="absolute inset-0"></div>
+            <div class="relative p-8">
+                <img id="win-modal-logo" src="" class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-white shadow-lg mb-4 animate-pop-in">
+                <h2 id="win-modal-winner" class="text-4xl font-black uppercase text-white animate-slide-up" style="--delay: 0.2s;"></h2>
+                <p class="text-yellow-400 text-5xl font-black uppercase tracking-wider animate-slide-up" style="--delay: 0.4s;">WINS!</p>
+                <p id="win-modal-margin" class="text-xl mt-2 text-gray-300 animate-slide-up" style="--delay: 0.6s;"></p>
+                <button id="win-modal-ok-btn" class="mt-8 px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-transform hover:scale-105 animate-slide-up" style="--delay: 0.8s;">View Summary</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="innings-break-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex flex-col justify-center items-center hidden z-[60] p-4">
+        <div class="modal-content bg-gray-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 w-11/12 max-w-lg text-center transform scale-95 relative overflow-hidden border-4 border-blue-500">
+            <h2 class="text-3xl sm:text-4xl font-black uppercase mb-4 tracking-wider" id="innings-break-title">INNINGS BREAK</h2>
+            
+            <div class="flex justify-around items-center my-6 p-4 bg-black bg-opacity-20 rounded-lg">
+                <div>
+                    <img id="innings-break-batting-logo" src="" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full object-cover border-4 border-gray-500">
+                    <p id="innings-break-batting-name" class="font-bold text-md sm:text-lg mt-2"></p>
+                    <p id="innings-break-batting-score" class="text-2xl sm:text-3xl font-bold"></p>
+                </div>
+                <div class="text-xl sm:text-2xl font-bold text-gray-400">vs</div>
+                <div>
+                    <img id="innings-break-bowling-logo" src="" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full object-cover border-4 border-gray-500">
+                    <p id="innings-break-bowling-name" class="font-bold text-md sm:text-lg mt-2"></p>
+                    <p class="text-2xl sm:text-3xl font-bold text-gray-700">. . .</p>
+                </div>
+            </div>
+            
+            <div class="target-container bg-yellow-500 text-black py-3 px-4 rounded-lg">
+                <p id="innings-break-target-team" class="font-semibold text-sm sm:text-base"></p>
+                <p class="text-4xl sm:text-5xl font-black tracking-tighter" id="innings-break-target-runs"></p>
+                <p class="font-semibold text-sm sm:text-base">to win</p>
+            </div>
+            
+            <button id="start-second-innings-btn" class="mt-8 px-8 py-3 bg-blue-600 font-bold rounded-lg hover:bg-blue-700 transition-transform hover:scale-105">Start 2nd Innings</button>
         </div>
     </div>
 
@@ -877,9 +841,6 @@
             tossDecisionContainer: document.getElementById('toss-decision-container'),
             startMatchBtn: document.getElementById('start-match-btn'),
             winModal: document.getElementById('win-modal'),
-            winModalWinner: document.getElementById('win-modal-winner'),
-            winModalMargin: document.getElementById('win-modal-margin'),
-            winModalOkBtn: document.getElementById('win-modal-ok-btn'),
             confettiContainer: document.getElementById('confetti-container'),
             previewImage: document.getElementById('preview-image'),
             confirmDownloadBtn: document.getElementById('confirm-download-btn'),
@@ -924,8 +885,7 @@
                 nameInput.type = 'text';
                 nameInput.placeholder = `Player ${i}`;
                 nameInput.className = 'w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition';
-                nameInput.style.textTransform = 'capitalize';
-
+                
                 // Event listener for file selection
                 fileInput.onchange = () => {
                     if (fileInput.files && fileInput.files[0]) {
@@ -1186,14 +1146,32 @@
             });
             
             const matchHeader = ui.matchHeader;
-            matchHeader.innerHTML = `
-                <div class="flex items-center justify-center space-x-2">
-                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <p class="font-semibold text-sm text-gray-500">Live Match</p>
-                </div>
-                <h1 class="font-bold text-lg uppercase text-blue-900">${team1Name} vs ${team2Name}</h1>
-                <p class="text-xs text-gray-600">${venue} | ${dateStr} | ${state.totalOvers} Overs, ${state.playersPerSide}-a-side</p>
+            // Clear existing header content before rebuilding
+            matchHeader.innerHTML = '';
+
+            const liveIndicator = document.createElement('div');
+            liveIndicator.className = 'flex items-center justify-center space-x-2';
+            liveIndicator.innerHTML = `
+                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <p class="font-semibold text-sm text-gray-500">Live Match</p>
             `;
+
+            const title = document.createElement('h1');
+            title.className = 'font-bold text-lg text-blue-900';
+            title.textContent = `${team1Name} vs ${team2Name}`;
+
+            const details = document.createElement('p');
+            details.className = 'text-xs text-gray-600';
+            details.textContent = `${venue} | ${dateStr} | ${state.totalOvers} Overs, ${state.playersPerSide}-a-side`;
+
+            const undoButtonContainer = document.createElement('div');
+            undoButtonContainer.className = 'absolute top-2 right-2';
+            undoButtonContainer.innerHTML = `<button onclick="undo()" class="px-3 py-1 bg-gray-300 text-gray-800 text-sm font-semibold rounded-md hover:bg-gray-400 active:bg-gray-500 transition-colors shadow">Undo</button>`;
+            
+            matchHeader.appendChild(undoButtonContainer);
+            matchHeader.appendChild(liveIndicator);
+            matchHeader.appendChild(title);
+            matchHeader.appendChild(details);
 
             state.isScoringLocked = true;
             updateUI();
@@ -1605,7 +1583,6 @@
             updateUI();
             await triggerEventAnimation('OUT', 'text-red-700');
 
-            // NEW: Show summary screen for the out player
             await showPlayerOutSummary(playerOutObject);
             
             if (checkInningsEnd()) return;
@@ -1672,27 +1649,7 @@
                 savePlayerStats(state.bowler, state.bowlingTeam);
 
                 if (state.innings === 1) {
-                    const inningsEndMessage = `End of Innings 1. ${state[state.bowlingTeam].name} needs ${battingTeam.score + 1} runs to win.`;
-                    
-                    showAlert(inningsEndMessage, () => {
-                        state.innings = 2;
-                        state.target = battingTeam.score + 1;
-                        [state.battingTeam, state.bowlingTeam] = [state.bowlingTeam, state.battingTeam];
-                        
-                        const newBattingTeam = state[state.battingTeam];
-                        newBattingTeam.score = 0;
-                        newBattingTeam.wickets = 0;
-                        newBattingTeam.overs = 0;
-                        newBattingTeam.balls = 0;
-
-                        state.striker = null;
-                        state.nonStriker = null;
-                        state.bowler = null;
-                        state.lastBowler = null;
-                        state.currentOver = [];
-                        
-                        initialize();
-                    });
+                    openInningsBreakModal();
                 } else {
                     // In the second innings, the win condition check will determine the outcome.
                     checkWinCondition();
@@ -1703,7 +1660,7 @@
         }
 
         function checkWinCondition() {
-            // The check for isScoringLocked is removed from here to allow the final win check to run.
+            // This check runs after every ball to see if a victory condition is met.
             if (state.innings !== 2 || state.winner) {
                 return; // Only check during the 2nd innings and if a winner hasn't been decided.
             }
@@ -1795,9 +1752,10 @@
             const createTeamHTML = (team, isBatting) => {
                 const logoClass = isBatting ? 'w-10 h-10' : 'w-8 h-8';
                 const nameClass = isBatting ? 'text-lg' : 'text-base';
-                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-2xl font-semibold';
+                const scoreClass = isBatting ? 'text-5xl font-bold' : 'text-2xl font-semibold';
                 const oversClass = isBatting ? 'text-base' : 'text-sm';
                 const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
+                const scoreStyle = isBatting ? `style="color: ${team.color};"` : '';
 
                 if (state.innings === 1 && !isBatting) {
                     return `
@@ -1821,7 +1779,7 @@
                             <span class="${nameClass} font-semibold text-gray-800">${team.name}</span>
                         </div>
                         <div class="text-right">
-                            <p class="${scoreClass} text-gray-900 leading-tight">${team.score}/${team.wickets}</p>
+                            <p class="${scoreClass} leading-tight" ${scoreStyle}>${team.score}/${team.wickets}</p>
                             <p class="${oversClass} text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
                         </div>
                     </div>
@@ -1864,7 +1822,9 @@
 
             ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need ${runsNeeded} runs in ${ballsRemaining} balls to win.</p>
                                                  <p class="text-sm text-gray-500">Current RR: ${crr} | Required RR: ${rrr}</p>`;
+            
             ui.targetInfoContainer.classList.remove('hidden');
+            ui.targetInfoContainer.classList.add('target-highlight');
         }
         
         function updateBattingTable() {
@@ -1969,7 +1929,7 @@
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('bg-opacity-0');
-                modal.querySelector('.modal-content').classList.remove('scale-95', 'translate-y-full');
+                modal.querySelector('.modal-content').classList.remove('scale-95', 'translate-y-full', 'scale-80', 'opacity-0');
             }, 10);
         }
 
@@ -1977,10 +1937,12 @@
             const modal = document.getElementById(modalId);
             modal.classList.add('bg-opacity-0');
             const modalContent = modal.querySelector('.modal-content');
-            if (modalContent.classList.contains('translate-y-full')) {
-                 modalContent.classList.add('translate-y-full');
-            } else {
-                 modalContent.classList.add('scale-95');
+            if (modalContent) {
+                modalContent.classList.add('scale-95');
+                 if(modalId === 'innings-break-modal') {
+                     modalContent.style.transform = 'scale(0.8)';
+                     modalContent.style.opacity = '0';
+                 }
             }
             setTimeout(() => {
                 modal.classList.add('hidden');
@@ -1988,9 +1950,11 @@
         }
         
         function closeAllModals() {
-            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal', 'end-match-modal', 'player-out-summary-modal'].forEach(closeModal);
+            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal', 'end-match-modal', 'player-out-summary-modal', 'innings-break-modal'].forEach(closeModal);
             if (!ui.winModal.classList.contains('hidden')) {
-                closeWinModal();
+                // The win modal has its own special close function
+                // but for a general "close all", just hiding it is fine.
+                 ui.winModal.classList.add('hidden');
             }
         }
 
@@ -2030,39 +1994,66 @@
         function launchConfetti() {
             ui.confettiContainer.innerHTML = '';
             const colors = ['#fde047', '#06b6d4', '#f43f5e', '#4ade80', '#a78bfa', '#f97316', '#3b82f6', '#d946ef'];
-            for (let i = 0; i < 100; i++) {
+            const confettiCount = 100;
+            for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('i');
+                const color = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.animationDelay = Math.random() * 3 + 's';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = 2 + Math.random() * 2 + 's';
+                confetti.style.backgroundColor = color;
+                
+                // Add different shapes
+                if (i % 3 === 0) {
+                    confetti.style.width = '5px';
+                    confetti.style.height = '10px';
+                } else if (i % 2 === 0) {
+                    confetti.style.width = '8px';
+                    confetti.style.height = '8px';
+                    confetti.style.borderRadius = '50%';
+                }
+                
                 ui.confettiContainer.appendChild(confetti);
             }
         }
 
         function openWinModal(winnerName, margin) {
-            ui.winModalWinner.textContent = winnerName;
-            ui.winModalMargin.textContent = margin;
+            const winModalWinnerEl = document.getElementById('win-modal-winner');
+            const winModalMarginEl = document.getElementById('win-modal-margin');
 
-            let winnerColor = '#475569'; // Default color for a tie
-            if (winnerName !== 'Match Tied') {
-                 const winnerTeamKey = state.team1.name === winnerName ? 'team1' : 'team2';
-                 winnerColor = state[winnerTeamKey].color;
+            winModalWinnerEl.textContent = winnerName;
+            winModalMarginEl.textContent = margin;
+
+            let winnerTeamKey = null;
+            if (state.team1.name === winnerName) {
+                winnerTeamKey = 'team1';
+            } else if (state.team2.name === winnerName) {
+                winnerTeamKey = 'team2';
             }
 
-            ui.winModalWinner.style.color = winnerColor;
-            ui.winModal.classList.remove('hidden');
-            ui.winModal.querySelector('.win-modal-content').classList.add('animate-slide-in');
-            launchConfetti();
-        }
+            const winModalLogo = document.getElementById('win-modal-logo');
+            if (winnerTeamKey) {
+                const winnerTeam = state[winnerTeamKey];
+                winModalLogo.src = winnerTeam.logo || `https://placehold.co/128x128/${winnerTeam.color.substring(1)}/FFFFFF?text=${winnerTeam.name.charAt(0)}`;
+                winModalLogo.style.display = 'block';
+                document.querySelector('#win-modal .text-yellow-400').style.display = 'block';
+            } else { // Handle a tie
+                winModalLogo.style.display = 'none'; // No logo for a tie
+                winModalWinnerEl.textContent = "It's a Tie!";
+                document.querySelector('#win-modal .text-yellow-400').style.display = 'none';
+            }
+            
+            // Re-trigger animations by cloning the node
+            const modalContent = ui.winModal.querySelector('.modal-content');
+            const newModalContent = modalContent.cloneNode(true);
+            modalContent.parentNode.replaceChild(newModalContent, modalContent);
 
-        function closeWinModal() {
-            const modalContent = ui.winModal.querySelector('.win-modal-content');
-            modalContent.classList.remove('animate-slide-in');
-            modalContent.classList.add('animate-slide-out');
-            setTimeout(() => {
-                ui.winModal.classList.add('hidden');
-                modalContent.classList.remove('animate-slide-out');
-            }, 500);
+            ui.winModal.classList.remove('hidden');
+            
+            // Re-bind the OK button on the new cloned node as the old one was removed
+            document.getElementById('win-modal-ok-btn').onclick = () => showSummaryScreen();
+            
+            launchConfetti();
         }
 
         function formatDismissalText(dismissalInfo) {
@@ -2077,6 +2068,54 @@
             } else {
                 return type.toLowerCase();
             }
+        }
+
+        function openInningsBreakModal() {
+            const battingTeamData = state[state.battingTeam];
+            const bowlingTeamData = state[state.bowlingTeam];
+            const target = battingTeamData.score + 1;
+
+            // Populate Batting Team Info
+            document.getElementById('innings-break-batting-logo').src = battingTeamData.logo || `https://placehold.co/96x96/${battingTeamData.color.substring(1)}/FFFFFF?text=${battingTeamData.name.charAt(0)}`;
+            document.getElementById('innings-break-batting-name').textContent = battingTeamData.name;
+            document.getElementById('innings-break-batting-score').textContent = `${battingTeamData.score} / ${battingTeamData.wickets}`;
+
+            // Populate Bowling Team Info
+            document.getElementById('innings-break-bowling-logo').src = bowlingTeamData.logo || `https://placehold.co/96x96/${bowlingTeamData.color.substring(1)}/FFFFFF?text=${bowlingTeamData.name.charAt(0)}`;
+            document.getElementById('innings-break-bowling-name').textContent = bowlingTeamData.name;
+
+            // Populate Target Info
+            document.getElementById('innings-break-target-team').textContent = `${bowlingTeamData.name} need`;
+            document.getElementById('innings-break-target-runs').textContent = target;
+
+            // Setup the button's action
+            const startBtn = document.getElementById('start-second-innings-btn');
+            const newStartBtn = startBtn.cloneNode(true); // To remove old event listeners
+            startBtn.parentNode.replaceChild(newStartBtn, startBtn);
+            
+            newStartBtn.onclick = () => {
+                closeModal('innings-break-modal');
+                // Logic to switch innings
+                state.innings = 2;
+                state.target = target;
+                [state.battingTeam, state.bowlingTeam] = [state.bowlingTeam, state.battingTeam];
+                
+                const newBattingTeam = state[state.battingTeam];
+                newBattingTeam.score = 0;
+                newBattingTeam.wickets = 0;
+                newBattingTeam.overs = 0;
+                newBattingTeam.balls = 0;
+
+                state.striker = null;
+                state.nonStriker = null;
+                state.bowler = null;
+                state.lastBowler = null;
+                state.currentOver = [];
+                
+                initialize();
+            };
+
+            openModal('innings-break-modal');
         }
 
         async function showPlayerOutSummary(playerOutObject) {
@@ -2313,6 +2352,7 @@
         }
 
         function saveMatchEdits() {
+            saveState(); // Allow this action to be undone
             const newTotalOvers = parseInt(document.getElementById('edit-total-overs').value);
             if (newTotalOvers < state.team1.overs || newTotalOvers < state.team2.overs) {
                 showAlert("Cannot set total overs to be less than overs already bowled.");
@@ -2423,8 +2463,6 @@
                 closeModal('confirm-modal');
                 confirmCallback = null;
             };
-
-            ui.winModalOkBtn.onclick = () => showSummaryScreen();
             
             ui.bowlerPromptOverlay.onclick = () => {
                 ui.playerModalCancelBtnX.classList.add('hidden');
