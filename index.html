@@ -323,10 +323,7 @@
 
     <div id="app" class="h-screen w-full flex flex-col hidden">
         <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
-            <div class="absolute top-2 right-2">
-                <button onclick="undo()" class="px-3 py-1 bg-gray-300 text-gray-800 text-sm font-semibold rounded-md hover:bg-gray-400 active:bg-gray-500 transition-colors shadow">Undo</button>
             </div>
-        </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
             <div class="lg:col-span-2 space-y-2 flex flex-col">
                 <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
@@ -334,6 +331,13 @@
                         </div>
                 </div>
                 
+                <div id="partnership-container" class="bg-white rounded-lg p-2 shadow-md text-center hidden">
+                    <p class="text-sm font-semibold text-gray-700">Partnership: 
+                        <span id="partnership-runs" class="font-bold text-base">0</span> runs 
+                        (<span id="partnership-balls">0</span> balls)
+                    </p>
+                </div>
+
                 <div id="target-info-container" class="hidden bg-white rounded-lg p-3 shadow-md text-center"></div>
 
                 <div class="space-y-2 flex-grow flex flex-col">
@@ -555,14 +559,15 @@
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <h3 class="text-lg font-bold text-center mb-2">Wides</h3>
             <p class="text-center text-sm text-gray-500 mb-6">(Wide = 1 run + any extra runs)</p>
-            <div class="grid grid-cols-4 gap-3">
+            <div class="grid grid-cols-5 gap-3">
+                <button onclick="addExtra('wd', 0)" class="p-3 bg-gray-100 rounded-lg">WD</button>
                 <button onclick="addExtra('wd', 1)" class="p-3 bg-gray-100 rounded-lg">WD+1</button>
                 <button onclick="addExtra('wd', 2)" class="p-3 bg-gray-100 rounded-lg">WD+2</button>
                 <button onclick="addExtra('wd', 3)" class="p-3 bg-gray-100 rounded-lg">WD+3</button>
                 <button onclick="addExtra('wd', 4)" class="p-3 bg-gray-100 rounded-lg">WD+4</button>
             </div>
              <div class="mt-4 border-t pt-4">
-                <button onclick="processExtraWicket('Run Out', 'wd')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
+                <button onclick="initiateExtraRunOut('wd')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -581,7 +586,7 @@
                 <button onclick="addExtra('nb', 6)" class="p-3 bg-gray-100 rounded-lg col-span-2">NB+6</button>
             </div>
             <div class="mt-4 border-t pt-4">
-                <button onclick="processExtraWicket('Run Out', 'nb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
+                <button onclick="initiateExtraRunOut('nb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -597,7 +602,7 @@
                 <button onclick="addExtra('b', 4)" class="p-3 bg-gray-100 rounded-lg">B+4</button>
             </div>
             <div class="mt-4 border-t pt-4">
-                <button onclick="processExtraWicket('Run Out', 'b')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
+                <button onclick="initiateExtraRunOut('b')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
@@ -613,11 +618,24 @@
                 <button onclick="addExtra('lb', 4)" class="p-3 bg-gray-100 rounded-lg">LB+4</button>
             </div>
             <div class="mt-4 border-t pt-4">
-                <button onclick="processExtraWicket('Run Out', 'lb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
+                <button onclick="initiateExtraRunOut('lb')" class="w-full p-3 bg-red-100 text-red-700 rounded-lg font-semibold">Run Out</button>
             </div>
         </div>
     </div>
     
+    <div id="runs-attempted-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="modal-content bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm transform scale-95">
+            <h3 class="text-lg font-bold text-center mb-4">How many runs were attempted?</h3>
+            <div id="runs-attempted-options" class="grid grid-cols-3 gap-3">
+                <button onclick="handleAttemptedRuns(0)" class="p-3 bg-gray-100 rounded-lg">0 Runs</button>
+                <button onclick="handleAttemptedRuns(1)" class="p-3 bg-gray-100 rounded-lg">1 Run</button>
+                <button onclick="handleAttemptedRuns(2)" class="p-3 bg-gray-100 rounded-lg">2 Runs</button>
+                <button onclick="handleAttemptedRuns(3)" class="p-3 bg-gray-100 rounded-lg">3 Runs</button>
+                <button onclick="handleAttemptedRuns(4)" class="p-3 bg-gray-100 rounded-lg">4 Runs</button>
+            </div>
+        </div>
+    </div>
+
     <div id="alert-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
         <div class="modal-content bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm text-center transform scale-95">
             <p id="alert-message" class="mb-4"></p>
@@ -745,7 +763,8 @@
                 overs: 0,
                 balls: 0,
                 players: [],
-                playerStats: {}, // Will be populated with player objects
+                playerStats: {},
+                partnerships: [], // NEW
                 color: '#3b82f6',
                 logo: ''
             },
@@ -756,7 +775,8 @@
                 overs: 0,
                 balls: 0,
                 players: [],
-                playerStats: {}, // Will be populated with player objects
+                playerStats: {},
+                partnerships: [], // NEW
                 color: '#64748b',
                 logo: ''
             },
@@ -773,7 +793,8 @@
             winner: null,
             winMargin: '',
             toss: {},
-            pendingExtraWicket: null, // To track run outs on extras
+            pendingExtra: null,
+            currentPartnership: { runs: 0, balls: 0, batsman1: null, batsman2: null }, // NEW
         };
 
         let alertCallback = null;
@@ -848,6 +869,9 @@
             setupStep4: document.getElementById('setup-step-4'),
             liveCommentaryContainer: document.getElementById('live-commentary-container'),
             liveCommentary: document.getElementById('live-commentary'),
+            partnershipContainer: document.getElementById('partnership-container'), // NEW
+            partnershipRuns: document.getElementById('partnership-runs'),       // NEW
+            partnershipBalls: document.getElementById('partnership-balls'),     // NEW
         };
 
         // --- HELPER FUNCTIONS ---
@@ -1157,7 +1181,7 @@
             `;
 
             const title = document.createElement('h1');
-            title.className = 'font-bold text-lg text-blue-900';
+            title.className = 'font-bold text-lg';
             title.textContent = `${team1Name} vs ${team2Name}`;
 
             const details = document.createElement('p');
@@ -1184,6 +1208,7 @@
                         ui.playerModalCancelBtnX.classList.remove('hidden');
                         ui.playerModalCancelBtnText.classList.remove('hidden');
                         state.isScoringLocked = false;
+                        startNewPartnership();
                         updateUI();
                         showIntroCommentary();
                     });
@@ -1442,6 +1467,9 @@
             state.striker.consecutiveFours = 0;
             state.striker.consecutiveSixes = 0;
 
+            if (state.currentPartnership) {
+                state.currentPartnership.runs += totalRuns;
+            }
 
             let ballEvent = type.toUpperCase();
             if (runs > 0) ballEvent += `+${runs}`;
@@ -1468,44 +1496,85 @@
             openModal('wicket-type-modal');
         }
 
-        // Handles initiating a wicket on an extra ball
-        function processExtraWicket(wicketType, extraType) {
-            if (state.isScoringLocked) return;
-            // Close the specific extra modal
-            const modalId = `${extraType.replace('wd', 'wide').replace('nb', 'noball').replace('b', 'byes').replace('lb', 'legbyes')}-modal`;
-            closeModal(modalId);
-            
-            // Set a flag that the next wicket is from an extra
-            state.pendingExtraWicket = extraType;
-
-            // Call the existing wicket handler, which will show the player selection for Run Out
-            handleWicket(wicketType);
+        // --- NEW MULTI-STEP RUN OUT LOGIC ---
+        function initiateExtraRunOut(extraType) {
+            closeAllModals();
+            state.pendingExtra = { type: extraType, runs: 0 };
+            openModal('runs-attempted-modal');
         }
 
-
-        function selectFielderForCatch() {
-            document.getElementById('fielder-modal-title').textContent = 'Fielder (Catcher)';
-            const fieldingTeamKey = state.bowlingTeam;
-            const players = state[fieldingTeamKey].players;
-            const fielderSelect = document.getElementById('fielder-select');
-
-            fielderSelect.innerHTML = players.map(player => `<option value="${player}">${player}</option>`).join('');
-            
-            openModal('fielder-modal');
-
-            const saveBtn = document.getElementById('fielder-save-btn');
-            const newSaveBtn = saveBtn.cloneNode(true);
-            saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-
-            newSaveBtn.onclick = () => {
-                const fielderName = fielderSelect.value;
-                if (fielderName) {
-                    closeModal('fielder-modal');
-                    processWicket('Catch', state.striker.name, fielderName);
-                }
-            };
+        function handleAttemptedRuns(runs) {
+            if (state.pendingExtra) {
+                state.pendingExtra.runs = runs;
+                closeModal('runs-attempted-modal');
+                
+                // Now ask who was out
+                ui.runOutOptions.innerHTML = `
+                    <button onclick="finalizeExtraRunOut('${state.striker.name}')" class="p-3 bg-gray-100 rounded-lg">${state.striker.name}</button>
+                    <button onclick="finalizeExtraRunOut('${state.nonStriker.name}')" class="p-3 bg-gray-100 rounded-lg">${state.nonStriker.name}</button>
+                `;
+                openModal('run-out-modal');
+            }
         }
-        
+
+        async function finalizeExtraRunOut(playerName) {
+            if (!state.pendingExtra) return;
+            
+            const battingTeam = state[state.battingTeam];
+            // Save current partnership before it's altered by the wicket
+            if (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0) {
+                battingTeam.partnerships.push({ ...state.currentPartnership });
+            }
+            saveState();
+
+            const { type, runs } = state.pendingExtra;
+            const isLegalDelivery = (type === 'b' || type === 'lb');
+            const baseExtraRuns = isLegalDelivery ? 0 : 1;
+            const totalRuns = baseExtraRuns + runs;
+
+            // Update scores
+            const battingTeamKey = state.battingTeam;
+            battingTeam.score += totalRuns;
+            battingTeam.wickets++;
+            if (state.bowler) state.bowler.runsConceded += totalRuns;
+             if (state.currentPartnership) {
+                state.currentPartnership.runs += totalRuns;
+            }
+
+            // Update player stats
+            const playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+            playerOutObject.isOut = true;
+            playerOutObject.dismissalInfo = { type: 'Run Out', via: type.toUpperCase(), bowler: null, fielder: null };
+            
+            const ballEvent = `${type.toUpperCase()}+${runs}+W`;
+            
+            if (isLegalDelivery) {
+                // Byes/Leg Byes still count as a legal delivery, but not for the batsman
+                processBall(totalRuns, ballEvent);
+            } else {
+                // Wides/No Balls don't count as a legal delivery
+                state.currentOver.push({ event: ballEvent, runs: totalRuns });
+            }
+
+            savePlayerStats(playerOutObject, battingTeamKey);
+            state.pendingExtra = null; // Clear the pending state
+            closeAllModals();
+
+            generateRealCommentary('wicket', { wicketType: 'Run Out', playerOut: playerName });
+            
+            if (state.striker && state.striker.name === playerName) state.striker = null;
+            if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
+
+            updateUI();
+            await triggerEventAnimation('OUT', 'text-red-700');
+            await showPlayerOutSummary(playerOutObject);
+            
+            if (checkInningsEnd()) return;
+            
+            const roleToFill = !state.striker ? 'striker' : 'nonStriker';
+            selectPlayer(roleToFill, startNewPartnership);
+        }
+
         function handleWicket(type) {
             closeModal('wicket-type-modal');
             if (type === 'Catch') {
@@ -1522,60 +1591,31 @@
         }
         
         async function processWicket(type, playerName, fielderName = null) {
-            let playerOutObject;
-            closeAllModals();
-            saveState();
-
-            // Determine which block of logic to use (extra run-out or normal wicket)
-            if (state.pendingExtraWicket && type === 'Run Out') {
-                const extraType = state.pendingExtraWicket;
-                state.pendingExtraWicket = null;
-                
-                const battingTeamKey = state.battingTeam;
-                const battingTeam = state[battingTeamKey];
-                playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
-
-                battingTeam.wickets++;
-                playerOutObject.isOut = true;
-                playerOutObject.dismissalInfo = { type: 'Run Out', via: extraType.toUpperCase(), bowler: null, fielder: fielderName };
-
-                let runsOnBall = (extraType === 'wd' || extraType === 'nb') ? 1 : 0;
-                let isLegalDelivery = !(extraType === 'wd' || extraType === 'nb');
-
-                battingTeam.score += runsOnBall;
-                if (state.bowler) state.bowler.runsConceded += runsOnBall;
-                
-                const ballEvent = `${extraType.toUpperCase()}+W`;
-
-                if (isLegalDelivery) {
-                    playerOutObject.balls++;
-                    processBall(runsOnBall, ballEvent);
-                } else {
-                    state.currentOver.push({ event: ballEvent, runs: runsOnBall });
-                }
-                
-                savePlayerStats(playerOutObject, battingTeamKey);
-                generateRealCommentary('wicket', { wicketType: 'Run Out', playerOut: playerName });
-
-            } else {
-                // --- Original Wicket Logic ---
-                const battingTeamKey = state.battingTeam;
-                const battingTeam = state[battingTeamKey];
-                playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
-                
-                playerOutObject.consecutiveFours = 0;
-                playerOutObject.consecutiveSixes = 0;
-                battingTeam.wickets++;
-                if (type !== 'Run Out') state.bowler.wickets++;
-                playerOutObject.balls++;
-                playerOutObject.isOut = true;
-                playerOutObject.dismissalInfo = { type: type, bowler: state.bowler ? state.bowler.name : null, fielder: fielderName };
-                
-                savePlayerStats(playerOutObject, battingTeamKey);
-                generateRealCommentary('wicket', { wicketType: type, bowler: state.bowler.name, striker: playerOutObject, fielder: fielderName, playerOut: playerName });
-                processBall(0, 'W');
+            const battingTeam = state[state.battingTeam];
+            // Save current partnership before it's altered by the wicket
+            if (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0) {
+                battingTeam.partnerships.push({ ...state.currentPartnership });
             }
+            
+            saveState();
+            closeAllModals();
 
+            // This is now only for wickets on legal deliveries
+            const battingTeamKey = state.battingTeam;
+            let playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+            
+            playerOutObject.consecutiveFours = 0;
+            playerOutObject.consecutiveSixes = 0;
+            battingTeam.wickets++;
+            if (type !== 'Run Out') state.bowler.wickets++;
+            playerOutObject.balls++;
+            playerOutObject.isOut = true;
+            playerOutObject.dismissalInfo = { type: type, bowler: state.bowler ? state.bowler.name : null, fielder: fielderName };
+            
+            savePlayerStats(playerOutObject, battingTeamKey);
+            generateRealCommentary('wicket', { wicketType: type, bowler: state.bowler.name, striker: playerOutObject, fielder: fielderName, playerOut: playerName });
+            processBall(0, 'W');
+            
             // --- Common Post-Dismissal Flow ---
             if (state.striker && state.striker.name === playerName) state.striker = null;
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
@@ -1597,6 +1637,7 @@
                 ui.playerModalCancelBtnX.classList.remove('hidden');
                 ui.playerModalCancelBtnText.classList.remove('hidden');
                 state.isScoringLocked = false;
+                startNewPartnership();
                 updateUI();
             });
         }
@@ -1607,6 +1648,12 @@
             if(state.bowler) state.bowler.ballsBowled++;
             state.bowler.runsConceded += runs;
             state.currentOver.push({ event, runs });
+
+            // Update partnership stats for a legal delivery
+            if (state.currentPartnership) {
+                state.currentPartnership.runs += runs;
+                state.currentPartnership.balls++;
+            }
 
             const isOverComplete = battingTeam.balls === 6;
 
@@ -1635,15 +1682,30 @@
             }
         }
 
+        function startNewPartnership() {
+            if (state.striker && state.nonStriker) {
+                state.currentPartnership = {
+                    runs: 0,
+                    balls: 0,
+                    batsman1: state.striker.name,
+                    batsman2: state.nonStriker.name,
+                };
+            }
+        }
+
         function checkInningsEnd() {
             const battingTeam = state[state.battingTeam];
 
-            // New, more robust check for the "all out" condition.
-            // An innings ends when there are not enough players for a partnership (i.e., fewer than 2 available).
             const playersOutCount = Object.values(battingTeam.playerStats).filter(p => p.isOut).length;
             const isAllOut = playersOutCount >= state.playersPerSide - 1;
 
             if (isAllOut || battingTeam.overs === state.totalOvers) {
+                // Save the final partnership of the innings
+                if (state.currentPartnership && (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0)) {
+                    battingTeam.partnerships.push({ ...state.currentPartnership });
+                    state.currentPartnership = { runs: 0, balls: 0, batsman1: null, batsman2: null };
+                }
+                
                 savePlayerStats(state.striker, state.battingTeam);
                 savePlayerStats(state.nonStriker, state.battingTeam);
                 savePlayerStats(state.bowler, state.bowlingTeam);
@@ -1651,7 +1713,6 @@
                 if (state.innings === 1) {
                     openInningsBreakModal();
                 } else {
-                    // In the second innings, the win condition check will determine the outcome.
                     checkWinCondition();
                 }
                 return true; 
@@ -1660,9 +1721,8 @@
         }
 
         function checkWinCondition() {
-            // This check runs after every ball to see if a victory condition is met.
             if (state.innings !== 2 || state.winner) {
-                return; // Only check during the 2nd innings and if a winner hasn't been decided.
+                return;
             }
 
             const battingTeam = state[state.battingTeam];
@@ -1670,30 +1730,28 @@
             let winner = null;
             let margin = '';
 
-            // Case 1: Batting team reaches the target and wins.
             if (battingTeam.score >= state.target) {
                 winner = battingTeam.name;
                 const wicketsLeft = state.playersPerSide - 1 - battingTeam.wickets;
                 margin = `wins by ${wicketsLeft} wicket${wicketsLeft !== 1 ? 's' : ''}!`;
             } 
-            // Case 2: The innings is over (all out or overs completed).
             else if (battingTeam.overs === state.totalOvers || battingTeam.wickets >= state.playersPerSide - 1) {
-                // Subcase 2a: Batting team scores less than the target -> Bowling team wins.
                 if (battingTeam.score < state.target - 1) {
                     winner = bowlingTeam.name;
                     const runDiff = state.target - 1 - battingTeam.score;
                     margin = `wins by ${runDiff} run${runDiff !== 1 ? 's' : ''}!`;
                 } 
-                // Subcase 2b: Scores are level -> Match is tied.
                 else if (battingTeam.score === state.target - 1) {
                     winner = 'Match Tied';
                 }
             }
             
-            // If a winner was determined in any of the above cases, end the match.
             if (winner) {
                 state.winner = winner;
                 state.winMargin = margin;
+                if (state.currentPartnership && (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0)) {
+                    battingTeam.partnerships.push({ ...state.currentPartnership });
+                }
                 savePlayerStats(state.striker, state.battingTeam);
                 savePlayerStats(state.nonStriker, state.battingTeam);
                 savePlayerStats(state.bowler, state.bowlingTeam);
@@ -1737,10 +1795,21 @@
         // --- UI UPDATES ---
         function updateUI() {
             updateScoreboard();
+            updatePartnershipDisplay();
             updateTargetInfo();
             updateBattingTable();
             updateBowlingTable();
             updateOverProgress();
+        }
+
+        function updatePartnershipDisplay() {
+            if (state.striker && state.nonStriker) {
+                ui.partnershipContainer.classList.remove('hidden');
+                ui.partnershipRuns.textContent = state.currentPartnership.runs;
+                ui.partnershipBalls.textContent = state.currentPartnership.balls;
+            } else {
+                ui.partnershipContainer.classList.add('hidden');
+            }
         }
 
         function updateScoreboard() {
@@ -1820,8 +1889,8 @@
             const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
             const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
-            ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need ${runsNeeded} runs in ${ballsRemaining} balls to win.</p>
-                                                 <p class="text-sm text-gray-500">Current RR: ${crr} | Required RR: ${rrr}</p>`;
+            ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need <span class="font-black text-lg">${runsNeeded}</span> runs in ${ballsRemaining} balls to win.</p>
+                                                 <p class="text-sm text-gray-500">Current RR: ${crr} | <span class="font-bold">Required RR: ${rrr}</span></p>`;
             
             ui.targetInfoContainer.classList.remove('hidden');
             ui.targetInfoContainer.classList.add('target-highlight');
@@ -1837,11 +1906,14 @@
 
         function createBatsmanRow(batsman, isStriker) {
             const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : '0.00';
+            const fallbackImg = `data:image/svg+xml;base64,${btoa('<svg class="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>')}`;
+            
             return `
                 <tr class="border-t align-middle">
                     <td class="p-2 font-semibold text-gray-800 flex items-center justify-between text-base">
-                        <div>
-                            ${batsman.name} ${isStriker ? '<span class="text-red-500 ml-1 text-xs">*</span>' : ''}
+                        <div class="flex items-center">
+                            <img src="${batsman.image || fallbackImg}" class="w-8 h-8 rounded-full object-cover mr-3 bg-gray-200">
+                            <span>${batsman.name} ${isStriker ? '<span class="text-red-500 ml-1 text-xs">*</span>' : ''}</span>
                         </div>
                         <div class="flex items-center space-x-2">
                              <button onclick="swapBatsmen()" class="text-gray-400 hover:text-blue-600">
@@ -1883,12 +1955,14 @@
                 const balls = bowler.ballsBowled % 6;
                 const oversDisplay = `${overs}.${balls}`;
                 const econ = bowler.ballsBowled > 0 ? (bowler.runsConceded / (bowler.ballsBowled / 6)).toFixed(2) : '0.00';
-                
+                const fallbackImg = `data:image/svg+xml;base64,${btoa('<svg class="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>')}`;
+
                 const row = `
                     <tr class="border-t align-middle">
-                        <td class="p-2 font-semibold text-gray-800 flex items-center space-x-2 text-base">
-                            <span>${bowler.name}</span>
-                            <button onclick="editPlayer('bowler')" class="text-gray-400 hover:text-gray-700">
+                        <td class="p-2 font-semibold text-gray-800 flex items-center text-base">
+                            <img src="${bowler.image || fallbackImg}" class="w-8 h-8 rounded-full object-cover mr-3 bg-gray-200">
+                            <span class="flex-grow">${bowler.name}</span>
+                            <button onclick="editPlayer('bowler')" class="ml-2 text-gray-400 hover:text-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z" /></svg>
                             </button>
                         </td>
@@ -1950,10 +2024,8 @@
         }
         
         function closeAllModals() {
-            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal', 'end-match-modal', 'player-out-summary-modal', 'innings-break-modal'].forEach(closeModal);
+            ['player-modal', 'wicket-type-modal', 'run-out-modal', 'wide-modal', 'noball-modal', 'byes-modal', 'legbyes-modal', 'alert-modal', 'confirm-modal', 'edit-match-modal', 'preview-modal', 'fielder-modal', 'end-match-modal', 'player-out-summary-modal', 'innings-break-modal', 'runs-attempted-modal'].forEach(closeModal);
             if (!ui.winModal.classList.contains('hidden')) {
-                // The win modal has its own special close function
-                // but for a general "close all", just hiding it is fine.
                  ui.winModal.classList.add('hidden');
             }
         }
@@ -2296,8 +2368,8 @@
 
                         return `<div class="grid grid-cols-6 gap-2 text-sm border-b py-1 items-center">
                             <div>
-                                <span>${p.name}</span>
-                                ${dismissalText ? `<br><span class="text-xs text-gray-500">${dismissalText}</span>` : ''}
+                                <span class="font-bold text-sm">${p.name}</span>
+                                ${dismissalText ? `<br><span class="text-xs text-gray-400">${dismissalText}</span>` : ''}
                             </div>
                             <span class="text-right font-bold">${p.runs}</span><span class="text-right">${p.balls}</span><span class="text-right">${p.fours}</span><span class="text-right">${p.sixes}</span><span class="text-right">${sr}</span>
                         </div>`
@@ -2316,7 +2388,19 @@
                         </div>`
                     }).join('')}`;
                 
-                tabContent.innerHTML = battingHtml + bowlingHtml;
+                let partnershipHtml = `<h4 class="font-bold text-lg mt-6">Partnerships</h4>
+                    <div class="text-xs text-gray-600 grid grid-cols-3 gap-2 font-semibold border-b pb-1">
+                        <span>Partners</span><span class="text-right">Runs</span><span class="text-right">Balls</span>
+                    </div>
+                    ${team.partnerships.map(p => `
+                        <div class="grid grid-cols-3 gap-2 text-sm border-b py-1">
+                            <span>${p.batsman1} & ${p.batsman2}</span>
+                            <span class="text-right font-bold">${p.runs}</span>
+                            <span class="text-right">${p.balls}</span>
+                        </div>
+                    `).join('')}`;
+                
+                tabContent.innerHTML = battingHtml + bowlingHtml + partnershipHtml;
                 tabContentContainer.appendChild(tabContent);
             });
 
