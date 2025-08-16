@@ -101,7 +101,7 @@
         #scoreboard { padding: 8px; }
         #team-scores-container > div { padding: 2px 0; }
         #team-scores-container .font-semibold { font-size: 1rem; }
-        #team-scores-container .text-5xl { font-size: 2.5rem; line-height: 1; } /* UPDATED */
+        #team-scores-container .text-5xl { font-size: 2.5rem; line-height: 1; }
         #team-scores-container .text-4xl { font-size: 2rem; }
         #team-scores-container .text-2xl { font-size: 1.5rem; }
         #team-scores-container .text-lg { font-size: 0.9rem; }
@@ -114,7 +114,7 @@
         #over-progress-container { padding: 8px; }
         #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
         #over-summary { font-size: 0.8rem; }
-        .target-highlight { color: #1e3a8a; } /* NEW: Dark blue for target */
+        .target-highlight { color: #1e3a8a; }
 
         /* Player Out Summary Animation */
         .summary-pop-in-animation { animation: summary-pop-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
@@ -764,7 +764,8 @@
                 balls: 0,
                 players: [],
                 playerStats: {},
-                partnerships: [], // NEW
+                partnerships: [],
+                fallOfWickets: [],
                 color: '#3b82f6',
                 logo: ''
             },
@@ -776,7 +777,8 @@
                 balls: 0,
                 players: [],
                 playerStats: {},
-                partnerships: [], // NEW
+                partnerships: [],
+                fallOfWickets: [],
                 color: '#64748b',
                 logo: ''
             },
@@ -794,7 +796,7 @@
             winMargin: '',
             toss: {},
             pendingExtra: null,
-            currentPartnership: { runs: 0, balls: 0, batsman1: null, batsman2: null }, // NEW
+            currentPartnership: { runs: 0, balls: 0, batsman1: null, batsman2: null },
         };
 
         let alertCallback = null;
@@ -869,9 +871,9 @@
             setupStep4: document.getElementById('setup-step-4'),
             liveCommentaryContainer: document.getElementById('live-commentary-container'),
             liveCommentary: document.getElementById('live-commentary'),
-            partnershipContainer: document.getElementById('partnership-container'), // NEW
-            partnershipRuns: document.getElementById('partnership-runs'),       // NEW
-            partnershipBalls: document.getElementById('partnership-balls'),     // NEW
+            partnershipContainer: document.getElementById('partnership-container'),
+            partnershipRuns: document.getElementById('partnership-runs'),
+            partnershipBalls: document.getElementById('partnership-balls'),
         };
 
         // --- HELPER FUNCTIONS ---
@@ -1197,7 +1199,6 @@
             matchHeader.appendChild(title);
             matchHeader.appendChild(details);
 
-            state.isScoringLocked = true;
             updateUI();
             
             ui.playerModalCancelBtnX.classList.add('hidden');
@@ -1210,7 +1211,9 @@
                         state.isScoringLocked = false;
                         startNewPartnership();
                         updateUI();
-                        showIntroCommentary();
+                        if(state.innings === 1) {
+                            showIntroCommentary();
+                        }
                     });
                 });
             });
@@ -1522,7 +1525,7 @@
             
             const battingTeam = state[state.battingTeam];
             // Save current partnership before it's altered by the wicket
-            if (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0) {
+            if (state.currentPartnership && (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0)) {
                 battingTeam.partnerships.push({ ...state.currentPartnership });
             }
             saveState();
@@ -1532,10 +1535,18 @@
             const baseExtraRuns = isLegalDelivery ? 0 : 1;
             const totalRuns = baseExtraRuns + runs;
 
+            const fowData = {
+                wicket: battingTeam.wickets + 1,
+                score: battingTeam.score + totalRuns, // Must be the score AFTER the runs from the extra are added
+                playerOut: playerName,
+                over: `${battingTeam.overs}.${isLegalDelivery ? battingTeam.balls + 1 : battingTeam.balls}`
+            };
+
             // Update scores
             const battingTeamKey = state.battingTeam;
             battingTeam.score += totalRuns;
             battingTeam.wickets++;
+            battingTeam.fallOfWickets.push(fowData);
             if (state.bowler) state.bowler.runsConceded += totalRuns;
              if (state.currentPartnership) {
                 state.currentPartnership.runs += totalRuns;
@@ -1593,7 +1604,7 @@
         async function processWicket(type, playerName, fielderName = null) {
             const battingTeam = state[state.battingTeam];
             // Save current partnership before it's altered by the wicket
-            if (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0) {
+            if (state.currentPartnership && (state.currentPartnership.balls > 0 || state.currentPartnership.runs > 0)) {
                 battingTeam.partnerships.push({ ...state.currentPartnership });
             }
             
@@ -1603,6 +1614,14 @@
             // This is now only for wickets on legal deliveries
             const battingTeamKey = state.battingTeam;
             let playerOutObject = (state.striker && state.striker.name === playerName) ? state.striker : state.nonStriker;
+            
+            const fowData = {
+                wicket: battingTeam.wickets + 1,
+                score: battingTeam.score,
+                playerOut: playerName,
+                over: `${battingTeam.overs}.${battingTeam.balls + 1}`
+            };
+            battingTeam.fallOfWickets.push(fowData);
             
             playerOutObject.consecutiveFours = 0;
             playerOutObject.consecutiveSixes = 0;
@@ -1614,9 +1633,14 @@
             
             savePlayerStats(playerOutObject, battingTeamKey);
             generateRealCommentary('wicket', { wicketType: type, bowler: state.bowler.name, striker: playerOutObject, fielder: fielderName, playerOut: playerName });
-            processBall(0, 'W');
             
-            // --- Common Post-Dismissal Flow ---
+            const inningsEndedByOver = processBall(0, 'W');
+
+            if (inningsEndedByOver || checkInningsEnd()) {
+                return;
+            }
+
+            // --- Common Post-Dismissal Flow (if innings is not over) ---
             if (state.striker && state.striker.name === playerName) state.striker = null;
             if (state.nonStriker && state.nonStriker.name === playerName) state.nonStriker = null;
 
@@ -1627,7 +1651,6 @@
             
             if (checkInningsEnd()) return;
             
-            // Then, prompt for the next batsman
             state.isScoringLocked = true;
             const roleToFill = !state.striker ? 'striker' : 'nonStriker';
             
@@ -1642,6 +1665,38 @@
             });
         }
 
+        function handleOverComplete() {
+            state.isScoringLocked = true;
+            const battingTeam = state[state.battingTeam];
+            
+            battingTeam.overs++;
+            battingTeam.balls = 0;
+
+            const overRuns = state.currentOver.reduce((acc, ball) => acc + ball.runs, 0);
+            const isMaiden = overRuns === 0 && state.currentOver.every(b => !b.event.includes('wd') && !b.event.includes('nb'));
+
+            if (isMaiden) {
+                state.bowler.maidens++;
+            }
+            generateRealCommentary('endOfOver', { overRuns: overRuns, maiden: isMaiden, bowler: state.bowler.name });
+
+            savePlayerStats(state.bowler, state.bowlingTeam);
+            state.lastBowler = state.bowler.name;
+            state.currentOver = []; 
+            
+            updateUI(); 
+
+            if (checkInningsEnd()) {
+                return true; // Innings is over
+            }
+            
+            swapBatsmen();
+            updateUI();
+            
+            ui.bowlerPromptOverlay.classList.remove('hidden');
+            return false; // Innings is not over
+        }
+
         function processBall(runs, event) {
             const battingTeam = state[state.battingTeam];
             battingTeam.balls++;
@@ -1649,37 +1704,15 @@
             state.bowler.runsConceded += runs;
             state.currentOver.push({ event, runs });
 
-            // Update partnership stats for a legal delivery
             if (state.currentPartnership) {
                 state.currentPartnership.runs += runs;
                 state.currentPartnership.balls++;
             }
 
-            const isOverComplete = battingTeam.balls === 6;
-
-            if (isOverComplete) {
-                state.isScoringLocked = true;
-                const overRuns = state.currentOver.reduce((acc, ball) => acc + ball.runs, 0);
-                const isMaiden = overRuns === 0 && state.currentOver.every(b => !b.event.includes('wd') && !b.event.includes('nb'));
-                
-                setTimeout(() => {
-                    battingTeam.overs++;
-                    battingTeam.balls = 0;
-                    
-                    if (isMaiden) {
-                        state.bowler.maidens++;
-                    }
-                    generateRealCommentary('endOfOver', { overRuns: overRuns, maiden: isMaiden, bowler: state.bowler.name });
-
-
-                    savePlayerStats(state.bowler, state.bowlingTeam);
-                    state.lastBowler = state.bowler.name;
-                    
-                    if (checkInningsEnd()) return;
-                    
-                    ui.bowlerPromptOverlay.classList.remove('hidden');
-                }, 2000); 
+            if (battingTeam.balls === 6) {
+                return handleOverComplete(); // Returns true if innings ended, false otherwise
             }
+            return false;
         }
 
         function startNewPartnership() {
@@ -1713,6 +1746,7 @@
                 if (state.innings === 1) {
                     openInningsBreakModal();
                 } else {
+                    // In the second innings, the win condition check will determine the outcome.
                     checkWinCondition();
                 }
                 return true; 
@@ -1721,8 +1755,9 @@
         }
 
         function checkWinCondition() {
+            // This check runs after every ball to see if a victory condition is met.
             if (state.innings !== 2 || state.winner) {
-                return;
+                return; // Only check during the 2nd innings and if a winner hasn't been decided.
             }
 
             const battingTeam = state[state.battingTeam];
@@ -1730,22 +1765,27 @@
             let winner = null;
             let margin = '';
 
+            // Case 1: Batting team reaches the target and wins.
             if (battingTeam.score >= state.target) {
                 winner = battingTeam.name;
                 const wicketsLeft = state.playersPerSide - 1 - battingTeam.wickets;
                 margin = `wins by ${wicketsLeft} wicket${wicketsLeft !== 1 ? 's' : ''}!`;
             } 
+            // Case 2: The innings is over (all out or overs completed).
             else if (battingTeam.overs === state.totalOvers || battingTeam.wickets >= state.playersPerSide - 1) {
+                // Subcase 2a: Batting team scores less than the target -> Bowling team wins.
                 if (battingTeam.score < state.target - 1) {
                     winner = bowlingTeam.name;
                     const runDiff = state.target - 1 - battingTeam.score;
                     margin = `wins by ${runDiff} run${runDiff !== 1 ? 's' : ''}!`;
                 } 
+                // Subcase 2b: Scores are level -> Match is tied.
                 else if (battingTeam.score === state.target - 1) {
                     winner = 'Match Tied';
                 }
             }
             
+            // If a winner was determined in any of the above cases, end the match.
             if (winner) {
                 state.winner = winner;
                 state.winMargin = margin;
@@ -1803,7 +1843,7 @@
         }
 
         function updatePartnershipDisplay() {
-            if (state.striker && state.nonStriker) {
+            if (state.striker && state.nonStriker && state.currentPartnership) {
                 ui.partnershipContainer.classList.remove('hidden');
                 ui.partnershipRuns.textContent = state.currentPartnership.runs;
                 ui.partnershipBalls.textContent = state.currentPartnership.balls;
@@ -1889,7 +1929,7 @@
             const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
             const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
-            ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need <span class="font-black text-lg">${runsNeeded}</span> runs in ${ballsRemaining} balls to win.</p>
+            ui.targetInfoContainer.innerHTML = `<p class="font-bold text-base">${battingTeam.name} need <span class="font-black text-lg">${runsNeeded}</span> runs in ${ballsRemaining} balls to win.</p>
                                                  <p class="text-sm text-gray-500">Current RR: ${crr} | <span class="font-bold">Required RR: ${rrr}</span></p>`;
             
             ui.targetInfoContainer.classList.remove('hidden');
@@ -2167,24 +2207,27 @@
             
             newStartBtn.onclick = () => {
                 closeModal('innings-break-modal');
-                // Logic to switch innings
-                state.innings = 2;
-                state.target = target;
-                [state.battingTeam, state.bowlingTeam] = [state.bowlingTeam, state.battingTeam];
-                
-                const newBattingTeam = state[state.battingTeam];
-                newBattingTeam.score = 0;
-                newBattingTeam.wickets = 0;
-                newBattingTeam.overs = 0;
-                newBattingTeam.balls = 0;
+                // FIX: Add a timeout to allow the modal closing animation to finish before starting the next sequence
+                setTimeout(() => {
+                    // Logic to switch innings
+                    state.innings = 2;
+                    state.target = target;
+                    [state.battingTeam, state.bowlingTeam] = [state.bowlingTeam, state.battingTeam];
+                    
+                    const newBattingTeam = state[state.battingTeam];
+                    newBattingTeam.score = 0;
+                    newBattingTeam.wickets = 0;
+                    newBattingTeam.overs = 0;
+                    newBattingTeam.balls = 0;
 
-                state.striker = null;
-                state.nonStriker = null;
-                state.bowler = null;
-                state.lastBowler = null;
-                state.currentOver = [];
-                
-                initialize();
+                    state.striker = null;
+                    state.nonStriker = null;
+                    state.bowler = null;
+                    state.lastBowler = null;
+                    state.currentOver = [];
+                    
+                    initialize();
+                }, 350); // Delay should be slightly longer than the CSS transition duration
             };
 
             openModal('innings-break-modal');
@@ -2277,8 +2320,10 @@
         
         function showSummaryTab(teamKeyToShow) {
             ['team1', 'team2'].forEach(teamKey => {
-                const tabButton = document.querySelector(`#summary-tabs button[data-team="${teamKey}"]`);
-                const tabContent = document.getElementById(`summary-scorecard-${teamKey}`);
+                const tabButton = document.querySelector(`#summary-tabs button[data-tab="${teamKey}"]`);
+                const tabContent = document.getElementById(`summary-tab-${teamKey}`);
+                if (!tabButton || !tabContent) return;
+
                 if(teamKey === teamKeyToShow) {
                     tabButton.classList.add('active');
                     tabContent.classList.remove('hidden');
@@ -2331,19 +2376,20 @@
             tabsContainer.innerHTML = '';
             tabContentContainer.innerHTML = '';
 
+            // Generate Team Scorecard Tabs
             ['team1', 'team2'].forEach((teamKey, index) => {
                 const team = state[teamKey];
                 
                 const tabButton = document.createElement('button');
-                tabButton.className = `tab-button py-2 px-4 font-semibold text-sm rounded-t-lg border-b-2 border-transparent hover:border-gray-300 ${index === 0 ? 'active' : ''}`;
-                tabButton.textContent = team.name;
-                tabButton.dataset.team = teamKey;
+                tabButton.className = `tab-button py-2 px-4 font-semibold text-sm rounded-t-lg border-b-2 border-transparent hover:border-gray-300`;
+                tabButton.textContent = `${team.name} Scorecard`;
+                tabButton.dataset.tab = teamKey;
                 tabButton.onclick = () => showSummaryTab(teamKey);
                 tabsContainer.appendChild(tabButton);
 
                 const tabContent = document.createElement('div');
-                tabContent.id = `summary-scorecard-${teamKey}`;
-                tabContent.className = `space-y-4 ${index > 0 ? 'hidden' : ''}`;
+                tabContent.id = `summary-tab-${teamKey}`;
+                tabContent.className = `space-y-4 hidden`;
 
                 const battingStats = Object.values(team.playerStats);
                 const bowlingTeamKey = teamKey === 'team1' ? 'team2' : 'team1';
@@ -2399,11 +2445,20 @@
                             <span class="text-right">${p.balls}</span>
                         </div>
                     `).join('')}`;
+
+                let fowHtml = `<h4 class="font-bold text-lg mt-6">Fall of Wickets</h4>
+                    <div class="text-xs text-gray-700 p-2 bg-gray-50 rounded flex flex-wrap">
+                        ${team.fallOfWickets.map(fow => `
+                            <span class="mr-4 mb-1"><b>${fow.wicket}-${fow.score}</b> (${fow.playerOut}, ${fow.over} ov)</span>
+                        `).join('')}
+                    </div>`;
                 
-                tabContent.innerHTML = battingHtml + bowlingHtml + partnershipHtml;
+                tabContent.innerHTML = battingHtml + bowlingHtml + partnershipHtml + fowHtml;
                 tabContentContainer.appendChild(tabContent);
             });
 
+            // Show the first tab by default
+            showSummaryTab('team1');
 
             setTimeout(() => {
                 ui.appScreen.classList.remove('flex');
@@ -2552,8 +2607,6 @@
                 ui.playerModalCancelBtnX.classList.add('hidden');
                 ui.playerModalCancelBtnText.classList.add('hidden');
                 swapBatsmen();
-                state.currentOver = [];
-                updateUI();
                 ui.bowlerPromptOverlay.classList.add('hidden');
                 selectPlayer('bowler', () => {
                     ui.playerModalCancelBtnX.classList.remove('hidden');
