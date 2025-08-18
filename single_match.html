@@ -2553,14 +2553,10 @@
             }
             state[teamKey].playerStats = playerStats;
 
-
-            // Update and disable the "Players per Side" dropdown
+            // Suggest the number of players based on the saved team
             const playerCount = teamData.players.length;
             if (playerCount > 0) {
                 ui.playersPerSideInput.value = playerCount;
-                ui.playersPerSideInput.disabled = true;
-            } else {
-                 ui.playersPerSideInput.disabled = false;
             }
         }
         
