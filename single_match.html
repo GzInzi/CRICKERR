@@ -2465,12 +2465,14 @@
         }
 
         // --- NEW: TEAM MANAGEMENT LOGIC ---
-function loadSavedTeams() {
+        function loadSavedTeams() {
             try {
-                // This code now ONLY reads the teams you saved from your "Manage Teams" page.
                 const teamsJSON = localStorage.getItem('savedTeams');
                 if (teamsJSON) {
-                    savedTeamsData = JSON.parse(teamsJSON);
+                    // The teams are saved as an object, like {"TEAM A": {...}, "TEAM B": {...}}
+                    // We need to turn this object into a list (an array) for the dropdown.
+                    const teamsObject = JSON.parse(teamsJSON);
+                    savedTeamsData = Object.values(teamsObject); // This converts the object to the correct list format.
                     populateTeamDropdowns();
                 }
             } catch (e) {
@@ -2478,7 +2480,6 @@ function loadSavedTeams() {
                 savedTeamsData = [];
             }
         }
-
         function populateTeamDropdowns() {
             [ui.team1Select, ui.team2Select].forEach(select => {
                 // Clear existing options except the first placeholder
