@@ -2467,48 +2467,29 @@
         // --- NEW: TEAM MANAGEMENT LOGIC ---
         function loadSavedTeams() {
             try {
-                // This simulates loading teams that you would have saved from a "Manage Teams" page.
-                // For now, we define some dummy data.
+                // This simulates loading the "ROYAL TITANS" team from your "Manage Teams" page.
                 const dummyTeams = [
                     { 
-                        name: "Warriors XI",
-                        color: "#e11d48", // Rose-600
-                        logo: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZmZmZiI+PHBhdGggZD0iTTEyIDJDNi40OCA MiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDh6bS0xLTQtNGgtMXY2aDF2LTJoM3YtMkgxMXYtMXptNS41LTMuNWgtMy41djFoMi41djEuNWgtMi41djFoMi41djEuNWgtMy41di01aDMuNXYxLjV6Ii8+PC9zdmc+",
+                        name: "ROYAL TITANS",
+                        color: "#0D47A1", // A deep blue to represent the logo's color
+                        logo: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZmZmZiI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bS0xIDNoMnYyaC0yeiIvPjxwYXRoIGQ9Ik0xMyAxMC41djZoLTJ2LTZ6Ii8+PC9zdmc+", // A placeholder logo
                         players: [
-                            { name: "Aarav Sharma", image: "" },
-                            { name: "Vivaan Singh", image: "" },
-                            { name: "Aditya Kumar", image: "" },
-                            { name: "Vihaan Gupta", image: "" },
-                            { name: "Arjun Patel", image: "" },
-                            { name: "Sai Reddy", image: "" },
-                            { name: "Reyansh Mehta", image: "" },
-                            { name: "Krishna Iyer", image: "" },
-                            { name: "Ishaan Nair", image: "" },
-                            { name: "Shaurya Joshi", image: "" },
-                            { name: "Advik Rao", image: "" }
-                        ]
-                    },
-                    { 
-                        name: "Royal Strikers",
-                        color: "#1d4ed8", // Blue-700
-                        logo: "",
-                        players: [
-                            { name: "Liam Smith", image: "" },
-                            { name: "Noah Johnson", image: "" },
-                            { name: "Oliver Williams", image: "" },
-                            { name: "Elijah Brown", image: "" },
-                            { name: "James Jones", image: "" },
-                            { name: "William Garcia", image: "" },
-                            { name: "Benjamin Miller", image: "" },
-                            { name: "Lucas Davis", image: "" },
-                            { name: "Henry Rodriguez", image: "" },
-                            { name: "Theodore Martinez", image: "" },
-                            { name: "Jack Wilson", image: "" }
+                            { name: "Vikram Rathore", image: "" },
+                            { name: "Rohan Sharma", image: "" },
+                            { name: "Suresh Kumar", image: "" },
+                            { name: "Deepak Singh", image: "" },
+                            { name: "Anil Mehta", image: "" },
+                            { name: "Harish Patel", image: "" },
+                            { name: "Manish Reddy", image: "" },
+                            { name: "Prakash Iyer", image: "" },
+                            { name: "Kiran Nair", image: "" },
+                            { name: "Jayesh Joshi", image: "" },
+                            { name: "Navin Rao", image: "" }
                         ]
                     }
                 ];
 
-                // In a real app, you would remove this line and just load from localStorage
+                // This line stores the team data so the app can find it.
                 localStorage.setItem('savedTeams', JSON.stringify(dummyTeams));
 
                 const teamsJSON = localStorage.getItem('savedTeams');
