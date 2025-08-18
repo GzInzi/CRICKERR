@@ -212,6 +212,12 @@
                             </div>
                         </div>
                         <div class="border-t pt-4 space-y-4">
+                             <div class="space-y-2">
+                                <label for="team1-select" class="block font-medium text-gray-700">Or Select a Saved Team</label>
+                                <select id="team1-select" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">Search saved teams...</option>
+                                </select>
+                            </div>
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div class="space-y-2 md:col-span-2">
                                       <label for="team1-name-input" class="block font-medium text-gray-700">Home Team Name</label>
@@ -228,6 +234,12 @@
                              </div>
                         </div>
                          <div class="border-t pt-4 space-y-4">
+                            <div class="space-y-2">
+                                <label for="team2-select" class="block font-medium text-gray-700">Or Select a Saved Team</label>
+                                <select id="team2-select" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">Search saved teams...</option>
+                                </select>
+                            </div>
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   <div class="space-y-2 md:col-span-2">
                                       <label for="team2-name-input" class="block font-medium text-gray-700">Away Team Name</label>
@@ -283,37 +295,37 @@
 
                 <div id="setup-step-4" class="setup-step hidden text-slate-800">
                      <div class="w-full max-w-lg mx-auto px-6">
-                          <header class="text-center mb-8">
-                               <h1 class="text-3xl font-bold">Toss Result</h1>
-                               <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
-                          </header>
-                          <div class="space-y-8">
-                               <div>
-                                   <p class="text-center font-semibold mb-4">Who won the toss?</p>
-                                   <div class="flex justify-center gap-6">
-                                       <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
-                                           <div id="toss-team1-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
-                                           <span id="toss-team1-name" class="truncate w-full"></span>
-                                       </button>
-                                       <button id="toss-winner-team2" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
-                                           <div id="toss-team2-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
-                                           <span id="toss-team2-name" class="truncate w-full"></span>
-                                       </button>
-                                   </div>
-                               </div>
+                           <header class="text-center mb-8">
+                                 <h1 class="text-3xl font-bold">Toss Result</h1>
+                                 <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
+                           </header>
+                           <div class="space-y-8">
+                                <div>
+                                    <p class="text-center font-semibold mb-4">Who won the toss?</p>
+                                    <div class="flex justify-center gap-6">
+                                        <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                            <div id="toss-team1-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                            <span id="toss-team1-name" class="truncate w-full"></span>
+                                        </button>
+                                        <button id="toss-winner-team2" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
+                                            <div id="toss-team2-logo-container" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold bg-cover bg-center text-white"></div>
+                                            <span id="toss-team2-name" class="truncate w-full"></span>
+                                        </button>
+                                    </div>
+                                </div>
 
-                               <div id="toss-decision-container" class="hidden text-center">
-                                   <p class="font-semibold mb-4">...and elected to:</p>
-                                   <div class="flex justify-center gap-6">
-                                       <button id="toss-choice-bat" class="toss-3d-button w-32 py-3">Bat First</button>
-                                       <button id="toss-choice-bowl" class="toss-3d-button w-32 py-3">Field First</button>
-                                   </div>
-                               </div>
-                          </div>
-                          <div class="mt-12 flex justify-between items-center">
-                               <button onclick="goToStep(3)" class="back-btn font-semibold hover:text-slate-900">Back</button>
-                               <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
-                          </div>
+                                <div id="toss-decision-container" class="hidden text-center">
+                                    <p class="font-semibold mb-4">...and elected to:</p>
+                                    <div class="flex justify-center gap-6">
+                                        <button id="toss-choice-bat" class="toss-3d-button w-32 py-3">Bat First</button>
+                                        <button id="toss-choice-bowl" class="toss-3d-button w-32 py-3">Field First</button>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="mt-12 flex justify-between items-center">
+                                <button onclick="goToStep(3)" class="back-btn font-semibold hover:text-slate-900">Back</button>
+                                <button id="start-match-btn" onclick="startMatch()" class="px-6 py-2 text-white font-bold rounded-lg setup-btn opacity-50 cursor-not-allowed" disabled>Start Match</button>
+                           </div>
                      </div>
                 </div>
             </div>
@@ -323,13 +335,12 @@
 
     <div id="app" class="h-screen w-full flex flex-col hidden">
         <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
-            <!-- Undo button is now generated by JavaScript to keep it dynamic -->
-        </div>
+            </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
             <div class="lg:col-span-2 space-y-2 flex flex-col">
                 <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
                     <div id="team-scores-container" class="space-y-0">
-                        </div>
+                    </div>
                 </div>
                 
                 <div id="target-info-container" class="hidden bg-white rounded-lg p-3 shadow-md text-center"></div>
@@ -378,7 +389,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div id="over-progress" class="flex items-center gap-2 flex-wrap">
-                            </div>
+                        </div>
                         <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
                     </div>
                 </div>
@@ -428,8 +439,7 @@
             <div class="text-center border-2 border-yellow-400 bg-yellow-50 p-4 sm:p-6 rounded-lg mb-6 sm:mb-8">
                 <h3 class="text-sm uppercase font-bold tracking-wider text-yellow-600">Man of the Match</h3>
                 <div id="motm-image-container" class="mt-4 w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center border-4 border-white shadow-lg">
-                    <!-- Player image will be inserted here by JavaScript -->
-                </div>
+                    </div>
                 <p id="summary-motm-name" class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2"></p>
                 <p id="summary-motm-team" class="text-base text-gray-600"></p>
                 <p id="summary-motm-contribution" class="text-lg sm:text-xl text-gray-700 mt-1"></p>
@@ -549,7 +559,6 @@
         </div>
     </div>
 
-    <!-- UPDATED: Wide Modal -->
     <div id="wide-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end hidden z-50" onclick="closeModal('wide-modal')">
         <div class="modal-content bg-white rounded-t-2xl shadow-xl w-full max-w-md p-6 transform translate-y-full" onclick="event.stopPropagation()">
             <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
@@ -619,7 +628,6 @@
         </div>
     </div>
     
-    <!-- NEW: Runs Attempted Modal -->
     <div id="runs-attempted-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
         <div class="modal-content bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm transform scale-95">
             <h3 class="text-lg font-bold text-center mb-4">How many runs were attempted?</h3>
@@ -662,7 +670,6 @@
         </div>
     </div>
 
-    <!-- UPDATED: WIN MODAL -->
     <div id="win-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden z-50 p-4">
         <div class="win-modal-content modal-content bg-gray-900 rounded-2xl shadow-xl w-full max-w-md text-center transform scale-100 relative overflow-hidden border-4 border-yellow-400">
             <div id="confetti-container" class="absolute inset-0"></div>
@@ -676,7 +683,6 @@
         </div>
     </div>
     
-    <!-- NEW: INNINGS BREAK MODAL -->
     <div id="innings-break-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex flex-col justify-center items-center hidden z-[60] p-4">
         <div class="modal-content bg-gray-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 w-11/12 max-w-lg text-center transform scale-95 relative overflow-hidden border-4 border-blue-500">
             <h2 class="text-3xl sm:text-4xl font-black uppercase mb-4 tracking-wider" id="innings-break-title">INNINGS BREAK</h2>
@@ -797,6 +803,7 @@
         let downloadAction = null;
         let tossWinnerKey = null;
         let tossDecision = 'bat';
+        let savedTeamsData = []; // NEW: To hold loaded team data
 
         // --- DOM ELEMENTS ---
         const ui = {
@@ -865,6 +872,9 @@
             setupStep4: document.getElementById('setup-step-4'),
             liveCommentaryContainer: document.getElementById('live-commentary-container'),
             liveCommentary: document.getElementById('live-commentary'),
+            // NEW: Team selection dropdowns
+            team1Select: document.getElementById('team1-select'),
+            team2Select: document.getElementById('team2-select'),
         };
 
         // --- HELPER FUNCTIONS ---
@@ -878,54 +888,71 @@
 
         // --- SETUP LOGIC ---
         function generatePlayerInputs(teamKey) {
-            const numPlayers = parseInt(ui.playersPerSideInput.value) || 11;
             const container = (teamKey === 'team1') ? ui.team1PlayerInputs : ui.team2PlayerInputs;
             container.innerHTML = ''; // Clear existing inputs
-            for (let i = 1; i <= numPlayers; i++) {
-                const playerRow = document.createElement('div');
-                playerRow.className = 'flex items-center gap-3 player-input-row';
 
-                // Image uploader and preview
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'w-10 h-10 flex-shrink-0';
-                const imagePreview = document.createElement('img');
-                imagePreview.src = `data:image/svg+xml;base64,${btoa('<svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>')}`; // Default placeholder SVG
-                imagePreview.alt = `Player ${i} Image`;
-                imagePreview.className = 'w-10 h-10 rounded-full object-cover bg-gray-200 cursor-pointer hover:opacity-80 transition';
+            // NEW: Check if players were pre-loaded from a saved team
+            const playersToGenerate = state[teamKey].players && state[teamKey].players.length > 0 ? state[teamKey].players : [];
 
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.className = 'hidden';
-                fileInput.accept = 'image/*';
-                
-                const nameInput = document.createElement('input');
-                nameInput.type = 'text';
-                nameInput.placeholder = `Player ${i}`;
-                nameInput.className = 'w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition';
-                
-                // Event listener for file selection
-                fileInput.onchange = () => {
-                    if (fileInput.files && fileInput.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            imagePreview.src = e.target.result;
-                            // Store base64 data on the name input for later retrieval
-                            nameInput.dataset.imageSrc = e.target.result;
-                        };
-                        reader.readAsDataURL(fileInput.files[0]);
-                    }
-                };
-                
-                // Trigger file input when image is clicked
-                imagePreview.onclick = () => fileInput.click();
-
-                imageContainer.appendChild(imagePreview);
-                imageContainer.appendChild(fileInput);
-
-                playerRow.appendChild(imageContainer);
-                playerRow.appendChild(nameInput);
-                container.appendChild(playerRow);
+            if (playersToGenerate.length > 0) {
+                // Pre-populate from saved team
+                playersToGenerate.forEach((player, index) => {
+                    const playerStats = state[teamKey].playerStats[player.name];
+                    createPlayerInputRow(container, player.name, player.image, index + 1);
+                });
+            } else {
+                // Generate blank inputs as before
+                const numPlayers = parseInt(ui.playersPerSideInput.value) || 11;
+                for (let i = 1; i <= numPlayers; i++) {
+                    createPlayerInputRow(container, '', '', i);
+                }
             }
+        }
+
+        // NEW: Extracted function to create a single player input row
+        function createPlayerInputRow(container, name, image, index) {
+            const playerRow = document.createElement('div');
+            playerRow.className = 'flex items-center gap-3 player-input-row';
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'w-10 h-10 flex-shrink-0';
+            const imagePreview = document.createElement('img');
+            imagePreview.src = image || `data:image/svg+xml;base64,${btoa('<svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>')}`;
+            imagePreview.alt = `Player ${index} Image`;
+            imagePreview.className = 'w-10 h-10 rounded-full object-cover bg-gray-200 cursor-pointer hover:opacity-80 transition';
+
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.className = 'hidden';
+            fileInput.accept = 'image/*';
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.placeholder = `Player ${index}`;
+            nameInput.value = name;
+            nameInput.className = 'w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition';
+            if (image) {
+                nameInput.dataset.imageSrc = image;
+            }
+
+            fileInput.onchange = () => {
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        nameInput.dataset.imageSrc = e.target.result;
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            };
+
+            imagePreview.onclick = () => fileInput.click();
+
+            imageContainer.appendChild(imagePreview);
+            imageContainer.appendChild(fileInput);
+            playerRow.appendChild(imageContainer);
+            playerRow.appendChild(nameInput);
+            container.appendChild(playerRow);
         }
         
         function selectTossWinner(teamKey) {
@@ -945,7 +972,7 @@
 
         function selectTossChoice(choice) {
             tossDecision = choice;
-                if (choice === 'bat') {
+                 if (choice === 'bat') {
                 ui.tossChoiceBat.classList.add('selected');
                 ui.tossChoiceBowl.classList.remove('selected');
             } else {
@@ -1012,8 +1039,8 @@
                 ui.progressBar.style.width = '75%';
             }
             if (step === 4) {
-                    ui.progressBar.style.width = '100%';
-                    // Reset toss state
+                  ui.progressBar.style.width = '100%';
+                  // Reset toss state
                 tossWinnerKey = null;
                 tossDecision = 'bat';
                 ui.tossDecisionContainer.classList.add('hidden');
@@ -1023,7 +1050,7 @@
                 ui.tossWinnerTeam2.classList.remove('selected');
                 selectTossChoice('bat'); // Default to bat
 
-                    // Populate Team 1 info
+                  // Populate Team 1 info
                 ui.tossTeam1Name.textContent = ui.team1NameInput.value || 'HOME TEAM';
                 if (state.team1.logo) {
                     ui.tossTeam1LogoContainer.innerHTML = `<img src="${state.team1.logo}" class="w-full h-full object-cover rounded-full">`;
@@ -1228,18 +1255,18 @@
             const players = state[teamKey].players;
             
             ui.playerSelect.innerHTML = players.map(player => {
-                const playerStats = state[teamKey].playerStats[player];
+                const playerStats = state[teamKey].playerStats[player.name ? player.name : player];
                 const isOut = playerStats.isOut;
                 const isStriker = state.striker && player === state.striker.name;
                 const isNonStriker = state.nonStriker && player === state.nonStriker.name;
                 const isLastBowler = state.lastBowler && player === state.lastBowler;
                 const isDisabled = (role !== 'bowler' && isOut) || isStriker || isNonStriker || (role === 'bowler' && isLastBowler);
                 
-                let text = player;
+                let text = player.name ? player.name : player;
                 if (role !== 'bowler' && isOut) text += ' (Out)';
                 if (role === 'bowler' && isLastBowler) text += ' (Can\'t bowl)';
 
-                return `<option value="${player}" ${isDisabled ? 'disabled' : ''} class="${isDisabled ? 'text-gray-400' : ''}">${text}</option>`;
+                return `<option value="${player.name ? player.name : player}" ${isDisabled ? 'disabled' : ''} class="${isDisabled ? 'text-gray-400' : ''}">${text}</option>`;
             }).join('');
             
             openModal('player-modal');
@@ -1837,7 +1864,7 @@
             const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
             ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need <span class="target-highlight font-black text-lg">${runsNeeded}</span> runs in ${ballsRemaining} balls to win.</p>
-                                                 <p class="text-sm text-gray-500">Current RR: ${crr} | <span class="target-highlight font-bold">Required RR: ${rrr}</span></p>`;
+                                                     <p class="text-sm text-gray-500">Current RR: ${crr} | <span class="target-highlight font-bold">Required RR: ${rrr}</span></p>`;
             
             ui.targetInfoContainer.classList.remove('hidden');
         }
@@ -1960,8 +1987,8 @@
             if (modalContent) {
                 modalContent.classList.add('scale-95');
                  if(modalId === 'innings-break-modal') {
-                     modalContent.style.transform = 'scale(0.8)';
-                     modalContent.style.opacity = '0';
+                       modalContent.style.transform = 'scale(0.8)';
+                       modalContent.style.opacity = '0';
                  }
             }
             setTimeout(() => {
@@ -2186,8 +2213,8 @@
             allPlayers.forEach(player => {
                 let points = 0;
                 let contribution = [];
-                const playerTeamKey = state.team1.players.includes(player.name) ? 'team1' : 'team2';
-                
+                const playerTeamKey = (state.team1.players.find(p => p.name === player.name) || state.team1.players.includes(player.name)) ? 'team1' : 'team2';
+
                 points += player.runs;
                 if (player.runs >= 100) points += 30;
                 else if (player.runs >= 50) points += 15;
@@ -2411,30 +2438,149 @@
         }
 
         function previewDownload(format) {
-             const { jsPDF } = window.jspdf;
-             const content = document.getElementById('summary-content');
-             const buttons = document.querySelector('#summary-screen > div:last-child');
-             buttons.classList.add('hidden');
-             html2canvas(content, { scale: 2 }).then(canvas => {
-                 buttons.classList.remove('hidden');
-                 const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                 ui.previewImage.src = imageDataUrl;
+               const { jsPDF } = window.jspdf;
+               const content = document.getElementById('summary-content');
+               const buttons = document.querySelector('#summary-screen > div:last-child');
+               buttons.classList.add('hidden');
+               html2canvas(content, { scale: 2 }).then(canvas => {
+                   buttons.classList.remove('hidden');
+                   const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                   ui.previewImage.src = imageDataUrl;
 
-                 downloadAction = () => {
-                     if(format === 'jpeg') {
-                         const link = document.createElement('a');
-                         link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
-                         link.href = imageDataUrl;
-                         link.click();
-                     } else { // PDF
-                         const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
-                         pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
-                         pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
-                     }
-                     closeModal('preview-modal');
-                 };
-                 openModal('preview-modal');
-             });
+                   downloadAction = () => {
+                       if(format === 'jpeg') {
+                           const link = document.createElement('a');
+                           link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
+                           link.href = imageDataUrl;
+                           link.click();
+                       } else { // PDF
+                           const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+                           pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
+                           pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
+                       }
+                       closeModal('preview-modal');
+                   };
+                   openModal('preview-modal');
+               });
+        }
+
+        // --- NEW: TEAM MANAGEMENT LOGIC ---
+        function loadSavedTeams() {
+            try {
+                // This simulates loading teams that you would have saved from a "Manage Teams" page.
+                // For now, we define some dummy data.
+                const dummyTeams = [
+                    { 
+                        name: "Warriors XI",
+                        color: "#e11d48", // Rose-600
+                        logo: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZmZmZiI+PHBhdGggZD0iTTEyIDJDNi40OCA MiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDh6bS0xLTQtNGgtMXY2aDF2LTJoM3YtMkgxMXYtMXptNS41LTMuNWgtMy41djFoMi41djEuNWgtMi41djFoMi41djEuNWgtMy41di01aDMuNXYxLjV6Ii8+PC9zdmc+",
+                        players: [
+                            { name: "Aarav Sharma", image: "" },
+                            { name: "Vivaan Singh", image: "" },
+                            { name: "Aditya Kumar", image: "" },
+                            { name: "Vihaan Gupta", image: "" },
+                            { name: "Arjun Patel", image: "" },
+                            { name: "Sai Reddy", image: "" },
+                            { name: "Reyansh Mehta", image: "" },
+                            { name: "Krishna Iyer", image: "" },
+                            { name: "Ishaan Nair", image: "" },
+                            { name: "Shaurya Joshi", image: "" },
+                            { name: "Advik Rao", image: "" }
+                        ]
+                    },
+                    { 
+                        name: "Royal Strikers",
+                        color: "#1d4ed8", // Blue-700
+                        logo: "",
+                        players: [
+                            { name: "Liam Smith", image: "" },
+                            { name: "Noah Johnson", image: "" },
+                            { name: "Oliver Williams", image: "" },
+                            { name: "Elijah Brown", image: "" },
+                            { name: "James Jones", image: "" },
+                            { name: "William Garcia", image: "" },
+                            { name: "Benjamin Miller", image: "" },
+                            { name: "Lucas Davis", image: "" },
+                            { name: "Henry Rodriguez", image: "" },
+                            { name: "Theodore Martinez", image: "" },
+                            { name: "Jack Wilson", image: "" }
+                        ]
+                    }
+                ];
+
+                // In a real app, you would remove this line and just load from localStorage
+                localStorage.setItem('savedTeams', JSON.stringify(dummyTeams));
+
+                const teamsJSON = localStorage.getItem('savedTeams');
+                if (teamsJSON) {
+                    savedTeamsData = JSON.parse(teamsJSON);
+                    populateTeamDropdowns();
+                }
+            } catch (e) {
+                console.error("Could not load or parse saved teams:", e);
+                savedTeamsData = [];
+            }
+        }
+
+        function populateTeamDropdowns() {
+            [ui.team1Select, ui.team2Select].forEach(select => {
+                // Clear existing options except the first placeholder
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                savedTeamsData.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.name;
+                    option.textContent = team.name;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function handleTeamSelection(event, teamKey) {
+            const selectedTeamName = event.target.value;
+            if (!selectedTeamName) {
+                // Optional: Clear fields if user re-selects the placeholder
+                return;
+            }
+
+            const teamData = savedTeamsData.find(t => t.name === selectedTeamName);
+            if (!teamData) return;
+
+            // Populate the UI fields
+            const nameInput = teamKey === 'team1' ? ui.team1NameInput : ui.team2NameInput;
+            const colorInput = teamKey === 'team1' ? ui.team1ColorInput : ui.team2ColorInput;
+            nameInput.value = teamData.name;
+            colorInput.value = teamData.color || (teamKey === 'team1' ? '#3b82f6' : '#64748b');
+
+            // Update the state directly
+            state[teamKey].logo = teamData.logo || '';
+            state[teamKey].players = teamData.players || [];
+            
+            // Build playerStats object from the players array
+            const playerStats = {};
+            if (teamData.players) {
+                teamData.players.forEach(player => {
+                     playerStats[player.name] = {
+                        name: player.name,
+                        image: player.image || '',
+                        runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalInfo: null,
+                        ballsBowled: 0, runsConceded: 0, wickets: 0, maidens: 0,
+                        consecutiveFours: 0, consecutiveSixes: 0
+                    };
+                });
+            }
+            state[teamKey].playerStats = playerStats;
+
+
+            // Update and disable the "Players per Side" dropdown
+            const playerCount = teamData.players.length;
+            if (playerCount > 0) {
+                ui.playersPerSideInput.value = playerCount;
+                ui.playersPerSideInput.disabled = true;
+            } else {
+                 ui.playersPerSideInput.disabled = false;
+            }
         }
         
         // --- INITIALIZATION ---
@@ -2448,6 +2594,11 @@
             
             ui.team1LogoInput.onchange = (e) => handleLogoUpload(e.target.files[0], 'team1');
             ui.team2LogoInput.onchange = (e) => handleLogoUpload(e.target.files[0], 'team2');
+
+            // NEW: Load saved teams and add event listeners for dropdowns
+            loadSavedTeams();
+            ui.team1Select.onchange = (e) => handleTeamSelection(e, 'team1');
+            ui.team2Select.onchange = (e) => handleTeamSelection(e, 'team2');
 
             const selects = document.querySelectorAll('#total-overs, #players-per-side');
             selects.forEach(select => {
