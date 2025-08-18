@@ -2465,33 +2465,9 @@
         }
 
         // --- NEW: TEAM MANAGEMENT LOGIC ---
-        function loadSavedTeams() {
+function loadSavedTeams() {
             try {
-                // This simulates loading the "ROYAL TITANS" team from your "Manage Teams" page.
-                const dummyTeams = [
-                    { 
-                        name: "ROYAL TITANS",
-                        color: "#0D47A1", // A deep blue to represent the logo's color
-                        logo: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZmZmZiI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bS0xIDNoMnYyaC0yeiIvPjxwYXRoIGQ9Ik0xMyAxMC41djZoLTJ2LTZ6Ii8+PC9zdmc+", // A placeholder logo
-                        players: [
-                            { name: "Vikram Rathore", image: "" },
-                            { name: "Rohan Sharma", image: "" },
-                            { name: "Suresh Kumar", image: "" },
-                            { name: "Deepak Singh", image: "" },
-                            { name: "Anil Mehta", image: "" },
-                            { name: "Harish Patel", image: "" },
-                            { name: "Manish Reddy", image: "" },
-                            { name: "Prakash Iyer", image: "" },
-                            { name: "Kiran Nair", image: "" },
-                            { name: "Jayesh Joshi", image: "" },
-                            { name: "Navin Rao", image: "" }
-                        ]
-                    }
-                ];
-
-                // This line stores the team data so the app can find it.
-                localStorage.setItem('savedTeams', JSON.stringify(dummyTeams));
-
+                // This code now ONLY reads the teams you saved from your "Manage Teams" page.
                 const teamsJSON = localStorage.getItem('savedTeams');
                 if (teamsJSON) {
                     savedTeamsData = JSON.parse(teamsJSON);
