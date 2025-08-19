@@ -336,19 +336,21 @@
     <div id="app" class="h-screen w-full flex flex-col hidden">
         <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
             </div>
-        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
-            <div class="lg:col-span-2 space-y-2 flex flex-col">
-                <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
+        <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden items-start">
+    <div class="lg:col-span-2 space-y-2">
+
+        <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
                     <div id="team-scores-container" class="space-y-0">
                     </div>
                 </div>
                 
-                <div id="target-info-container" class="hidden bg-white rounded-lg p-3 shadow-md text-center"></div>
+        <div id="target-info-container" class="hidden bg-white rounded-lg p-2 shadow-md text-center"></div>
 
-                <div class="space-y-2 flex-grow flex flex-col">
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <table class="table-fixed w-full text-left text-sm relative">
-                            <thead class="bg-gray-200">
+    <div class="space-y-2 flex flex-col">
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <table class="table-fixed w-full text-left text-sm relative">
+                <thead class="bg-gray-200">
                                 <tr>
                                     <th class="p-2 font-semibold text-base w-2/5">Batting</th>
                                     <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
@@ -362,25 +364,24 @@
                                 </tbody>
                         </table>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex-grow">
-                        <table class="table-fixed w-full text-left text-sm h-full">
-                            <thead class="bg-gray-200">
-                                <tr>
-                                    <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[10%]">O</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[10%]">M</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
-                                    <th class="text-center p-2 font-semibold text-base w-[10%]">W</th>
-                                    <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bowling-table">
-                               </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
-
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <table class="table-fixed w-full text-left text-sm">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
+                <th class="text-center p-2 font-semibold text-base w-[10%]">O</th>
+                <th class="text-center p-2 font-semibold text-base w-[10%]">M</th>
+                <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
+                <th class="text-center p-2 font-semibold text-base w-[10%]">W</th>
+                <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
+            </tr>
+        </thead>
+        <tbody id="bowling-table">
+        </tbody>
+    </table>
+</div>
             <div class="lg:col-span-1 flex flex-col space-y-2">
                 <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
                     <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
@@ -1221,7 +1222,7 @@
             `;
 
             const title = document.createElement('h1');
-            title.className = 'font-bold text-lg';
+            title.className = 'font-bold text-base';
             title.textContent = `${team1Name} vs ${team2Name}`;
 
             const details = document.createElement('p');
@@ -1794,7 +1795,7 @@
             const createTeamHTML = (team, isBatting) => {
                 const logoClass = isBatting ? 'w-10 h-10' : 'w-8 h-8';
                 const nameClass = isBatting ? 'text-lg' : 'text-base';
-                const scoreClass = isBatting ? 'text-5xl font-bold' : 'text-2xl font-semibold';
+                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-xl font-semibold';
                 const oversClass = isBatting ? 'text-base' : 'text-sm';
                 const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
                 const scoreStyle = isBatting ? `style="color: ${team.color};"` : '';
