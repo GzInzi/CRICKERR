@@ -1836,36 +1836,43 @@
         }
 
         function updateTargetInfo() {
-            if (state.innings !== 2 || state.winner) {
-                ui.targetInfoContainer.classList.add('hidden');
-                return;
-            }
+    if (state.innings !== 2 || state.winner) {
+        ui.targetInfoContainer.classList.add('hidden');
+        return;
+    }
 
-            const battingTeam = state[state.battingTeam];
-            const runsNeeded = state.target - battingTeam.score;
+    const battingTeam = state[state.battingTeam];
+    const runsNeeded = state.target - battingTeam.score;
 
-            if (runsNeeded <= 0) {
-                 ui.targetInfoContainer.classList.add('hidden');
-                 return;
-            }
+    if (runsNeeded <= 0) {
+        ui.targetInfoContainer.classList.add('hidden');
+        return;
+    }
 
-            const totalBalls = state.totalOvers * 6;
-            const ballsBowled = battingTeam.overs * 6 + battingTeam.balls;
-            const ballsRemaining = totalBalls - ballsBowled;
+    const totalBalls = state.totalOvers * 6;
+    const ballsBowled = battingTeam.overs * 6 + battingTeam.balls;
+    const ballsRemaining = totalBalls - ballsBowled;
 
-            if (ballsRemaining <= 0 && runsNeeded > 0) {
-                ui.targetInfoContainer.classList.add('hidden');
-                return;
-            }
+    if (ballsRemaining <= 0 && runsNeeded > 0) {
+        ui.targetInfoContainer.classList.add('hidden');
+        return;
+    }
 
-            const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
-            const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
+    const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
+    const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
-            ui.targetInfoContainer.innerHTML = `<p class="font-bold text-gray-700 text-base">${battingTeam.name} need <span class="target-highlight font-black text-lg">${runsNeeded}</span> runs in ${ballsRemaining} balls to win.</p>
-                                                     <p class="text-sm text-gray-500">Current RR: ${crr} | <span class="target-highlight font-bold">Required RR: ${rrr}</span></p>`;
-            
-            ui.targetInfoContainer.classList.remove('hidden');
-        }
+    // This is the updated single-line HTML
+    ui.targetInfoContainer.innerHTML = `
+        <p class="font-semibold text-gray-800" style="font-size: 0.9rem;">
+            ${battingTeam.name.toUpperCase()} need
+            <span class="target-highlight font-bold">${runsNeeded} runs</span> in
+            <span class="target-highlight font-bold">${ballsRemaining} balls</span>
+            to WIN - CRR: ${crr} | RRR: ${rrr}
+        </p>
+    `;
+    
+    ui.targetInfoContainer.classList.remove('hidden');
+}
         
         function updateBattingTable() {
             ui.battingTable.innerHTML = '';
