@@ -33,9 +33,7 @@
             <div id="team-editor-view" class="hidden">
                 <div class="flex justify-between items-center p-4 border-b">
                     <h3 id="team-editor-title" class="text-xl font-bold">Create New Team</h3>
-                    <button onclick="showTeamListView()" class="text-gray-400 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
+                    <a href="index.html" class="text-sm font-semibold py-2 px-3 rounded-md text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors">Back to Home</a>
                 </div>
                 <div class="p-4 overflow-y-auto space-y-4" style="max-height: 70vh;">
                     <input type="hidden" id="editing-team-name">
@@ -65,7 +63,7 @@
                         </div>
                     </div>
                     <div class="border-t pt-4">
-                        <label class="block font-medium text-gray-700 mb-2">Player Roster (11 Players)</label>
+                        <label class="block font-medium text-gray-700 mb-2">Player Roster (20 Players)</label>
                         <div id="editor-player-inputs" class="space-y-3"></div>
                     </div>
                 </div>
@@ -87,7 +85,9 @@
             editorTeamColorInput: document.getElementById('editor-team-color'),
             editorTeamLogoInput: document.getElementById('editor-team-logo'),
             editorTeamLogoPreview: document.getElementById('editor-team-logo-preview'),
-            editorPlayerInputs: document.getElementById('editor-player-inputs')
+            editorPlayerInputs: document.getElementById('editor-player-inputs'),
+            captainSelect: document.getElementById('editor-captain-select'),
+            wicketKeeperSelect: document.getElementById('editor-wicket-keeper-select')
         };
         let savedTeams = {};
 
@@ -107,7 +107,6 @@
                 const team = savedTeams[name];
                 const teamCard = document.createElement('div');
                 teamCard.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-3';
-                
                 teamCard.innerHTML = `
                     <div class="flex items-center gap-4">
                         <img src="${team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`}" alt="Team Logo" class="w-10 h-10 rounded-full object-cover" style="background-color: ${team.color};">
@@ -127,16 +126,32 @@
                 ui.manageTeamsList.appendChild(teamCard);
             });
         }
+        
+        function highlightPlayerRoles() {
+            const captainName = ui.captainSelect.value;
+            document.querySelectorAll('.player-input-row').forEach(row => {
+                const nameInput = row.querySelector('input[type="text"]');
+                let roleIndicator = row.querySelector('.role-indicator');
+                if (!roleIndicator) {
+                    roleIndicator = document.createElement('span');
+                    roleIndicator.className = 'role-indicator text-blue-600 font-bold w-6 text-center flex-shrink-0';
+                    nameInput.after(roleIndicator);
+                }
+                
+                if (nameInput.value && nameInput.value === captainName) {
+                    roleIndicator.textContent = '(C)';
+                } else {
+                    roleIndicator.textContent = '';
+                }
+            });
+        }
 
         function updateRoleDropdowns(captainName = '', wicketKeeperName = '') {
-            const captainSelect = document.getElementById('editor-captain-select');
-            const wicketKeeperSelect = document.getElementById('editor-wicket-keeper-select');
-            
-            const previouslySelectedCaptain = captainSelect.value;
-            const previouslySelectedWicketKeeper = wicketKeeperSelect.value;
+            const previouslySelectedCaptain = ui.captainSelect.value;
+            const previouslySelectedWicketKeeper = ui.wicketKeeperSelect.value;
 
-            captainSelect.innerHTML = '<option value="">Select Captain...</option>';
-            wicketKeeperSelect.innerHTML = '<option value="">Select Wicket Keeper...</option>';
+            ui.captainSelect.innerHTML = '<option value="">Select Captain...</option>';
+            ui.wicketKeeperSelect.innerHTML = '<option value="">Select Wicket Keeper...</option>';
             
             const playerRows = ui.editorPlayerInputs.querySelectorAll('.player-input-row');
             const playerNames = Array.from(playerRows).map(row => row.querySelector('input[type="text"]').value.trim()).filter(name => name);
@@ -145,17 +160,18 @@
                 const option = document.createElement('option');
                 option.value = name;
                 option.textContent = name;
-                captainSelect.appendChild(option.cloneNode(true));
-                wicketKeeperSelect.appendChild(option.cloneNode(true));
+                ui.captainSelect.appendChild(option.cloneNode(true));
+                ui.wicketKeeperSelect.appendChild(option.cloneNode(true));
             });
 
-            captainSelect.value = captainName || previouslySelectedCaptain;
-            wicketKeeperSelect.value = wicketKeeperName || previouslySelectedWicketKeeper;
+            ui.captainSelect.value = captainName || previouslySelectedCaptain;
+            ui.wicketKeeperSelect.value = wicketKeeperName || previouslySelectedWicketKeeper;
+            highlightPlayerRoles();
         }
 
         function generatePlayerInputs(players = [], captainName = '', wicketKeeperName = '') {
             ui.editorPlayerInputs.innerHTML = '';
-            for (let i = 1; i <= 11; i++) {
+            for (let i = 1; i <= 20; i++) {
                 const player = players[i - 1] || { name: '', image: '' };
                 const playerRow = document.createElement('div');
                 playerRow.className = 'flex items-center gap-3 player-input-row';
@@ -205,8 +221,8 @@
                 return { name: nameInput.value.trim() || `Player ${i + 1}`, image: nameInput.dataset.imageSrc || '' }; 
             });
 
-            const captainName = document.getElementById('editor-captain-select').value;
-            const wicketKeeperName = document.getElementById('editor-wicket-keeper-select').value;
+            const captainName = ui.captainSelect.value;
+            const wicketKeeperName = ui.wicketKeeperSelect.value;
             
             const teamData = { 
                 name: teamName, 
@@ -268,6 +284,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadSavedTeams();
             showTeamListView();
+            
+            ui.captainSelect.addEventListener('change', highlightPlayerRoles);
+
             ui.editorTeamLogoInput.onchange = (e) => {
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
