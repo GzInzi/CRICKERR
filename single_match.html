@@ -141,9 +141,20 @@
 }
 .scoring-grid {
     display: grid;
-    /* This creates 3 rows that will take up all available vertical space equally */
     grid-template-rows: repeat(3, 1fr);
-    flex-grow: 1; /* This makes the grid itself grow to fill the footer area */
+    flex-grow: 1;
+}
+.scoring-grid button {
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+}
+/* This removes the border from the far right edge */
+.scoring-grid button:nth-child(4n) {
+    border-right: none;
+}
+/* This removes the border from the very bottom edge */
+.scoring-grid button:nth-last-child(-n+4) {
+    border-bottom: none;
 }
     </style>
 </head>
