@@ -14,8 +14,8 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXrdIGNORE_THIS_PART_OF_THE_LINK_i1eM//zA1fi9w/payA04asGeaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" xintegrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         body { 
@@ -84,15 +84,6 @@
         @keyframes event-animation { 0% { opacity: 0; transform: scale(0.8); } 20% { opacity: 1; transform: scale(1.1); } 80% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(0.8); } }
 
         /* Scoring & UI Polish */
-        .scoring-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .scoring-grid button { transition: all 0.2s ease-in-out; text-align: center; border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
-        .scoring-grid button:nth-child(4n) { border-right: none; }
-        .scoring-grid button:nth-last-child(-n+4) { border-bottom: none; }
-        .scoring-grid button:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .scoring-grid button:active { transform: scale(0.98); }
-        .scoring-grid button:nth-child(6) span:first-child { color: #a37100; }
-        .scoring-grid button:nth-child(7) span:first-child { color: #14532d; }
-        .scoring-grid button:nth-child(8) { color: #8b0000; }
         .highlight-score { animation: score-flash 0.6s ease-out; }
         @keyframes score-flash { 0% { background-color: transparent; } 50% { background-color: #bfdbfe; transform: scale(1.05); } 100% { background-color: transparent; transform: scale(1); } }
         .tab-button.active { border-color: #2563eb; background-color: #2563eb; color: white; }
@@ -100,12 +91,6 @@
         /* Scoreboard & Table Styles */
         #scoreboard { padding: 8px; }
         #team-scores-container > div { padding: 2px 0; }
-        #team-scores-container .font-semibold { font-size: 1rem; }
-        #team-scores-container .text-5xl { font-size: 2.5rem; line-height: 1; } /* UPDATED */
-        #team-scores-container .text-4xl { font-size: 2rem; }
-        #team-scores-container .text-2xl { font-size: 1.5rem; }
-        #team-scores-container .text-lg { font-size: 0.9rem; }
-        #team-scores-container .text-gray-600 { font-size: 0.8rem; }
         #batting-table, #bowling-table { table-layout: fixed; width: 100%; }
         #batting-table th, #batting-table td, #bowling-table th, #bowling-table td { padding: 4px 3px; font-size: 0.75rem; }
         #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child { padding-left: 8px; }
@@ -134,28 +119,34 @@
         #win-modal .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateY(20px); animation-delay: var(--delay, 0s); }
         @keyframes pop-in { to { opacity: 1; transform: scale(1); } }
         @keyframes slide-up { to { opacity: 1; transform: translateY(0); } }
-/* --- SCORING GRID & LAYOUT FIX --- */
-#scoring-controls {
-    display: flex;
-    flex-direction: column;
-}
-.scoring-grid {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    flex-grow: 1;
-}
-.scoring-grid button {
-    border-bottom: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-}
-/* This removes the border from the far right edge */
-.scoring-grid button:nth-child(4n) {
-    border-right: none;
-}
-/* This removes the border from the very bottom edge */
-.scoring-grid button:nth-last-child(-n+4) {
-    border-bottom: none;
-}
+
+        /* --- SCORING GRID & LAYOUT FIX --- */
+        #scoring-controls {
+            display: flex;
+            flex-direction: column;
+        }
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            flex-grow: 1; /* This makes the grid itself grow to fill the footer area */
+        }
+        .scoring-grid button {
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* This removes the border from the far right edge */
+        .scoring-grid button:nth-child(4n) {
+            border-right: none;
+        }
+        /* This removes the border from the very bottom edge */
+        .scoring-grid button:nth-last-child(-n+4) {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100 antialiased">
@@ -252,7 +243,7 @@
                              <div class="space-y-2">
                                     <label for="team1-logo-input" class="block font-medium text-gray-700">Home Team Logo</label>
                                     <input type="file" id="team1-logo-input" accept="image/png, image/jpeg" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                               </div>
+                                </div>
                         </div>
                          <div class="border-t pt-4 space-y-4">
                             <div class="space-y-2">
@@ -274,7 +265,7 @@
                              <div class="space-y-2">
                                     <label for="team2-logo-input" class="block font-medium text-gray-700">Away Team Logo</label>
                                     <input type="file" id="team2-logo-input" accept="image/png, image/jpeg" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                               </div>
+                                </div>
                         </div>
                     </div>
                     <div class="mt-8 text-right">
@@ -356,22 +347,21 @@
 
     <div id="app" class="h-screen w-full flex flex-col hidden">
         <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
-            </div>
+        </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden items-start">
-    <div class="lg:col-span-2 space-y-2">
-
-        <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
+    
+            <div class="lg:col-span-2 space-y-2">
+                <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
                     <div id="team-scores-container" class="space-y-0">
                     </div>
                 </div>
                 
-        <div id="target-info-container" class="hidden bg-white rounded-lg p-2 shadow-md text-center"></div>
-
-    <div class="space-y-2 flex flex-col">
-
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <table class="table-fixed w-full text-left text-sm relative">
-                <thead class="bg-gray-200">
+                <div id="target-info-container" class="hidden bg-white rounded-lg p-2 shadow-md text-center"></div>
+        
+                <div class="space-y-2">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <table class="table-fixed w-full text-left text-sm relative">
+                            <thead class="bg-gray-200">
                                 <tr>
                                     <th class="p-2 font-semibold text-base w-2/5">Batting</th>
                                     <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
@@ -382,63 +372,61 @@
                                 </tr>
                             </thead>
                             <tbody id="batting-table">
-                                </tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <table class="table-fixed w-full text-left text-sm">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">O</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">M</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
+                                    <th class="text-center p-2 font-semibold text-base w-[10%]">W</th>
+                                    <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bowling-table">
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <table class="table-fixed w-full text-left text-sm">
-        <thead class="bg-gray-200">
-            <tr>
-                <th class="p-2 font-semibold text-base w-2/5">Bowling</th>
-                <th class="text-center p-2 font-semibold text-base w-[10%]">O</th>
-                <th class="text-center p-2 font-semibold text-base w-[10%]">M</th>
-                <th class="text-center p-2 font-semibold text-base w-[10%]">R</th>
-                <th class="text-center p-2 font-semibold text-base w-[10%]">W</th>
-                <th class="text-right p-2 font-semibold text-base w-1/5">Econ</th>
-            </tr>
-        </thead>
-        <tbody id="bowling-table">
-        </tbody>
-    </table>
-</div>
-<div class="lg:col-span-1 flex flex-col space-y-2">
-    <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
-        <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
-            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
-            <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
-        </div>
-        <div class="flex items-center justify-between">
-            <div id="over-progress" class="flex items-center gap-2 flex-wrap">
-            </div>
-            <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
-        </div>
-    </div>
-    <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
-        <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-            <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
-        </div>
         
-        <div class="grid grid-cols-4 h-full scoring-grid"><style></style>
-            <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
-            <button onclick="addRuns(1)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
-            <button onclick="addRuns(2)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
-            <button onclick="undo()" class="h-full text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
-
-            <button onclick="addRuns(3)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
-            <button onclick="addRuns(4)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
-            <button onclick="addRuns(6)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
-            <button onclick="openWicketModal()" class="h-full text-center border-b flex items-center justify-center"><span class="font-semibold text-base">Wicket</span></button>
-
-            <button onclick="openModal('wide-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Wide</span></button>
-            <button onclick="openModal('noball-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">NB</span></button>
-            <button onclick="openModal('byes-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Byes</span></button>
-            <button onclick="openModal('legbyes-modal')" class="h-full text-center flex items-center justify-center"><span class="font-semibold text-base">LB</span></button>
-        </div>
-    </footer>
-</div>
-        </div>
+            <div class="lg:col-span-1 flex flex-col space-y-2">
+                <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
+                    <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
+                        <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div id="over-progress" class="flex items-center gap-2 flex-wrap">
+                        </div>
+                        <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
+                    </div>
+                </div>
+                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
+                    <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
+                        <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
+                    </div>
+                    <div class="scoring-grid">
+                        <button onclick="addRuns(0)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
+                        <button onclick="addRuns(1)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
+                        <button onclick="addRuns(2)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
+                        <button onclick="undo()" class="flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
+                        <button onclick="addRuns(3)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
+                        <button onclick="addRuns(4)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
+                        <button onclick="addRuns(6)" class="flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
+                        <button onclick="openWicketModal()" class="flex items-center justify-center"><span class="font-semibold text-xl">Wicket</span></button>
+                        <button onclick="openModal('wide-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">Wide</span></button>
+                        <button onclick="openModal('noball-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">NB</span></button>
+                        <button onclick="openModal('byes-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">Byes</span></button>
+                        <button onclick="openModal('legbyes-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">LB</span></button>
+                    </div>
+                </footer>
+            </div>
+        </div> 
         <header class="bg-gray-200 text-black p-1 flex justify-between items-center shadow-inner w-full">
             <div class="flex items-center justify-center flex-grow">
                 <button onclick="openEditModal()" class="text-sm font-semibold py-2 px-3 rounded-md hover:bg-gray-300 active:bg-blue-600 active:text-white transition-colors">Edit</button>
@@ -518,7 +506,7 @@
             <div class="flex justify-between items-center mb-4 pb-4 border-b">
                 <h3 class="text-xl font-bold">Edit Match Details</h3>
                  <button onclick="closeModal('edit-match-modal')" class="text-gray-400 hover:text-gray-700">
-                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                       <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div class="flex-grow overflow-y-auto pr-2 space-y-4">
@@ -1859,44 +1847,42 @@
         }
 
         function updateTargetInfo() {
-    if (state.innings !== 2 || state.winner) {
-        ui.targetInfoContainer.classList.add('hidden');
-        return;
-    }
+            if (state.innings !== 2 || state.winner) {
+                ui.targetInfoContainer.classList.add('hidden');
+                return;
+            }
 
-    const battingTeam = state[state.battingTeam];
-    const runsNeeded = state.target - battingTeam.score;
+            const battingTeam = state[state.battingTeam];
+            const runsNeeded = state.target - battingTeam.score;
 
-    if (runsNeeded <= 0) {
-        ui.targetInfoContainer.classList.add('hidden');
-        return;
-    }
+            if (runsNeeded <= 0) {
+                ui.targetInfoContainer.classList.add('hidden');
+                return;
+            }
 
-    const totalBalls = state.totalOvers * 6;
-    const ballsBowled = battingTeam.overs * 6 + battingTeam.balls;
-    const ballsRemaining = totalBalls - ballsBowled;
+            const totalBalls = state.totalOvers * 6;
+            const ballsBowled = battingTeam.overs * 6 + battingTeam.balls;
+            const ballsRemaining = totalBalls - ballsBowled;
 
-    if (ballsRemaining <= 0 && runsNeeded > 0) {
-        ui.targetInfoContainer.classList.add('hidden');
-        return;
-    }
+            if (ballsRemaining <= 0 && runsNeeded > 0) {
+                ui.targetInfoContainer.classList.add('hidden');
+                return;
+            }
 
-    const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
-    const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
+            const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
+            const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
-    // CHANGE 1: Font size is now smaller (0.75rem)
-    ui.targetInfoContainer.innerHTML = `
-        <p class="font-semibold text-gray-800" style="font-size: 0.75rem;">
-            ${battingTeam.name.toUpperCase()} need
-            <span class="target-highlight font-bold" style="font-size: 0.8rem;">${runsNeeded} runs</span> in
-            <span class="target-highlight font-bold" style="font-size: 0.8rem;">${ballsRemaining} balls</span>
-            to WIN - CRR: ${crr} | RRR: ${rrr}
-        </p>
-    `;
-    
-    // CHANGE 2: We are now setting the padding to be smaller (p-2)
-    ui.targetInfoContainer.className = 'bg-white rounded-lg p-2 shadow-md text-center';
-}
+            ui.targetInfoContainer.innerHTML = `
+                <p class="font-semibold text-gray-800" style="font-size: 0.75rem;">
+                    ${battingTeam.name.toUpperCase()} need
+                    <span class="target-highlight font-bold" style="font-size: 0.8rem;">${runsNeeded} runs</span> in
+                    <span class="target-highlight font-bold" style="font-size: 0.8rem;">${ballsRemaining} balls</span>
+                    to WIN - CRR: ${crr} | RRR: ${rrr}
+                </p>
+            `;
+            
+            ui.targetInfoContainer.className = 'bg-white rounded-lg p-2 shadow-md text-center';
+        }
         
         function updateBattingTable() {
             ui.battingTable.innerHTML = '';
@@ -2016,8 +2002,8 @@
             if (modalContent) {
                 modalContent.classList.add('scale-95');
                  if(modalId === 'innings-break-modal') {
-                         modalContent.style.transform = 'scale(0.8)';
-                         modalContent.style.opacity = '0';
+                          modalContent.style.transform = 'scale(0.8)';
+                          modalContent.style.opacity = '0';
                  }
             }
             setTimeout(() => {
@@ -2461,24 +2447,24 @@
                  const buttons = document.querySelector('#summary-screen > div:last-child');
                  buttons.classList.add('hidden');
                  html2canvas(content, { scale: 2 }).then(canvas => {
-                     buttons.classList.remove('hidden');
-                     const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                     ui.previewImage.src = imageDataUrl;
+                      buttons.classList.remove('hidden');
+                      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                      ui.previewImage.src = imageDataUrl;
 
-                     downloadAction = () => {
-                         if(format === 'jpeg') {
-                             const link = document.createElement('a');
-                             link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
-                             link.href = imageDataUrl;
-                             link.click();
-                         } else { // PDF
-                             const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
-                             pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
-                             pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
-                         }
-                         closeModal('preview-modal');
-                     };
-                     openModal('preview-modal');
+                      downloadAction = () => {
+                           if(format === 'jpeg') {
+                               const link = document.createElement('a');
+                               link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
+                               link.href = imageDataUrl;
+                               link.click();
+                           } else { // PDF
+                               const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+                               pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
+                               pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
+                           }
+                           closeModal('preview-modal');
+                      };
+                      openModal('preview-modal');
                  });
         }
         
