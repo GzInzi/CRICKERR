@@ -8,74 +8,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" href="icon-512.png">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        body { font-family: 'Inter', sans-serif; }
+        .menu-card { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
         }
-        .menu-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .menu-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        .menu-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); 
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
-
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
         <header class="text-center mb-12">
             <img src="my-logo.png" alt="Cricker Logo" class="w-24 h-24 mx-auto mb-4">
-            <h1 class="text-5xl font-black tracking-tight">CRICKER</h1>
-            <p class="text-gray-500 mt-2">Your Ultimate Cricket Scoring Companion</p>
+            <h1 class="text-5xl font-black tracking-tight">CRiCKERR</h1>
+            <p class="text-gray-500 mt-2">your ultimate cricker scoring companion</p>
         </header>
 
         <main class="w-full max-w-5xl">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                <a href="manage_teams.html" class="menu-card block bg-white p-8 rounded-2xl shadow-lg text-center">
-                    <div class="mx-auto bg-blue-100 text-blue-600 w-16 h-16 flex items-center justify-center rounded-full mb-4">
-                        <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 12L22 20M15 2L9 8M2 22L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M7 4.5C7 4.5 9 2 12 2C15 2 17 4.5 17 4.5C17 4.5 19 7 19 9C19 11 17 13.5 17 13.5L12 16L7 13.5C7 13.5 5 11 5 9C5 7 7 4.5 7 4.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V18C12 19.1046 12.8954 20 14 20H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-2">Manage Teams</h2>
-                    <p class="text-gray-500 text-sm">Create, edit, and save your team rosters for quick match setups.</p>
+                <a href="manage_teams.html" class="menu-card block bg-blue-500 text-white p-8 rounded-2xl shadow-lg text-center">
+                    <h2 class="text-2xl font-bold mb-2">Manage Teams</h2>
+                    <p class="text-blue-200 text-sm">Create, edit, and save your team rosters for quick match setups.</p>
                 </a>
-
-                <a href="single_match.html" class="menu-card block bg-white p-8 rounded-2xl shadow-lg text-center">
-                    <div class="mx-auto bg-green-100 text-green-600 w-16 h-16 flex items-center justify-center rounded-full mb-4">
-                        <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 21C16.4183 21 20 17.4183 20 13C20 8.58172 16.4183 5 12 5C7.58172 5 4 8.58172 4 13C4 17.4183 7.58172 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-miterlimit="10"/>
-                            <path d="M12 5V3M12 5H9.5M12 5H14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 21V23M12 21H9.5M12 21H14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M4 13H2M20 13H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-2">Single Match</h2>
-                    <p class="text-gray-500 text-sm">Jump right into scoring a new match with custom or saved teams.</p>
+                <a href="single_match.html" class="menu-card block bg-green-500 text-white p-8 rounded-2xl shadow-lg text-center">
+                    <h2 class="text-2xl font-bold mb-2">Single Match</h2>
+                    <p class="text-green-200 text-sm">Jump right into scoring a new match with custom or saved teams.</p>
                 </a>
-
-                <a href="tournament.html" class="menu-card block bg-white p-8 rounded-2xl shadow-lg text-center relative overflow-hidden">
+                <a href="tournament.html" class="menu-card block bg-yellow-500 text-white p-8 rounded-2xl shadow-lg text-center relative overflow-hidden">
                      <div class="absolute top-0 right-0 bg-yellow-400 text-white text-xs font-bold px-4 py-1 transform rotate-45 translate-x-8 translate-y-4">SOON</div>
-                    <div class="mx-auto bg-yellow-100 text-yellow-600 w-16 h-16 flex items-center justify-center rounded-full mb-4">
-                        <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 2L5 6L9 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M15 14L19 18L15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-miterlimit="10"/>
-                            <path d="M12 20C14.2091 20 16 18.2091 16 16C16 13.7909 14.2091 12 12 12C9.79086 12 8 13.7909 8 16C8 18.2091 9.79086 20 12 20Z" stroke="currentColor" stroke-width="2" stroke-miterlimit="10"/>
-                        </svg>
-                    </div>
-                    <h2 class="text-xl font-bold mb-2">Tournament Mode</h2>
-                    <p class="text-gray-500 text-sm">Organize brackets, track points, and score a full tournament.</p>
+                    <h2 class="text-2xl font-bold mb-2">Tournament Mode</h2>
+                    <p class="text-yellow-200 text-sm">Organize brackets, track points, and score a full tournament.</p>
                 </a>
             </div>
         </main>
-        <footer class="absolute bottom-6 text-center text-gray-500 text-sm">
+
+        <footer class="mt-12 text-center text-gray-500 text-sm">
             Created and developed by Inzamam Rishi
         </footer>
     </div>
-
 </body>
 </html>
