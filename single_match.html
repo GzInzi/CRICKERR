@@ -1166,14 +1166,28 @@
 
 
         // --- CORE LOGIC ---
-        function showIntroCommentary() {
-            const tossWinnerName = state.toss.winner;
-            const tossDecisionText = state.toss.decision === 'bat' ? 'bat first' : 'field first';
-            
-            const introText = `Welcome, everyone, to <b>${state.venue}</b> for this exciting clash between <b>${state.team1.name}</b> and <b>${state.team2.name}</b>. ${tossWinnerName} won the toss and will ${tossDecisionText}. The opening pair of <b>${state.striker.name}</b> and <b>${state.nonStriker.name}</b> are making their way to the middle, and it looks like <b>${state.bowler.name}</b> will start the proceedings with the ball.`;
-            
-            updateLiveCommentary(introText);
+function showIntroPopup(title, commentaryText) {
+            document.getElementById('commentary-modal-title').textContent = title;
+            document.getElementById('commentary-popup-text').innerHTML = commentaryText;
+            openModal('commentary-modal');
         }
+
+        function showIntroCommentary() {
+            let introText = '';
+            let title = '';
+
+            if (state.innings === 1) {
+                title = 'Match Start';
+                const tossWinnerName = state.toss.winner;
+                const tossDecisionText = state.toss.decision === 'bat' ? 'bat first' : 'field first';
+                introText = `Welcome to <b>${state.venue}</b>. ${tossWinnerName} won the toss and will ${tossDecisionText}. The opening pair of <b>${state.striker.name}</b> and <b>${state.nonStriker.name}</b> are out in the middle, and <b>${state.bowler.name}</b> will start the attack.`;
+            } else {
+                title = 'Second Innings';
+                introText = `The second innings is about to begin. <b>${state.striker.name}</b> and <b>${state.nonStriker.name}</b> are the openers for ${state[state.battingTeam].name}. The bowler is <b>${state.bowler.name}</b>.`;
+            }
+            
+            showIntroPopup(title, introText);
+        }
 
         function initialize() {
             const team1Name = state.team1.name;
