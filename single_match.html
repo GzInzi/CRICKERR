@@ -1861,17 +1861,18 @@
     const crr = ballsBowled > 0 ? (battingTeam.score / (ballsBowled / 6)).toFixed(2) : '0.00';
     const rrr = ballsRemaining > 0 ? (runsNeeded / (ballsRemaining / 6)).toFixed(2) : '&infin;';
 
-    // This is the updated single-line HTML
+    // CHANGE 1: Font size is now smaller (0.75rem)
     ui.targetInfoContainer.innerHTML = `
-        <p class="font-semibold text-gray-800" style="font-size: 0.9rem;">
+        <p class="font-semibold text-gray-800" style="font-size: 0.75rem;">
             ${battingTeam.name.toUpperCase()} need
-            <span class="target-highlight font-bold">${runsNeeded} runs</span> in
-            <span class="target-highlight font-bold">${ballsRemaining} balls</span>
+            <span class="target-highlight font-bold" style="font-size: 0.8rem;">${runsNeeded} runs</span> in
+            <span class="target-highlight font-bold" style="font-size: 0.8rem;">${ballsRemaining} balls</span>
             to WIN - CRR: ${crr} | RRR: ${rrr}
         </p>
     `;
     
-    ui.targetInfoContainer.classList.remove('hidden');
+    // CHANGE 2: We are now setting the padding to be smaller (p-2)
+    ui.targetInfoContainer.className = 'bg-white rounded-lg p-2 shadow-md text-center';
 }
         
         function updateBattingTable() {
