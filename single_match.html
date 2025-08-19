@@ -235,11 +235,11 @@
                                 </select>
                             </div>
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                 <div class="space-y-2 md:col-span-2">
+                                <div class="space-y-2 md:col-span-2">
                                     <label for="team1-name-input" class="block font-medium text-gray-700">Home Team Name</label>
                                     <input type="text" id="team1-name-input" placeholder="Enter Home Team Name" value="" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                 </div>
-                                 <div class="space-y-2">
+                                <div class="space-y-2">
                                     <label for="team1-color-input" class="block font-medium text-gray-700">Team Color</label>
                                     <input type="color" id="team1-color-input" value="#3b82f6" class="w-full h-10 p-1 border-gray-300 border rounded-md">
                                 </div>
@@ -257,11 +257,11 @@
                                 </select>
                             </div>
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                 <div class="space-y-2 md:col-span-2">
+                                <div class="space-y-2 md:col-span-2">
                                     <label for="team2-name-input" class="block font-medium text-gray-700">Away Team Name</label>
                                     <input type="text" id="team2-name-input" placeholder="Enter Away Team Name" value="" class="w-full p-2 border-gray-300 border rounded-md focus:ring-blue-500 focus:border-blue-500 transition">
                                 </div>
-                                 <div class="space-y-2">
+                                <div class="space-y-2">
                                     <label for="team2-color-input" class="block font-medium text-gray-700">Team Color</label>
                                     <input type="color" id="team2-color-input" value="#64748b" class="w-full h-10 p-1 border-gray-300 border rounded-md">
                                 </div>
@@ -316,7 +316,7 @@
                                  <p class="text-slate-600 mt-1">Select the toss winner and their choice</p>
                             </header>
                             <div class="space-y-8">
-                                 <div>
+                                <div>
                                     <p class="text-center font-semibold mb-4">Who won the toss?</p>
                                     <div class="flex justify-center gap-6">
                                         <button id="toss-winner-team1" class="toss-3d-button flex flex-col items-center gap-3 w-32 p-4">
@@ -361,7 +361,7 @@
                 </div>
                 
                 <div id="target-info-container" class="hidden bg-white rounded-lg p-2 shadow-md text-center"></div>
-        
+    
                 <div class="space-y-2">
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <table class="table-fixed w-full text-left text-sm relative">
@@ -397,20 +397,13 @@
                     </div>
                 </div>
             </div>
-        
+    
             <div class="lg:col-span-1 flex flex-col space-y-2">
                 <div id="live-commentary-box" class="bg-white rounded-lg p-2 shadow-md hidden">
-    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
-    <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
-</div>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
+                    <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
+                </div>
 
-<div id="over-summary-box" class="bg-white rounded-lg p-2 shadow-md hidden">
-    <div class="flex items-center justify-between">
-        <div id="over-progress" class="flex items-center gap-2 flex-wrap">
-        </div>
-        <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
-    </div>
-</div>
                 <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
                         <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
@@ -511,7 +504,7 @@
             <div class="flex justify-between items-center mb-4 pb-4 border-b">
                 <h3 class="text-xl font-bold">Edit Match Details</h3>
                  <button onclick="closeModal('edit-match-modal')" class="text-gray-400 hover:text-gray-700">
-                       <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div class="flex-grow overflow-y-auto pr-2 space-y-4">
@@ -906,7 +899,6 @@
             confirmDownloadBtn: document.getElementById('confirm-download-btn'),
             setupCard: document.querySelector('.setup-card'),
             setupStep4: document.getElementById('setup-step-4'),
-            overSummaryBox: document.getElementById('over-summary-box'),
             liveCommentary: document.getElementById('live-commentary'),
             team1Select: document.getElementById('team1-select'),
             team2Select: document.getElementById('team2-select'),
@@ -1057,7 +1049,7 @@
                 ui.progressBar.style.width = '50%';
             }
             if (step === 3) {
-                    document.getElementById('setup-step-3').style.background = `linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db)`;
+                 document.getElementById('setup-step-3').style.background = `linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db)`;
                 if (state.team2.logo) {
                     ui.team2RosterLogo.src = state.team2.logo;
                     ui.team2RosterLogo.classList.remove('hidden');
@@ -1339,15 +1331,15 @@
         }
         
         function updateLiveCommentary(commentary, append = false) {
-    if (ui.liveCommentary && commentary) {
-        ui.liveCommentaryBox.classList.remove('hidden'); // This now shows our new commentary box
-        if (append) {
-            ui.liveCommentary.innerHTML += `<br><span class="text-gray-500 italic">${commentary}</span>`;
-        } else {
-            ui.liveCommentary.innerHTML = commentary;
-        }
-    }
-}
+			if (ui.liveCommentary && commentary) {
+				ui.liveCommentaryBox.classList.remove('hidden'); // This now shows our new commentary box
+				if (append) {
+					ui.liveCommentary.innerHTML += `<br><span class="text-gray-500 italic">${commentary}</span>`;
+				} else {
+					ui.liveCommentary.innerHTML = commentary;
+				}
+			}
+		}
         
         const commentaryPool = {
             dot: ["Excellent delivery from {bowler}! A perfect dot ball.", "{bowler} to {striker}, played straight to the fielder. No run there.", "A swing and a miss! {striker} couldn't connect on that one.", "Good, tight bowling from {bowler}. {striker} is forced to defend.", "Punched to the cover fielder, no space for a single.", "Solidly defended by {striker}. No run on offer.", "Left alone outside the off stump, wise batting from {striker}.", "A sharp bouncer from {bowler}, and {striker} has to duck under it.", "Driven firmly, but straight to the man at mid-off."],
@@ -1797,7 +1789,6 @@
             updateTargetInfo();
             updateBattingTable();
             updateBowlingTable();
-            updateOverProgress();
         }
 
         function updateScoreboard() {
@@ -1949,7 +1940,8 @@
                 const econ = bowler.ballsBowled > 0 ? (bowler.runsConceded / (bowler.ballsBowled / 6)).toFixed(2) : '0.00';
                 const fallbackImg = `data:image/svg+xml;base64,${btoa('<svg class="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>')}`;
 
-                const row = `
+                // This part creates the main row for the bowler's stats
+                let tableHTML = `
                     <tr class="border-t align-middle">
                         <td class="p-2 font-semibold text-gray-800 flex items-center text-base">
                             <img src="${bowler.image || fallbackImg}" class="w-8 h-8 rounded-full object-cover mr-3 bg-gray-200">
@@ -1965,41 +1957,44 @@
                         <td class="text-right p-2 text-base">${econ}</td>
                     </tr>
                 `;
-                ui.bowlingTable.innerHTML = row;
+
+                // This new part adds the ball-by-ball display below the bowler
+                if (state.currentOver.length > 0) {
+                    const overHistoryHTML = state.currentOver.map((ball, index) => {
+                        let ballEventText = ball.event;
+                        let bgColor = 'bg-gray-300';
+                        if (ballEventText === '0') { bgColor = 'bg-yellow-400 text-black'; }
+                        if (ballEventText === '1') { bgColor = 'bg-sky-400 text-white'; }
+                        if (ballEventText === '4') { bgColor = 'bg-blue-500 text-white'; }
+                        if (ballEventText === '6') { bgColor = 'bg-green-500 text-white'; }
+                        if (ballEventText.includes('W')) { bgColor = 'bg-red-500 text-white'; }
+                        if (ballEventText.toLowerCase().includes('wd') || ballEventText.toLowerCase().includes('nb')) { bgColor = 'bg-orange-400 text-white'; }
+                        
+                        const ballNumberLabel = `${state[state.battingTeam].overs}.${index + 1}`;
+                        
+                        return `
+                            <div class="flex flex-col items-center space-y-1">
+                                <div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${bgColor}">${ballEventText}</div>
+                                <p class="text-xs text-gray-500">${ballNumberLabel}</p>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    tableHTML += `
+                        <tr>
+                            <td colspan="6" class="pt-1 pb-2 px-2">
+                                <div class="flex items-center flex-wrap gap-x-3 gap-y-2">
+                                    ${overHistoryHTML}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+                ui.bowlingTable.innerHTML = tableHTML;
             } else {
-                 ui.bowlingTable.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Select bowler to begin</td></tr>`;
+                ui.bowlingTable.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Select bowler to begin</td></tr>`;
             }
         }
-        
-        function updateOverProgress() {
-    if (state.currentOver.length > 0) {
-        ui.overSummaryBox.classList.remove('hidden'); // This now shows our new over summary box
-
-        const battingTeam = state[state.battingTeam];
-
-        ui.overProgress.innerHTML = state.currentOver.map((ball, index) => {
-            let bgColor = 'bg-gray-300';
-            if (ball.event === '4') bgColor = 'bg-yellow-500 text-white';
-            if (ball.event === '6') bgColor = 'bg-green-700 text-white';
-            if (ball.event.includes('W')) bgColor = 'bg-red-700 text-white';
-
-            const ballNumberLabel = `${battingTeam.overs}.${index + 1}`;
-
-            return `
-                <div class="flex flex-col items-center">
-                    <p class="text-xs text-gray-500 mb-1">${ballNumberLabel}</p>
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-base ${bgColor}">${ball.event}</div>
-                </div>
-            `;
-        }).join('');
-
-        const overRuns = state.currentOver.reduce((acc, ball) => acc + ball.runs, 0);
-        ui.overSummary.textContent = `${overRuns} Runs This Over`;
-    } else {
-        ui.overSummaryBox.classList.add('hidden');
-        ui.liveCommentaryBox.classList.add('hidden');
-    }
-}
         
         // --- MODAL CONTROLS ---
         function openModal(modalId) {
@@ -2018,9 +2013,9 @@
             if (modalContent) {
                 modalContent.classList.add('scale-95');
                  if(modalId === 'innings-break-modal') {
-                          modalContent.style.transform = 'scale(0.8)';
-                          modalContent.style.opacity = '0';
-                 }
+                         modalContent.style.transform = 'scale(0.8)';
+                         modalContent.style.opacity = '0';
+               }
             }
             setTimeout(() => {
                 modal.classList.add('hidden');
@@ -2458,30 +2453,30 @@
         }
 
         function previewDownload(format) {
-                 const { jsPDF } = window.jspdf;
-                 const content = document.getElementById('summary-content');
-                 const buttons = document.querySelector('#summary-screen > div:last-child');
-                 buttons.classList.add('hidden');
-                 html2canvas(content, { scale: 2 }).then(canvas => {
-                      buttons.classList.remove('hidden');
-                      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                      ui.previewImage.src = imageDataUrl;
+             const { jsPDF } = window.jspdf;
+             const content = document.getElementById('summary-content');
+             const buttons = document.querySelector('#summary-screen > div:last-child');
+             buttons.classList.add('hidden');
+             html2canvas(content, { scale: 2 }).then(canvas => {
+                  buttons.classList.remove('hidden');
+                  const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+                  ui.previewImage.src = imageDataUrl;
 
-                      downloadAction = () => {
-                           if(format === 'jpeg') {
-                               const link = document.createElement('a');
-                               link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
-                               link.href = imageDataUrl;
-                               link.click();
-                           } else { // PDF
-                               const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
-                               pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
-                               pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
-                           }
-                           closeModal('preview-modal');
-                      };
-                      openModal('preview-modal');
-                 });
+                  downloadAction = () => {
+                       if(format === 'jpeg') {
+                            const link = document.createElement('a');
+                            link.download = `cricker-summary-${state.team1.name}-vs-${state.team2.name}.jpeg`;
+                            link.href = imageDataUrl;
+                            link.click();
+                       } else { // PDF
+                            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+                            pdf.addImage(imageDataUrl, 'JPEG', 0, 0, canvas.width, canvas.height);
+                            pdf.save(`cricker-summary-${state.team1.name}-vs-${state.team2.name}.pdf`);
+                       }
+                       closeModal('preview-modal');
+                  };
+                  openModal('preview-modal');
+             });
         }
         
         // --- TEAM MANAGEMENT LOGIC ---
