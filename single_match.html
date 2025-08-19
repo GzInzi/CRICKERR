@@ -382,40 +382,41 @@
         </tbody>
     </table>
 </div>
-            <div class="lg:col-span-1 flex flex-col space-y-2">
-                <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
-                    <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
-                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
-                        <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div id="over-progress" class="flex items-center gap-2 flex-wrap">
-                        </div>
-                        <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
-                    </div>
-                </div>
-                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
-                    <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-                        <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
-                    </div>
-                    <div class="grid grid-cols-4 grid-rows-3 scoring-grid flex-grow">
-                        <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
-                        <button onclick="addRuns(1)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
-                        <button onclick="addRuns(2)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
-                        <button onclick="undo()" class="h-full text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
-    
-                        <button onclick="addRuns(3)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
-                        <button onclick="addRuns(4)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
-                        <button onclick="addRuns(6)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
-                        <button onclick="openWicketModal()" class="h-full text-center border-b flex items-center justify-center"><span class="font-semibold text-base">Wicket</span></button>
-    
-                        <button onclick="openModal('wide-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Wide</span></button>
-                        <button onclick="openModal('noball-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">NB</span></button>
-                        <button onclick="openModal('byes-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Byes</span></button>
-                        <button onclick="openModal('legbyes-modal')" class="h-full text-center flex items-center justify-center"><span class="font-semibold text-base">LB</span></button>
-                    </div>
-                </footer>
+<div class="lg:col-span-1 flex flex-col space-y-2">
+    <div id="over-progress-container" class="bg-white rounded-lg p-2 shadow-md hidden">
+        <div id="live-commentary-container" class="hidden pb-2 mb-2 border-b border-gray-200">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
+            <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
+        </div>
+        <div class="flex items-center justify-between">
+            <div id="over-progress" class="flex items-center gap-2 flex-wrap">
             </div>
+            <div id="over-summary" class="text-base text-gray-700 font-medium whitespace-nowrap ml-2"></div>
+        </div>
+    </div>
+    <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex-grow flex flex-col">
+        <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
+            <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
+        </div>
+        
+        <div class="grid grid-cols-4 h-full scoring-grid">
+            <button onclick="addRuns(0)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">0</span><span class="text-xs text-gray-500 mt-1">Dot</span></button>
+            <button onclick="addRuns(1)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">1</span><span class="text-xs text-gray-500 mt-1">Single</span></button>
+            <button onclick="addRuns(2)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">2</span><span class="text-xs text-gray-500 mt-1">Double</span></button>
+            <button onclick="undo()" class="h-full text-center border-b flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
+
+            <button onclick="addRuns(3)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">3</span><span class="text-xs text-gray-500 mt-1">Triple</span></button>
+            <button onclick="addRuns(4)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">4</span><span class="text-xs text-gray-500 mt-1">Four</span></button>
+            <button onclick="addRuns(6)" class="h-full text-center border-r border-b flex flex-col items-center justify-center"><span class="font-bold text-xl leading-none">6</span><span class="text-xs text-gray-500 mt-1">Six</span></button>
+            <button onclick="openWicketModal()" class="h-full text-center border-b flex items-center justify-center"><span class="font-semibold text-base">Wicket</span></button>
+
+            <button onclick="openModal('wide-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Wide</span></button>
+            <button onclick="openModal('noball-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">NB</span></button>
+            <button onclick="openModal('byes-modal')" class="h-full text-center border-r flex items-center justify-center"><span class="font-semibold text-base">Byes</span></button>
+            <button onclick="openModal('legbyes-modal')" class="h-full text-center flex items-center justify-center"><span class="font-semibold text-base">LB</span></button>
+        </div>
+    </footer>
+</div>
         </div>
         <header class="bg-gray-200 text-black p-1 flex justify-between items-center shadow-inner w-full">
             <div class="flex items-center justify-center flex-grow">
