@@ -46,14 +46,24 @@
                 font-size: 0.65rem; /* Smaller sub-headline */
             }
             .lg\\:col-span-2, .lg\\:col-span-1 {
-                overflow-y: auto; /* Allow internal scrolling if content overflows */
+                overflow-y: hidden; /* We will control scrolling inside specific elements instead */
             }
              .lg\\:col-span-2 {
-                flex-grow: 1; /* Allow top section to take available space */
+                flex-grow: 1;
+                min-height: 0;
+                display: flex; /* Add this */
+                flex-direction: column; /* Add this */
+            }
+            /* Add this new rule to make the tables container scrollable */
+            .lg\\:col-span-2 > .space-y-2 {
+                flex-grow: 1;
+                overflow-y: auto;
                 min-height: 0;
             }
             .lg\\:col-span-1 {
-                flex-shrink: 0; /* Prevent bottom section from shrinking */
+                flex-shrink: 0;
+                display: flex; /* Add this */
+                flex-direction: column; /* Add this */
             }
             #scoring-controls {
                 height: auto; /* Let the grid define the height */
