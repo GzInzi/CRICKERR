@@ -140,7 +140,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 antialiased">
+<body class="bg-gray-100 antialiased overflow-hidden">
 
     <div id="splash-screen">
         <img src="my-logo.png" alt="App Logo" id="splash-logo">
@@ -387,10 +387,10 @@
            <div class="lg:col-span-1 flex flex-col space-y-2 overflow-y-auto">
                 <div id="live-commentary-box" class="bg-white rounded-lg p-2 shadow-md hidden">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
-                    <p id="live-commentary" class="text-sm text-gray-800 font-medium mt-1"></p>
+                    <p id="live-commentary" class="text-xs text-gray-800 font-medium mt-1"></p>
                 </div>
 
-                <footer id="scoring-controls" class="bg-white rounded-lg shadow-md relative flex flex-col h-64">
+                <footer id="scoring-controls" class="bg-white shadow-md relative flex flex-col h-52 -mx-4 rounded-none lg:mx-0 lg:rounded-lg">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
                         <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
                     </div>
