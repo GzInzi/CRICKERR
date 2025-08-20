@@ -28,6 +28,43 @@
             body { font-size: 14px; }
             #setup-screen { padding: 0; }
             .setup-card { max-width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; border: none; }
+            
+            /* --- NEW: Mobile Scoring Screen Layout --- */
+            #app {
+                overflow: hidden; /* Prevent the whole app from scrolling */
+            }
+            #app > .flex-grow {
+                padding: 8px; /* Reduce padding on mobile */
+                display: flex;
+                flex-direction: column;
+            }
+            #match-header h1 {
+                font-size: 1rem; /* Smaller headline */
+                font-weight: 700;
+            }
+            #match-header p {
+                font-size: 0.65rem; /* Smaller sub-headline */
+            }
+            .lg\\:col-span-2, .lg\\:col-span-1 {
+                overflow-y: auto; /* Allow internal scrolling if content overflows */
+            }
+             .lg\\:col-span-2 {
+                flex-grow: 1; /* Allow top section to take available space */
+                min-height: 0;
+            }
+            .lg\\:col-span-1 {
+                flex-shrink: 0; /* Prevent bottom section from shrinking */
+            }
+            #scoring-controls {
+                height: auto; /* Let the grid define the height */
+            }
+            .scoring-grid button {
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+             #scoreboard {
+                padding: 4px;
+            }
         }
 
         /* --- SPLASH SCREEN STYLES --- */
