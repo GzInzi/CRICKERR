@@ -341,7 +341,7 @@
         </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
     
-            <div class="lg:col-span-2 space-y-2">
+            <div class="lg:col-span-2 space-y-2 overflow-y-auto">
                 <div id="scoreboard" class="bg-white rounded-lg p-2 shadow-md">
                     <div id="team-scores-container" class="space-y-0">
                     </div>
@@ -1775,37 +1775,30 @@
             const bowlingTeam = state[bowlingTeamKey];
 
             const createTeamHTML = (team, isBatting) => {
-                const logoClass = isBatting ? 'w-10 h-10' : 'w-8 h-8';
-                const nameClass = isBatting ? 'text-lg' : 'text-base';
-                const scoreClass = isBatting ? 'text-4xl font-bold' : 'text-xl font-semibold';
-                const oversClass = isBatting ? 'text-base' : 'text-sm';
-                const logoSrc = team.logo || `https://placehold.co/40x40/${team.color.substring(1)}/FFFFFF?text=${team.name.charAt(0)}`;
-                const scoreStyle = isBatting ? `style="color: ${team.color};"` : '';
+                const overs = `${team.overs}.${team.balls}`;
+                let scoreHTML;
 
-                if (state.innings === 1 && !isBatting) {
-                    return `
-                        <div class="flex items-center justify-between opacity-70 mt-1">
-                            <div class="flex items-center space-x-2">
-                                <img src="${logoSrc}" alt="${team.name} Logo" class="${logoClass} rounded-full object-cover">
-                                <span class="${nameClass} font-semibold text-gray-700">${team.name}</span>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-base font-semibold text-gray-500">Yet to bat</p>
-                            </div>
-                        </div>
+                if (!isBatting && state.innings === 1) {
+                    // "Yet to bat" display
+                    scoreHTML = `<p class="text-sm font-semibold text-gray-500">Yet to bat</p>`;
+                } else {
+                    // Score and overs display (font size changed from text-2xl to text-xl)
+                    scoreHTML = `
+                        <p class="text-xl font-bold text-gray-900">${team.score}/${team.wickets}</p>
+                        <p class="text-xs text-gray-500">(${overs} / ${state.totalOvers} ov)</p>
                     `;
                 }
 
-                const overs = `${team.overs}.${team.balls}`;
                 return `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <img src="${logoSrc}" alt="${team.name} Logo" class="${logoClass} rounded-full object-cover">
-                            <span class="${nameClass} font-semibold text-gray-800">${team.name}</span>
+                    <div class="flex items-center justify-between py-1.5 ${!isBatting ? 'opacity-60' : ''}">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-full flex items-center justify-center font-semibold text-white text-xs" style="background-color: ${team.color};">
+                                ${team.name.charAt(0).toUpperCase()}
+                            </div>
+                            <span class="font-semibold text-gray-700">${team.name}</span>
                         </div>
                         <div class="text-right">
-                            <p class="${scoreClass} leading-tight" ${scoreStyle}>${team.score}/${team.wickets}</p>
-                            <p class="${oversClass} text-gray-600">(${overs} / ${state.totalOvers} ov)</p>
+                            ${scoreHTML}
                         </div>
                     </div>
                 `;
@@ -1813,9 +1806,9 @@
 
             const battingTeamHTML = createTeamHTML(battingTeam, true);
             const bowlingTeamHTML = createTeamHTML(bowlingTeam, false);
-            
+
             ui.teamScoresContainer.innerHTML = battingTeamHTML + bowlingTeamHTML;
-            document.getElementById('scoreboard').style.background = `linear-gradient(135deg, ${battingTeam.color}20, #ffffff)`;
+            document.getElementById('scoreboard').style.background = '';
         }
 
         function updateTargetInfo() {
