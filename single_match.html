@@ -70,16 +70,14 @@
         .back-btn { color: #475569; transition: color 0.2s; }
         .back-btn:hover { color: #1e293b; }
         
-        /* --- ADDED/MODIFIED CSS FOR SCROLLING --- */
         #setup-screen {
-            overflow-y: auto; /* Ensures the container can scroll if content overflows */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            overflow-y: auto; 
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         #setup-screen::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, and Opera */
+            display: none;
         }
-        /* --- END OF ADDED/MODIFIED CSS --- */
 
         /* Toss Screen Styles */
         #setup-step-4.toss-active { background: linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db); position: relative; overflow: hidden; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center; }
@@ -396,10 +394,19 @@
                 </div>
             </div>
            <div class="lg:col-span-1 flex flex-col space-y-2 overflow-y-auto">
-                <div id="live-commentary-box" class="bg-white rounded-lg p-2 shadow-md hidden">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">LIVE COMMENTARY</p>
-                    <p id="live-commentary" class="text-xs text-gray-800 font-medium mt-1"></p>
+                <!-- MODIFIED: Live Commentary Box -->
+                <div id="live-commentary-box" class="bg-blue-50 rounded-lg p-2 shadow-md hidden">
+                    <div class="flex justify-between items-center cursor-pointer" id="toggle-commentary-btn">
+                        <p class="text-xs font-semibold text-blue-800 uppercase tracking-wider">LIVE COMMENTARY</p>
+                        <svg id="commentary-chevron" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <div id="live-commentary-content">
+                         <p id="live-commentary" class="text-xs text-gray-800 font-medium mt-2 pt-2 border-t border-blue-200"></p>
+                    </div>
                 </div>
+                <!-- END MODIFICATION -->
 
                 <footer id="scoring-controls" class="bg-white shadow-md relative flex flex-col h-52 -mx-4 rounded-none lg:mx-0 lg:rounded-lg">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
@@ -2734,6 +2741,18 @@
                 });
             });
 
+            // --- NEW: Commentary Toggle Logic ---
+            const toggleBtn = document.getElementById('toggle-commentary-btn');
+            const commentaryContent = document.getElementById('live-commentary-content');
+            const commentaryChevron = document.getElementById('commentary-chevron');
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    commentaryContent.classList.toggle('hidden');
+                    commentaryChevron.classList.toggle('rotate-180');
+                });
+            }
+            // --- END: Commentary Toggle Logic ---
         });
 
         document.addEventListener('keydown', function(event) {
