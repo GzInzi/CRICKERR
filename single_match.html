@@ -96,10 +96,7 @@
         #batting-table th:first-child, #batting-table td:first-child, #bowling-table th:first-child, #bowling-table td:first-child { padding-left: 8px; }
         #batting-table th:last-child, #batting-table td:last-child, #bowling-table th:last-child, #bowling-table td:last-child { padding-right: 8px; text-align: right; }
         #batting-table .font-semibold, #bowling-table .font-semibold { font-size: 0.8rem; }
-        #over-progress-container { padding: 8px; }
-        #over-progress > div { width: 20px; height: 20px; font-size: 0.7rem; margin-right: 3px; margin-bottom: 3px; }
-        #over-summary { font-size: 0.8rem; }
-        .target-highlight { color: #1e3a8a; } /* NEW: Dark blue for target */
+        .target-highlight { color: #1e3a8a; }
 
         /* Player Out Summary Animation */
         .summary-pop-in-animation { animation: summary-pop-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
@@ -121,36 +118,26 @@
         @keyframes slide-up { to { opacity: 1; transform: translateY(0); } }
 
         /* --- FINAL LAYOUT FIX --- */
-/* This makes the scoring controls fill the screen height */
-#scoring-controls {
-    display: flex;
-    flex-direction: column;
-}
-
-/* This makes the scoring button grid fill the available space */
-.scoring-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* <-- ADD THIS LINE */
-    grid-template-rows: repeat(3, 1fr);
-    flex-grow: 1;
-}
-
-/* This adds the borders back correctly */
-.scoring-grid button {
-    border-bottom: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-}
-.scoring-grid button:nth-child(4n) {
-    border-right: none;
-}
-.scoring-grid button:nth-last-child(-n+4) {
-    border-bottom: none;
-}
-
-/* This creates a nice, even gap between the balls in the over summary */
-#over-progress {
-    gap: 0.75rem; 
-}
+        #scoring-controls {
+            display: flex;
+            flex-direction: column;
+        }
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            flex-grow: 1;
+        }
+        .scoring-grid button {
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+        }
+        .scoring-grid button:nth-child(4n) {
+            border-right: none;
+        }
+        .scoring-grid button:nth-last-child(-n+4) {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100 antialiased">
@@ -865,9 +852,7 @@
             battingTable: document.getElementById('batting-table'),
             bowlingTable: document.getElementById('bowling-table'),
             bowlerPromptOverlay: document.getElementById('bowler-prompt-overlay'),
-            overProgress: document.getElementById('over-progress'),
             liveCommentaryBox: document.getElementById('live-commentary-box'),
-            overSummary: document.getElementById('over-summary'),
             scoringControls: document.getElementById('scoring-controls'),
             playerModal: document.getElementById('player-modal'),
             modalTitle: document.getElementById('modal-title'),
@@ -2408,48 +2393,80 @@
         }
         
         function openEditModal() {
+            // Populate the form fields with current match data
+            document.getElementById('edit-total-overs').value = state.totalOvers;
+            document.getElementById('edit-team1-name').value = state.team1.name;
+            document.getElementById('edit-team1-players').value = state.team1.players.join('\n');
+            document.getElementById('edit-team2-name').value = state.team2.name;
+            document.getElementById('edit-team2-players').value = state.team2.players.join('\n');
+
+            // Now, open the modal
             openModal('edit-match-modal');
         }
 
         function saveMatchEdits() {
-            saveState();
-            const newTotalOvers = parseInt(document.getElementById('edit-total-overs').value);
-            if (newTotalOvers < state.team1.overs || newTotalOvers < state.team2.overs) {
-                showAlert("Cannot set total overs to be less than overs already bowled.");
-                return;
-            }
-            state.totalOvers = newTotalOvers;
+            saveState(); // Save the state before editing, so "Undo" can revert the changes
 
+            // Update simple match details
+            state.totalOvers = parseInt(document.getElementById('edit-total-overs').value);
             state.team1.name = document.getElementById('edit-team1-name').value;
             state.team2.name = document.getElementById('edit-team2-name').value;
-            
-            const renamePlayer = (oldPlayerList, newPlayerList, teamKey) => {
-                newPlayerList.forEach((newName, i) => {
-                    if (i < oldPlayerList.length) {
-                        const oldName = oldPlayerList[i];
-                        if(oldName && newName && oldName !== newName) {
-                            state[teamKey].playerStats[newName] = state[teamKey].playerStats[oldName];
-                            state[teamKey].playerStats[newName].name = newName;
-                            delete state[teamKey].playerStats[oldName];
 
-                            if(state.striker && state.striker.name === oldName) state.striker.name = newName;
-                            if(state.nonStriker && state.nonStriker.name === oldName) state.nonStriker.name = newName;
-                            if(state.bowler && state.bowler.name === oldName) state.bowler.name = newName;
-                            if(state.lastBowler === oldName) state.lastBowler = newName;
-                        }
+            // This is a more robust function to handle player list updates
+            const updateTeamRoster = (teamKey, newPlayerNames) => {
+                const oldPlayerStats = { ...state[teamKey].playerStats };
+                const newPlayerStats = {};
+
+                // Rebuild the player stats object, preserving stats for existing players
+                newPlayerNames.forEach(name => {
+                    if (oldPlayerStats[name]) {
+                        // Player already exists, so we keep their stats
+                        newPlayerStats[name] = oldPlayerStats[name];
+                    } else {
+                        // This is a new player, so we initialize their stats
+                        newPlayerStats[name] = {
+                            name: name, image: '', runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalInfo: null,
+                            ballsBowled: 0, runsConceded: 0, wickets: 0, maidens: 0, consecutiveFours: 0, consecutiveSixes: 0
+                        };
                     }
                 });
-                state[teamKey].players = newPlayerList;
-            }
+
+                // Update the team's state with the new lists
+                state[teamKey].players = newPlayerNames;
+                state[teamKey].playerStats = newPlayerStats;
+            };
 
             const newTeam1Players = document.getElementById('edit-team1-players').value.split('\n').map(p => p.trim()).filter(p => p);
             const newTeam2Players = document.getElementById('edit-team2-players').value.split('\n').map(p => p.trim()).filter(p => p);
 
-            renamePlayer(state.team1.players, newTeam1Players, 'team1');
-            renamePlayer(state.team2.players, newTeam2Players, 'team2');
+            updateTeamRoster('team1', newTeam1Players);
+            updateTeamRoster('team2', newTeam2Players);
+
+            // After updating rosters, check if the current players were removed from the lists
+            const battingTeamPlayers = state[state.battingTeam].players;
+            const bowlingTeamPlayers = state[state.bowlingTeam].players;
+
+            if (state.striker && !battingTeamPlayers.includes(state.striker.name)) {
+                state.striker = null;
+            }
+            if (state.nonStriker && !battingTeamPlayers.includes(state.nonStriker.name)) {
+                state.nonStriker = null;
+            }
+            if (state.bowler && !bowlingTeamPlayers.includes(state.bowler.name)) {
+                state.bowler = null;
+            }
 
             closeModal('edit-match-modal');
-            updateUI();
+            updateUI(); // Update the UI to show the new names
+
+            // If any player role is now empty, prompt the user to select a new one
+            if (!state.striker) {
+                selectPlayer('striker');
+            } else if (!state.nonStriker) {
+                selectPlayer('nonStriker');
+            } else if (!state.bowler) {
+                selectPlayer('bowler');
+            }
         }
 
         function previewDownload(format) {
