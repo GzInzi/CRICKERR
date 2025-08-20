@@ -337,7 +337,7 @@
 
 
     <div id="app" class="h-screen w-full flex flex-col hidden">
-        <div id="match-header" class="relative text-center py-1 px-4 pt-4 bg-gray-100">
+        <div id="match-header" class="relative text-center py-1 px-4 bg-gray-100">
         </div>
         <div class="flex-grow w-full p-4 grid lg:grid-cols-3 gap-2 overflow-hidden">
     
@@ -1206,14 +1206,6 @@
             
             const matchHeader = ui.matchHeader;
             matchHeader.innerHTML = '';
-
-            const liveIndicator = document.createElement('div');
-            liveIndicator.className = 'absolute top-2 left-4 flex items-center space-x-2';
-            liveIndicator.innerHTML = `
-                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <p class="font-semibold text-sm text-gray-500">Live Match</p>
-            `;
-
             const title = document.createElement('h1');
             title.className = 'font-bold text-base';
             title.textContent = `${team1Name} vs ${team2Name}`;
@@ -1222,7 +1214,6 @@
             details.className = 'text-xs text-gray-600';
             details.textContent = `${venue} | ${dateStr} | ${state.totalOvers} Overs, ${state.playersPerSide}-a-side`;
             
-            matchHeader.appendChild(liveIndicator);
             matchHeader.appendChild(title);
             matchHeader.appendChild(details);
 
