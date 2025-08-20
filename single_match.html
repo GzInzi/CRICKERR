@@ -69,6 +69,17 @@
         .setup-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15); }
         .back-btn { color: #475569; transition: color 0.2s; }
         .back-btn:hover { color: #1e293b; }
+        
+        /* --- ADDED/MODIFIED CSS FOR SCROLLING --- */
+        #setup-screen {
+            overflow-y: auto; /* Ensures the container can scroll if content overflows */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        #setup-screen::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+        /* --- END OF ADDED/MODIFIED CSS --- */
 
         /* Toss Screen Styles */
         #setup-step-4.toss-active { background: linear-gradient(135deg, #e2e8f0, #ffffff, #d1d5db); position: relative; overflow: hidden; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center; }
@@ -140,7 +151,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 antialiased overflow-hidden">
+<body class="bg-gray-100 antialiased">
 
     <div id="splash-screen">
         <img src="my-logo.png" alt="App Logo" id="splash-logo">
