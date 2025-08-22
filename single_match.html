@@ -39,7 +39,7 @@
                 flex-direction: column;
             }
             #match-header h1 {
-                font-size: 1rem; /* Smaller headline */
+                font-size: 1rem; /* Medium headline */
                 font-weight: 700;
             }
             #match-header p {
@@ -49,11 +49,19 @@
                 overflow-y: hidden; /* We will control scrolling inside specific elements instead */
             }
              .lg\\:col-span-2 {
-                flex-grow: 1;
+                /* flex-grow: 1;  <-- REMOVE THIS LINE */
                 min-height: 0;
-                display: flex; /* Add this */
-                flex-direction: column; /* Add this */
+                display: flex; 
+                flex-direction: column;
             }
+            /* --- NEW: Increase table font size on mobile --- */
+#batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
+    padding: 8px 4px; /* Increased vertical padding */
+    font-size: 0.875rem; /* Increased font size (from 0.75rem) */
+}
+#batting-table th.p-2, #bowling-table th.p-2 {
+    font-size: 0.8rem; /* Make header text a bit bigger */
+}
             /* Add this new rule to make the tables container scrollable */
             .lg\\:col-span-2 > .space-y-2 {
                 flex-grow: 1;
@@ -78,8 +86,8 @@
                 grid-template-rows: repeat(3, 1fr); /* Ensure all rows are of equal height */
             }
             .scoring-grid button {
-                padding-top: 12px;
-                padding-bottom: 12px;
+                padding-top: 12.5px;
+                padding-bottom: 12.5px;
                 font-size: 1rem; /* Slightly larger text on buttons */
             }
              /* --- END OF MODIFICATIONS FOR SCORING PANEL --- */
