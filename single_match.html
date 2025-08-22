@@ -64,14 +64,25 @@
                 flex-shrink: 0;
                 display: flex; /* Add this */
                 flex-direction: column; /* Add this */
+                flex-grow: 1; /* MODIFICATION: Allow this column to take up remaining vertical space */
+                min-height: 0; /* MODIFICATION: Necessary for flex-grow to work properly */
             }
+            /* --- START OF MODIFICATIONS FOR SCORING PANEL --- */
             #scoring-controls {
-                height: auto; /* Let the grid define the height */
+                flex-grow: 1; /* Make the scoring footer grow to fill the available space */
+                display: flex; /* Make it a flex container */
+                flex-direction: column; /* Stack its children (the grid) vertically */
+            }
+            .scoring-grid {
+                flex-grow: 1; /* Make the grid itself grow to fill the parent footer */
+                grid-template-rows: repeat(3, 1fr); /* Ensure all rows are of equal height */
             }
             .scoring-grid button {
-                padding-top: 8px;
-                padding-bottom: 8px;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                font-size: 1rem; /* Slightly larger text on buttons */
             }
+             /* --- END OF MODIFICATIONS FOR SCORING PANEL --- */
              #scoreboard {
                 padding: 4px;
             }
@@ -441,7 +452,6 @@
                 </div>
             </div>
            <div class="lg:col-span-1 flex flex-col space-y-2 overflow-y-auto">
-                <!-- MODIFIED: Live Commentary Box -->
                 <div id="live-commentary-box" class="bg-blue-50 rounded-lg p-2 shadow-md hidden">
                     <div class="flex justify-between items-center cursor-pointer" id="toggle-commentary-btn">
                         <p class="text-xs font-semibold text-blue-800 uppercase tracking-wider">LIVE COMMENTARY</p>
@@ -453,8 +463,6 @@
                          <p id="live-commentary" class="text-xs text-gray-800 font-medium mt-2 pt-2 border-t border-blue-200"></p>
                     </div>
                 </div>
-                <!-- END MODIFICATION -->
-
                 <footer id="scoring-controls" class="bg-white shadow-md relative flex flex-col h-52 -mx-4 rounded-none lg:mx-0 lg:rounded-lg">
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
                         <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
