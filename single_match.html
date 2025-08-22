@@ -29,7 +29,7 @@
             #setup-screen { padding: 0; }
             .setup-card { max-width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; border: none; }
             
-            /* --- NEW: Mobile Scoring Screen Layout --- */
+            /* --- Mobile Scoring Screen Layout --- */
             #app {
                 overflow: hidden; /* Prevent the whole app from scrolling */
             }
@@ -39,7 +39,7 @@
                 flex-direction: column;
             }
             #match-header h1 {
-                font-size: 1rem; /* Medium headline */
+                font-size: 1rem; /* Smaller headline */
                 font-weight: 700;
             }
             #match-header p {
@@ -49,20 +49,11 @@
                 overflow-y: hidden; /* We will control scrolling inside specific elements instead */
             }
              .lg\\:col-span-2 {
-                /* flex-grow: 1;  <-- REMOVE THIS LINE */
+                /* CORRECTED: Removed flex-grow: 1; to stop this section from expanding vertically */
                 min-height: 0;
-                display: flex; 
+                display: flex;
                 flex-direction: column;
             }
-            /* --- NEW: Increase table font size on mobile --- */
-#batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
-    padding: 8px 4px; /* Increased vertical padding */
-    font-size: 0.875rem; /* Increased font size (from 0.75rem) */
-}
-#batting-table th.p-2, #bowling-table th.p-2 {
-    font-size: 0.8rem; /* Make header text a bit bigger */
-}
-            /* Add this new rule to make the tables container scrollable */
             .lg\\:col-span-2 > .space-y-2 {
                 flex-grow: 1;
                 overflow-y: auto;
@@ -70,29 +61,36 @@
             }
             .lg\\:col-span-1 {
                 flex-shrink: 0;
-                display: flex; /* Add this */
-                flex-direction: column; /* Add this */
-                flex-grow: 1; /* MODIFICATION: Allow this column to take up remaining vertical space */
-                min-height: 0; /* MODIFICATION: Necessary for flex-grow to work properly */
+                display: flex; 
+                flex-direction: column; 
+                flex-grow: 1; /* This will now correctly take up all remaining vertical space */
+                min-height: 0;
             }
-            /* --- START OF MODIFICATIONS FOR SCORING PANEL --- */
             #scoring-controls {
-                flex-grow: 1; /* Make the scoring footer grow to fill the available space */
-                display: flex; /* Make it a flex container */
-                flex-direction: column; /* Stack its children (the grid) vertically */
+                flex-grow: 1; 
+                display: flex;
+                flex-direction: column; 
             }
             .scoring-grid {
-                flex-grow: 1; /* Make the grid itself grow to fill the parent footer */
-                grid-template-rows: repeat(3, 1fr); /* Ensure all rows are of equal height */
+                flex-grow: 1; 
+                grid-template-rows: repeat(3, 1fr); 
             }
             .scoring-grid button {
-                padding-top: 12.5px;
-                padding-bottom: 12.5px;
-                font-size: 1rem; /* Slightly larger text on buttons */
+                padding-top: 12px;
+                padding-bottom: 12px;
+                font-size: 1rem; 
             }
-             /* --- END OF MODIFICATIONS FOR SCORING PANEL --- */
-             #scoreboard {
+            #scoreboard {
                 padding: 4px;
+            }
+            
+            /* --- NEW: Increase table font size on mobile --- */
+            #batting-table th, #batting-table td, #bowling-table th, #bowling-table td {
+                padding: 8px 4px; /* Increased vertical padding */
+                font-size: 0.875rem; /* Increased font size (from 0.75rem) */
+            }
+            #batting-table th.p-2, #bowling-table th.p-2 {
+                font-size: 0.8rem; /* Make header text a bit bigger */
             }
         }
 
@@ -884,6 +882,13 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // --- ALL JAVASCRIPT IS IDENTICAL AND REMAINS UNCHANGED ---
+        // ... (script content from your original file) ...
+    </script>
+</body>
+</html>
 
     <script>
         // --- STATE MANAGEMENT ---
