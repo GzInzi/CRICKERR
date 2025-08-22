@@ -17,11 +17,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            font-size: 16px;
-        }
+<style>
+  /* ... some of your CSS rules ... */
+  #bowler-prompt-overlay:not(.hidden) + .scoring-grid {
+    visibility: hidden;
+  }
+
+  /* Full-screen layout and font size for setup pages on mobile */
+  @media (max-width: 768px) {
+    /* ... all of your other CSS rules ... */
+  }
+
+  /* ... all the rest of your styles ... */
+  
+  .scoring-grid button:nth-last-child(-n+4) {
+    border-bottom: none;
+  }
+</head>
 
         /* Full-screen layout and font size for setup pages on mobile */
         @media (max-width: 768px) {
@@ -470,9 +482,9 @@
                     </div>
                 </div>
                 <footer id="scoring-controls" class="bg-white shadow-md relative flex flex-col h-52 -mx-4 rounded-none lg:mx-0 lg:rounded-lg">
-                    <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
-                        <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
-                    </div>
+                    <div id="bowler-prompt-overlay" class="absolute inset-0 bg-blue-50 bg-opacity-95 flex items-center justify-center hidden rounded-lg cursor-pointer">
+    <p class="font-bold text-blue-800 text-3xl tracking-tight">Choose the Next Bowler</p>
+</div>
 
                 <div class="scoring-grid">
                     <button onclick="addRuns(0)" class="flex flex-col items-center justify-center bg-amber-400 text-black transition-transform active:scale-95">
