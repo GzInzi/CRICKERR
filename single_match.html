@@ -459,20 +459,54 @@
                     <div id="bowler-prompt-overlay" class="absolute inset-0 bg-gray-200 bg-opacity-80 flex items-center justify-center hidden rounded-lg cursor-pointer">
                         <p class="font-bold text-red-800 text-2xl">Choose the Next Bowler</p>
                     </div>
-                    <div class="scoring-grid">
-                        <button onclick="addRuns(0)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">0</span><span class="text-[10px] text-gray-400 mt-1">Dot</span></button>
-                        <button onclick="addRuns(1)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">1</span><span class="text-[10px] text-gray-400 mt-1">Single</span></button>
-                        <button onclick="addRuns(2)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">2</span><span class="text-[10px] text-gray-400 mt-1">Double</span></button>
-                        <button onclick="undo()" class="flex flex-col items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg><span class="text-sm font-semibold mt-1">Undo</span></button>
-                        <button onclick="addRuns(3)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">3</span><span class="text-[10px] text-gray-400 mt-1">Triple</span></button>
-                        <button onclick="addRuns(4)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">4</span><span class="text-[10px] text-gray-400 mt-1">Four</span></button>
-                        <button onclick="addRuns(6)" class="flex flex-col items-center justify-center"><span class="font-semibold text-lg leading-none">6</span><span class="text-[10px] text-gray-400 mt-1">Six</span></button>
-                        <button onclick="openWicketModal()" class="flex items-center justify-center"><span class="font-semibold text-xl">Wicket</span></button>
-                        <button onclick="openModal('wide-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">Wide</span></button>
-                        <button onclick="openModal('noball-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">NB</span></button>
-                        <button onclick="openModal('byes-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">Byes</span></button>
-                        <button onclick="openModal('legbyes-modal')" class="flex items-center justify-center"><span class="font-semibold text-xl">LB</span></button>
-                    </div>
+
+                <div class="scoring-grid">
+                    <button onclick="addRuns(0)" class="flex flex-col items-center justify-center bg-amber-400 text-black transition-transform active:scale-95">
+                    <span class="font-bold text-xl leading-none">0</span>
+                    <span class="text-xs font-semibold mt-1 opacity-75">Dot</span>
+                </button>
+                <button onclick="addRuns(1)" class="flex flex-col items-center justify-center bg-sky-400 text-white transition-transform active:scale-95">
+            <span class="font-bold text-xl leading-none">1</span>
+        <span class="text-xs font-semibold mt-1 opacity-75">Single</span>
+    </button>
+    <button onclick="addRuns(2)" class="flex flex-col items-center justify-center bg-slate-300 text-black transition-transform active:scale-95">
+        <span class="font-bold text-xl leading-none">2</span>
+        <span class="text-xs font-semibold mt-1 opacity-75">Double</span>
+    </button>
+    <button onclick="undo()" class="flex flex-col items-center justify-center bg-orange-300 text-orange-900 transition-transform active:scale-95">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" transform="rotate(180 12 12)"/></svg>
+        <span class="text-sm font-semibold mt-1">Undo</span>
+    </button>
+    
+    <button onclick="addRuns(3)" class="flex flex-col items-center justify-center bg-slate-200 text-black transition-transform active:scale-95">
+        <span class="font-bold text-xl leading-none">3</span>
+        <span class="text-xs font-semibold mt-1 opacity-75">Triple</span>
+    </button>
+    <button onclick="addRuns(4)" class="flex flex-col items-center justify-center bg-blue-600 text-white transition-transform active:scale-95">
+        <span class="font-bold text-xl leading-none">4</span>
+        <span class="text-xs font-semibold mt-1 opacity-75">Four</span>
+    </button>
+    <button onclick="addRuns(6)" class="flex flex-col items-center justify-center bg-green-500 text-white transition-transform active:scale-95">
+        <span class="font-bold text-xl leading-none">6</span>
+        <span class="text-xs font-semibold mt-1 opacity-75">Six</span>
+    </button>
+    <button onclick="openWicketModal()" class="flex items-center justify-center bg-red-600 text-white font-bold text-xl transition-transform active:scale-95">
+        Wicket
+    </button>
+    
+    <button onclick="openModal('wide-modal')" class="flex items-center justify-center bg-slate-50 text-slate-700 font-bold text-xl transition-transform active:scale-95">
+        Wide
+    </button>
+    <button onclick="openModal('noball-modal')" class="flex items-center justify-center bg-slate-50 text-slate-700 font-bold text-xl transition-transform active:scale-95">
+        NB
+    </button>
+    <button onclick="openModal('byes-modal')" class="flex items-center justify-center bg-slate-50 text-slate-700 font-bold text-xl transition-transform active:scale-95">
+        Byes
+    </button>
+    <button onclick="openModal('legbyes-modal')" class="flex items-center justify-center bg-slate-50 text-slate-700 font-bold text-xl transition-transform active:scale-95">
+        LB
+    </button>
+</div>
                 </footer>
             </div>
         </div> 
@@ -607,6 +641,10 @@
                 <button onclick="handleWicket('Bowled')" class="p-3 bg-gray-100 rounded-lg">Bowled</button>
                 <button onclick="handleWicket('Stump Out')" class="p-3 bg-gray-100 rounded-lg">Stump Out</button>
                 <button onclick="handleWicket('Run Out')" class="p-3 bg-gray-100 rounded-lg">Run Out</button>
+                <button onclick="handleWicket('LBW')" class="p-3 bg-gray-100 rounded-lg">LBW</button>
+                <button onclick="handleWicket('Hit Wicket')" class="p-3 bg-gray-100 rounded-lg">Hit Wicket</button>
+                <button onclick="handleWicket('Retired Out')" class="p-3 bg-gray-100 rounded-lg">Retired Out</button>
+                <button onclick="handleWicket('Other')" class="p-3 bg-gray-100 rounded-lg">Other</button>
             </div>
         </div>
     </div>
@@ -952,6 +990,31 @@
             team1Select: document.getElementById('team1-select'),
             team2Select: document.getElementById('team2-select'),
         };
+        function selectFielderForCatch() {
+            const fielderSelect = document.getElementById('fielder-select');
+            fielderSelect.innerHTML = ''; // Clear previous options
+
+            // Populate with players from the bowling team
+            const bowlingTeamPlayers = state[state.bowlingTeam].players;
+            bowlingTeamPlayers.forEach(playerName => {
+                const option = document.createElement('option');
+                option.value = playerName;
+                option.textContent = playerName;
+                fielderSelect.appendChild(option);
+            });
+
+            // Set up the confirm button
+            const confirmBtn = document.getElementById('fielder-save-btn');
+            confirmBtn.onclick = () => {
+                const selectedFielder = fielderSelect.value;
+                if (selectedFielder) {
+                    processWicket('Catch', state.striker.name, selectedFielder);
+                    closeModal('fielder-modal');
+                }
+            };
+
+            openModal('fielder-modal');
+        }
 
         // --- HELPER FUNCTIONS ---
         function hexToRgba(hex, alpha = 0.1) {
@@ -1253,7 +1316,7 @@
             openModal('alert-modal');
         }
 
-        function initialize() {
+        function initialize(isSecondInnings = false) {
             const team1Name = state.team1.name;
             const team2Name = state.team2.name;
             const venue = state.venue || 'Unknown Venue';
@@ -1283,19 +1346,29 @@
             state.isScoringLocked = true;
             updateUI();
             
-            ui.playerModalCancelBtnX.classList.add('hidden');
-            ui.playerModalCancelBtnText.classList.add('hidden');
-            selectPlayer('striker', () => {
-                selectPlayer('nonStriker', () => {
-                    selectPlayer('bowler', () => {
-                        ui.playerModalCancelBtnX.classList.remove('hidden');
-                        ui.playerModalCancelBtnText.classList.remove('hidden');
-                        state.isScoringLocked = false;
-                        updateUI();
-                        showIntroCommentary();
+            const setupPlayers = () => {
+                ui.playerModalCancelBtnX.classList.add('hidden');
+                ui.playerModalCancelBtnText.classList.add('hidden');
+                selectPlayer('striker', () => {
+                    selectPlayer('nonStriker', () => {
+                        selectPlayer('bowler', () => {
+                            ui.playerModalCancelBtnX.classList.remove('hidden');
+                            ui.playerModalCancelBtnText.classList.remove('hidden');
+                            state.isScoringLocked = false;
+                            updateUI();
+                            showIntroCommentary();
+                        });
                     });
                 });
-            });
+            };
+
+            if (isSecondInnings) {
+                // For the 2nd innings, use an alert to guide the user.
+                showAlert('The 2nd innings is about to begin. Please select the opening batsmen and bowler.', setupPlayers);
+            } else {
+                // For the 1st innings, the original behavior is fine.
+                setupPlayers();
+            }
         }
         
         function savePlayerStats(playerObject, teamKey) {
@@ -1575,7 +1648,29 @@
         }
 
         function initiateExtraRunOut(extraType) {
-            closeAllModals();
+            // Determine the correct modal to close based on the extra type
+            let modalToClose;
+            switch (extraType) {
+                case 'wd':
+                    modalToClose = 'wide-modal';
+                    break;
+                case 'nb':
+                    modalToClose = 'noball-modal';
+                    break;
+                case 'b':
+                    modalToClose = 'byes-modal';
+                    break;
+                case 'lb':
+                    modalToClose = 'legbyes-modal';
+                    break;
+            }
+
+            // Close only the specific modal that was open
+            if (modalToClose) {
+                closeModal(modalToClose);
+            }
+
+           // Proceed with the run out logic as before
             state.pendingExtra = { type: extraType, runs: 0 };
             openModal('runs-attempted-modal');
         }
@@ -1667,7 +1762,13 @@
             playerOutObject.consecutiveFours = 0;
             playerOutObject.consecutiveSixes = 0;
             battingTeam.wickets++;
-            if (type !== 'Run Out') state.bowler.wickets++;
+
+            // Only credit the bowler for specific wicket types
+            const bowlerCreditedWickets = ['Catch', 'Bowled', 'Stump Out', 'LBW', 'Hit Wicket'];
+            if (bowlerCreditedWickets.includes(type)) {
+                state.bowler.wickets++;
+            }
+            
             playerOutObject.balls++;
             playerOutObject.isOut = true;
             playerOutObject.dismissalInfo = { type: type, bowler: state.bowler ? state.bowler.name : null, fielder: fielderName };
@@ -1688,17 +1789,19 @@
             
             state.isScoringLocked = true;
             const roleToFill = !state.striker ? 'striker' : 'nonStriker';
-            
-            ui.playerModalCancelBtnX.classList.add('hidden');
-            ui.playerModalCancelBtnText.classList.add('hidden');
-            selectPlayer(roleToFill, () => {
-                ui.playerModalCancelBtnX.classList.remove('hidden');
-                ui.playerModalCancelBtnText.classList.remove('hidden');
-                state.isScoringLocked = false;
-                updateUI();
+
+            // NEW: Use an alert to guide the user to the next step
+            showAlert(`Please select the next ${roleToFill}.`, () => {
+                ui.playerModalCancelBtnX.classList.add('hidden');
+                ui.playerModalCancelBtnText.classList.add('hidden');
+                selectPlayer(roleToFill, () => {
+                    ui.playerModalCancelBtnX.classList.remove('hidden');
+                    ui.playerModalCancelBtnText.classList.remove('hidden');
+                    state.isScoringLocked = false;
+                    updateUI();
+                });
             });
         }
-
         function processBall(runs, event) {
             const battingTeam = state[state.battingTeam];
             battingTeam.balls++;
@@ -2207,7 +2310,7 @@
                 state.lastBowler = null;
                 state.currentOver = [];
                 
-                initialize();
+                initialize(true); // This line is updated
             };
 
             openModal('innings-break-modal');
